@@ -1,10 +1,12 @@
 import React from 'react';
+// یہ وہ لائن ہے جو آپ کے ڈیٹا کو ہوم پیج کے ساتھ جوڑ رہی ہے!
+import { popularCategories, hotDeals, topProducts } from './data';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800">
       
-      {/* 1. Navbar (Inspired by Pricena & SaudiPrice) */}
+      {/* 1. Navbar */}
       <header className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-8">
@@ -25,7 +27,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 2. Hero Section with Search (SaudiPrice Style - Image 3) */}
+      {/* 2. Hero Section */}
       <section className="bg-blue-600 py-12 px-4 text-center">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold text-white mb-3">Find the Best Prices in Saudi Arabia</h2>
@@ -47,7 +49,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Popular Categories (SaudiPrice Style - Image 3) */}
+      {/* 3. Popular Categories (اب یہ data.ts سے آ رہی ہیں) */}
       <section className="bg-gray-50 py-10 border-b">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
@@ -55,19 +57,17 @@ export default function Home() {
             <p className="text-gray-500 text-sm">Browse through our most popular shopping categories</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-            {['Smartphones', 'Laptops', 'Fashion', 'TV & Audio', 'Home Appliances', 'Cameras'].map((cat, i) => (
+            {popularCategories.map((cat, i) => (
               <div key={i} className="bg-white p-6 rounded-xl shadow-sm text-center border hover:shadow-md transition cursor-pointer text-blue-600">
-                <div className="text-3xl mb-3">
-                  {i === 0 ? '📱' : i === 1 ? '💻' : i === 2 ? '👕' : i === 3 ? '📺' : i === 4 ? '🏠' : '📷'}
-                </div>
-                <h4 className="font-semibold text-gray-700 text-sm">{cat}</h4>
+                <div className="text-3xl mb-3">{cat.icon}</div>
+                <h4 className="font-semibold text-gray-700 text-sm">{cat.name}</h4>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. Hot Deals List (KSA Price Style - Image 2) */}
+      {/* 4. Hot Deals List (یہ بھی data.ts سے آ رہی ہیں) */}
       <section className="container mx-auto px-4 py-10">
         <div className="flex justify-between items-center mb-6 border-b pb-2">
           <h3 className="text-2xl font-bold text-gray-800">Hot Deals</h3>
@@ -86,45 +86,42 @@ export default function Home() {
           <div className="w-1/6 text-center">Action</div>
         </div>
 
-        {/* Deal Item 1 */}
-        <div className="border border-t-0 p-4 flex flex-col md:flex-row items-center hover:bg-gray-50 transition">
-          <div className="w-full md:w-1/3 flex items-center gap-4">
-            <div className="w-16 h-16 bg-gray-100 flex items-center justify-center rounded border text-2xl">🏪</div>
-            <div>
-              <h4 className="font-bold text-sm">Ramadan Deals - Nesto</h4>
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">Riyadh</span>
+        {/* Dynamic Deals */}
+        {hotDeals.map((deal) => (
+          <div key={deal.id} className="border border-t-0 p-4 flex flex-col md:flex-row items-center hover:bg-gray-50 transition">
+            <div className="w-full md:w-1/3 flex items-center gap-4">
+              <div className="w-16 h-16 bg-gray-100 flex items-center justify-center rounded border text-2xl">{deal.icon}</div>
+              <div>
+                <h4 className="font-bold text-sm">{deal.title}</h4>
+                <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">{deal.location}</span>
+              </div>
+            </div>
+            
+            {deal.price ? (
+              <div className="w-full md:w-2/6 text-center font-bold text-gray-800 mt-2 md:mt-0">{deal.price}</div>
+            ) : (
+              <>
+                <div className="w-full md:w-1/6 text-center text-sm text-gray-600 mt-2 md:mt-0">{deal.startDate}</div>
+                <div className="w-full md:w-1/6 text-center text-sm text-gray-600">{deal.endDate}</div>
+              </>
+            )}
+            
+            <div className="w-full md:w-1/6 text-center mt-2 md:mt-0">
+              {deal.status && (
+                <span className="text-green-600 text-sm font-bold flex items-center justify-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-green-500"></span> {deal.status}
+                  {deal.isNew && <span className="bg-red-500 text-white text-[10px] px-1 rounded ml-1">New</span>}
+                </span>
+              )}
+            </div>
+            <div className="w-full md:w-1/6 text-center mt-4 md:mt-0">
+              <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-1.5 rounded text-sm w-full md:w-auto">View</button>
             </div>
           </div>
-          <div className="w-full md:w-1/6 text-center text-sm text-gray-600 mt-2 md:mt-0">Feb 17, 2026</div>
-          <div className="w-full md:w-1/6 text-center text-sm text-gray-600">Feb 23, 2026</div>
-          <div className="w-full md:w-1/6 text-center mt-2 md:mt-0">
-            <span className="text-green-600 text-sm font-bold flex items-center justify-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-green-500"></span> Valid <span className="bg-red-500 text-white text-[10px] px-1 rounded ml-1">New</span>
-            </span>
-          </div>
-          <div className="w-full md:w-1/6 text-center mt-4 md:mt-0">
-            <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-1.5 rounded text-sm w-full md:w-auto">View</button>
-          </div>
-        </div>
-
-        {/* Deal Item 2 */}
-        <div className="border border-t-0 p-4 flex flex-col md:flex-row items-center hover:bg-gray-50 transition bg-blue-50/30">
-          <div className="w-full md:w-1/3 flex items-center gap-4">
-            <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded border overflow-hidden text-2xl">🚗</div>
-            <div>
-              <h4 className="font-bold text-sm">Kia Sportage Full Option 2026</h4>
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">Jeddah</span>
-            </div>
-          </div>
-          <div className="w-full md:w-2/6 text-center font-bold text-gray-800 mt-2 md:mt-0">SAR 92,000</div>
-          <div className="w-full md:w-1/6 text-center mt-2 md:mt-0"></div>
-          <div className="w-full md:w-1/6 text-center mt-4 md:mt-0">
-            <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-1.5 rounded text-sm w-full md:w-auto">View</button>
-          </div>
-        </div>
+        ))}
       </section>
 
-      {/* 5. Product Grid (Pricena Style - Image 1) */}
+      {/* 5. Product Grid (ڈیٹا فائل سے فونز کی لسٹ) */}
       <section className="bg-white py-8 border-t">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
@@ -133,97 +130,42 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {/* Product 1 */}
-            <div className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col">
-              <div className="h-40 flex items-center justify-center mb-4">
-                <span className="text-6xl">📱</span>
-              </div>
-              <h4 className="text-blue-600 text-sm font-medium hover:underline cursor-pointer line-clamp-2 h-10">Samsung Galaxy S24 Ultra, 256GB, Titanium Black</h4>
-              <div className="mt-2 mb-4">
-                <span className="text-xs text-gray-500">Starts from</span>
-                <div className="font-bold text-lg text-gray-900">SAR 3,899</div>
-              </div>
-              <div className="mt-auto">
-                <div className="flex gap-1 mb-2">
-                  <span className="text-xs bg-yellow-100 text-yellow-800 px-1 rounded">Noon</span>
-                  <span className="text-xs bg-blue-100 text-blue-800 px-1 rounded">Amazon</span>
+            {topProducts.map((product) => (
+              <div key={product.id} className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col">
+                <div className="h-40 flex items-center justify-center mb-4">
+                  <span className="text-6xl">{product.icon}</span>
                 </div>
-                <button className="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded text-sm font-medium">Compare Prices</button>
-              </div>
-            </div>
-
-            {/* Product 2 */}
-            <div className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col">
-              <div className="h-40 flex items-center justify-center mb-4">
-                <span className="text-6xl">📱</span>
-              </div>
-              <h4 className="text-blue-600 text-sm font-medium hover:underline cursor-pointer line-clamp-2 h-10">Apple iPhone 15 Pro Max, 256GB, Natural Titanium</h4>
-              <div className="mt-2 mb-4">
-                <span className="text-xs text-gray-500">Starts from</span>
-                <div className="font-bold text-lg text-gray-900">SAR 4,699</div>
-              </div>
-              <div className="mt-auto">
-                <div className="flex gap-1 mb-2">
-                  <span className="text-xs bg-gray-100 text-gray-800 px-1 rounded">Jarir</span>
-                  <span className="text-xs bg-blue-100 text-blue-800 px-1 rounded">Amazon</span>
+                <h4 className="text-blue-600 text-sm font-medium hover:underline cursor-pointer line-clamp-2 h-10">{product.name}</h4>
+                <div className="mt-2 mb-4">
+                  <span className="text-xs text-gray-500">Starts from</span>
+                  <div className="font-bold text-lg text-gray-900">SAR {product.startingPrice}</div>
                 </div>
-                <button className="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded text-sm font-medium">Compare Prices</button>
+                <div className="mt-auto">
+                  <div className="flex gap-1 mb-2">
+                    {product.stores.map((store, idx) => (
+                      <span key={idx} className={`text-xs px-1 rounded ${store === 'Noon' ? 'bg-yellow-100 text-yellow-800' : store === 'Amazon' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
+                        {store}
+                      </span>
+                    ))}
+                  </div>
+                  <button className="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded text-sm font-medium">Compare Prices</button>
+                </div>
               </div>
-            </div>
-            
-            {/* Product 3, 4, 5 placeholers... */}
-            {[3,4,5].map((num) => (
-               <div key={num} className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col">
-               <div className="h-40 flex items-center justify-center mb-4">
-                 <span className="text-6xl text-gray-300">📱</span>
-               </div>
-               <h4 className="text-blue-600 text-sm font-medium hover:underline cursor-pointer line-clamp-2 h-10">Smart Phone Model {num}</h4>
-               <div className="mt-2 mb-4">
-                 <span className="text-xs text-gray-500">Starts from</span>
-                 <div className="font-bold text-lg text-gray-900">SAR 1,299</div>
-               </div>
-               <div className="mt-auto">
-                 <button className="w-full border border-green-500 text-green-600 hover:bg-green-50 py-1.5 rounded text-sm font-medium">Go to Shop</button>
-               </div>
-             </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. Footer (Combined Style) */}
+      {/* 6. Footer */}
       <footer className="bg-gray-900 text-gray-300 py-10 mt-10 text-sm">
         <div className="container mx-auto px-4 grid md:grid-cols-4 gap-8">
           <div>
             <h4 className="text-white text-lg font-bold mb-4">SaudiPrice</h4>
             <p className="text-gray-400">Your trusted price comparison platform helping shoppers in Saudi Arabia find the best deals and save money.</p>
           </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white">About Us</a></li>
-              <li><a href="#" className="hover:text-white">Contact Us</a></li>
-              <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-            </ul>
+          <div className="container mx-auto px-4 mt-8 pt-4 border-t border-gray-800 text-center text-gray-500">
+            © 2026 SaudiPrice.com. All rights reserved.
           </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Categories</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white">Smartphones</a></li>
-              <li><a href="#" className="hover:text-white">Laptops</a></li>
-              <li><a href="#" className="hover:text-white">Perfumes</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Newsletter</h4>
-            <div className="flex">
-              <input type="text" placeholder="Email address" className="px-3 py-2 w-full text-black outline-none" />
-              <button className="bg-cyan-500 text-white px-4 py-2 hover:bg-cyan-600">Subscribe</button>
-            </div>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 mt-8 pt-4 border-t border-gray-800 text-center text-gray-500">
-          © 2026 SaudiPrice.com. All rights reserved.
         </div>
       </footer>
     </div>
