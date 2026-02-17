@@ -1,33 +1,10 @@
 import React from 'react';
-// یہ وہ لائن ہے جو آپ کے ڈیٹا کو ہوم پیج کے ساتھ جوڑ رہی ہے!
 import { popularCategories, hotDeals, topProducts } from './data';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-800">
-      
-      {/* 1. Navbar */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <h1 className="text-3xl font-bold text-blue-600 tracking-tight">SaudiPrice</h1>
-            <div className="hidden md:flex space-x-6 text-sm font-medium text-gray-600">
-              <a href="#" className="hover:text-blue-600">All Categories ▾</a>
-              <a href="#" className="hover:text-blue-600">Electronics</a>
-              <a href="#" className="hover:text-blue-600">Fashion</a>
-              <a href="#" className="text-red-500 flex items-center gap-1">🔥 Hot Deals</a>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center text-sm">
-              <span className="text-gray-500 mr-4">Login ▾</span>
-              <span>🇸🇦 AR</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* 2. Hero Section */}
+    <>
+      {/* Hero Section */}
       <section className="bg-blue-600 py-12 px-4 text-center">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold text-white mb-3">Find the Best Prices in Saudi Arabia</h2>
@@ -49,7 +26,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Popular Categories (اب یہ data.ts سے آ رہی ہیں) */}
+      {/* Popular Categories */}
       <section className="bg-gray-50 py-10 border-b">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
@@ -58,8 +35,8 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             {popularCategories.map((cat, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl shadow-sm text-center border hover:shadow-md transition cursor-pointer text-blue-600">
-                <div className="text-3xl mb-3">{cat.icon}</div>
+              <div key={i} className="bg-white p-6 rounded-xl shadow-sm text-center border hover:shadow-md transition cursor-pointer text-blue-600 group">
+                <div className="text-3xl mb-3 group-hover:scale-110 transition duration-300">{cat.icon}</div>
                 <h4 className="font-semibold text-gray-700 text-sm">{cat.name}</h4>
               </div>
             ))}
@@ -67,13 +44,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Hot Deals List (یہ بھی data.ts سے آ رہی ہیں) */}
+      {/* Hot Deals List */}
       <section className="container mx-auto px-4 py-10">
         <div className="flex justify-between items-center mb-6 border-b pb-2">
           <h3 className="text-2xl font-bold text-gray-800">Hot Deals</h3>
           <div className="flex gap-2">
             <span className="bg-blue-500 text-white px-3 py-1 text-sm rounded cursor-pointer">Deal End</span>
-            <span className="border px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-50">Recent</span>
+            <span className="border px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-50 transition">Recent</span>
           </div>
         </div>
 
@@ -115,25 +92,25 @@ export default function Home() {
               )}
             </div>
             <div className="w-full md:w-1/6 text-center mt-4 md:mt-0">
-              <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-1.5 rounded text-sm w-full md:w-auto">View</button>
+              <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-1.5 rounded text-sm w-full md:w-auto transition">View</button>
             </div>
           </div>
         ))}
       </section>
 
-      {/* 5. Product Grid (ڈیٹا فائل سے فونز کی لسٹ) */}
+      {/* Product Grid */}
       <section className="bg-white py-8 border-t">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold text-gray-800 border-l-4 border-blue-600 pl-3">Mobile Phones</h3>
-            <a href="#" className="text-blue-600 text-sm hover:underline">View All</a>
+            <a href="/electronics" className="text-blue-600 text-sm hover:underline">View All</a>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {topProducts.map((product) => (
-              <div key={product.id} className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col">
+              <div key={product.id} className="border border-gray-100 p-4 hover:shadow-lg transition relative bg-white flex flex-col group">
                 <div className="h-40 flex items-center justify-center mb-4">
-                  <span className="text-6xl">{product.icon}</span>
+                  <span className="text-6xl group-hover:scale-110 transition duration-300">{product.icon}</span>
                 </div>
                 <h4 className="text-blue-600 text-sm font-medium hover:underline cursor-pointer line-clamp-2 h-10">{product.name}</h4>
                 <div className="mt-2 mb-4">
@@ -143,31 +120,18 @@ export default function Home() {
                 <div className="mt-auto">
                   <div className="flex gap-1 mb-2">
                     {product.stores.map((store, idx) => (
-                      <span key={idx} className={`text-xs px-1 rounded ${store === 'Noon' ? 'bg-yellow-100 text-yellow-800' : store === 'Amazon' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
+                      <span key={idx} className={`text-xs px-1 rounded ${store === 'Noon' ? 'bg-yellow-100 text-yellow-800' : store === 'Amazon' ? 'bg-blue-100 text-blue-800' : store === 'Jarir' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'}`}>
                         {store}
                       </span>
                     ))}
                   </div>
-                  <button className="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded text-sm font-medium">Compare Prices</button>
+                  <button className="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded text-sm font-medium transition">Compare Prices</button>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* 6. Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-10 mt-10 text-sm">
-        <div className="container mx-auto px-4 grid md:grid-cols-4 gap-8">
-          <div>
-            <h4 className="text-white text-lg font-bold mb-4">SaudiPrice</h4>
-            <p className="text-gray-400">Your trusted price comparison platform helping shoppers in Saudi Arabia find the best deals and save money.</p>
-          </div>
-          <div className="container mx-auto px-4 mt-8 pt-4 border-t border-gray-800 text-center text-gray-500">
-            © 2026 SaudiPrice.com. All rights reserved.
-          </div>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }
