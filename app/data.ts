@@ -33,6 +33,17 @@ export const hotDeals = [
     status: "",
     isNew: false,
     price: "SAR 92,000"
+  },
+  {
+    id: 3,
+    title: "PlayStation 5 Slim - Extra Stores",
+    location: "All KSA",
+    icon: "🎮",
+    startDate: "Feb 18, 2026",
+    endDate: "Feb 25, 2026",
+    status: "Valid",
+    isNew: true,
+    price: "SAR 1,899"
   }
 ];
 
