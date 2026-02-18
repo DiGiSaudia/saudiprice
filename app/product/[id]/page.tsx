@@ -1,27 +1,28 @@
 import { supabase } from '../../lib/supabase'
 import Link from 'next/link'
 
-// 1. یہ لائن سب سے اہم ہے تاکہ Next.js پرانا پیج نہ دکھائے اور ہمیشہ لائیو ڈیٹا لائے
 export const revalidate = 0; 
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({ params }: any) {
   
-  // 2. ہم ID کو ڈیٹا بیس سے بالکل صحیح میچ کروا رہے ہیں
+  // 🚨 Next.js 15 کا نیا اور لیٹسٹ طریقہ: ID کو لانے کے لیے await کرنا ضروری ہے
+  const { id } = await params;
+  
+  // اب یہ بالکل صحیح ID ڈیٹا بیس کو بھیجے گا
   const { data: product, error } = await supabase
     .from('products')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
-  // 3. اگر پروڈکٹ نہ ملے، تو اب ہم سکرین پر اصلی وجہ (Error) بھی دکھائیں گے
   if (error || !product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Product not found 😢</h1>
         <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center border border-red-200">
           <p className="font-semibold">Error Detail:</p>
-          <p className="font-mono text-sm mt-1">{error?.message || "Product does not exist in database"}</p>
-          <p className="font-mono text-sm mt-1 text-gray-500">Searched ID: {params.id}</p>
+          <p className="font-mono text-sm mt-1">{error?.message || "Product does not exist"}</p>
+          <p className="font-mono text-sm mt-1 text-gray-500">Searched ID: {id}</p>
         </div>
         <Link href="/" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
           ← Back to Home
@@ -30,7 +31,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
     )
   }
 
-  // پروڈکٹ کا شاندار ڈیزائن (جو ہم نے پہلے بنایا تھا)
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
