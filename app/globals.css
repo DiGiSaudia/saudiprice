@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* یہ وہ نیا لاک ہے جو موبائل پر سکرین کو دائیں بائیں ہلنے سے روکے گا */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
