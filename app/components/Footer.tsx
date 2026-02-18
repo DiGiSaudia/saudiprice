@@ -23,11 +23,11 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold text-white mb-6">Popular Categories</h3>
             <ul className="space-y-4 text-sm font-medium">
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Mobile Phones</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Laptops & Computers</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Smartwatches</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Home Appliances</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Gaming Consoles</Link></li>
+              <li><Link href="/category/Mobiles" className="hover:text-white hover:underline transition-all">Mobile Phones</Link></li>
+              <li><Link href="/category/Laptops" className="hover:text-white hover:underline transition-all">Laptops & Computers</Link></li>
+              <li><Link href="/category/Smartwatches" className="hover:text-white hover:underline transition-all">Smartwatches</Link></li>
+              <li><Link href="/category/Home Appliances" className="hover:text-white hover:underline transition-all">Home Appliances</Link></li>
+              <li><Link href="/category/Gaming" className="hover:text-white hover:underline transition-all">Gaming Consoles</Link></li>
             </ul>
           </div>
 
@@ -35,10 +35,10 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold text-white mb-6">Top Retailers</h3>
             <ul className="space-y-4 text-sm font-medium">
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Amazon KSA</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Noon</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">Jarir Bookstore</Link></li>
-              <li><Link href="/" className="hover:text-white hover:underline transition-all">eXtra Stores</Link></li>
+              <li><Link href="/store/Amazon" className="hover:text-white hover:underline transition-all">Amazon KSA</Link></li>
+              <li><Link href="/store/Noon" className="hover:text-white hover:underline transition-all">Noon</Link></li>
+              <li><Link href="/store/Jarir" className="hover:text-white hover:underline transition-all">Jarir Bookstore</Link></li>
+              <li><Link href="/store/eXtra" className="hover:text-white hover:underline transition-all">eXtra Stores</Link></li>
             </ul>
           </div>
           
