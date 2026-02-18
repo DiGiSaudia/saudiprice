@@ -1,39 +1,47 @@
 import { supabase } from '../../lib/supabase'
 import Link from 'next/link'
 
+// 1. یہ لائن سب سے اہم ہے تاکہ Next.js پرانا پیج نہ دکھائے اور ہمیشہ لائیو ڈیٹا لائے
+export const revalidate = 0; 
+
 export default async function ProductPage({ params }: { params: { id: string } }) {
-  // ہم URL سے پروڈکٹ کی ID لے کر ڈیٹا بیس سے وہ مخصوص پروڈکٹ منگوا رہے ہیں
+  
+  // 2. ہم ID کو ڈیٹا بیس سے بالکل صحیح میچ کروا رہے ہیں
   const { data: product, error } = await supabase
     .from('products')
     .select('*')
     .eq('id', params.id)
     .single()
 
-  // اگر کوئی غلط ID ڈالے تو یہ میسج آئے گا
+  // 3. اگر پروڈکٹ نہ ملے، تو اب ہم سکرین پر اصلی وجہ (Error) بھی دکھائیں گے
   if (error || !product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Product not found 😢</h1>
-        <Link href="/" className="text-blue-600 hover:underline">← Back to Home</Link>
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center border border-red-200">
+          <p className="font-semibold">Error Detail:</p>
+          <p className="font-mono text-sm mt-1">{error?.message || "Product does not exist in database"}</p>
+          <p className="font-mono text-sm mt-1 text-gray-500">Searched ID: {params.id}</p>
+        </div>
+        <Link href="/" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          ← Back to Home
+        </Link>
       </div>
     )
   }
 
-  // پروڈکٹ کا شاندار ڈیزائن
+  // پروڈکٹ کا شاندار ڈیزائن (جو ہم نے پہلے بنایا تھا)
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* واپس جانے کا بٹن */}
         <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-8 transition-colors">
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           Back to all deals
         </Link>
 
-        {/* پروڈکٹ کا مین کارڈ */}
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
           
-          {/* بائیں طرف: بڑی تصویر */}
           <div className="w-full md:w-1/2 p-10 flex justify-center items-center bg-white border-b md:border-b-0 md:border-r border-gray-100 relative">
             <div className="absolute top-6 left-6 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-black px-4 py-2 rounded-lg shadow-sm tracking-wide z-10">
               HOT DEAL
@@ -45,7 +53,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
             />
           </div>
 
-          {/* دائیں طرف: پروڈکٹ کی تفصیلات */}
           <div className="w-full md:w-1/2 p-10 md:p-14 flex flex-col justify-center bg-gray-50/50">
             <span className="text-sm text-blue-600 font-bold uppercase tracking-widest mb-3">{product.category}</span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">{product.title}</h1>
