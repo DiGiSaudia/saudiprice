@@ -5,10 +5,9 @@ export const revalidate = 0;
 
 export default async function ProductPage({ params }: any) {
   
-  // 🚨 Next.js 15 کا نیا اور لیٹسٹ طریقہ: ID کو لانے کے لیے await کرنا ضروری ہے
+  // Next.js 15 کے مطابق ID لانا
   const { id } = await params;
   
-  // اب یہ بالکل صحیح ID ڈیٹا بیس کو بھیجے گا
   const { data: product, error } = await supabase
     .from('products')
     .select('*')
@@ -35,8 +34,9 @@ export default async function ProductPage({ params }: any) {
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        {/* یہاں بیک بٹن کے آئیکن کا سائز 20px فکس کر دیا گیا ہے */}
         <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-8 transition-colors">
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <svg width="20" height="20" className="mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           Back to all deals
         </Link>
 
@@ -79,7 +79,8 @@ export default async function ProductPage({ params }: any) {
               className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-5 px-8 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 text-xl flex justify-center items-center gap-3"
             >
               Get Deal Now
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              {/* یہاں ڈیل والے آئیکن کا سائز 24px فکس کر دیا گیا ہے */}
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
           </div>
 
