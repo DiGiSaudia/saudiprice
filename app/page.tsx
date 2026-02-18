@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
+import Link from 'next/link'; // ہم نے صفحات کو جوڑنے کے لیے یہ شامل کیا ہے
 
 export default function Home() {
-  // یہ وہ متغیرات (Variables) ہیں جو یوزر کی سرچ اور فلٹرز کو یاد رکھیں گے
   const [products, setProducts] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedStore, setSelectedStore] = useState('All Stores');
 
-  // ویب سائٹ کھلتے ہی ڈیٹا بیس سے پروڈکٹس منگوانا
   useEffect(() => {
     async function fetchProducts() {
       const { data, error } = await supabase.from('products').select('*');
@@ -21,7 +20,6 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  // 🪄 اصل جادو یہاں ہے: پروڈکٹس کو سرچ اور فلٹرز کے حساب سے چھانٹنا (Filter کرنا)
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All Categories' || product.category === selectedCategory;
@@ -33,7 +31,6 @@ export default function Home() {
   return (
     <div className="bg-gray-50 min-h-screen">
       
-      {/* 1. Hero Section & Search Bar */}
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white py-20 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
           Discover the Best Deals in Saudi Arabia
@@ -42,7 +39,6 @@ export default function Home() {
           Compare prices across Amazon, Noon, Jarir, and Extra to save on your favorite products.
         </p>
         
-        {/* Active Search Input */}
         <div className="max-w-3xl mx-auto flex bg-white rounded-full shadow-2xl overflow-hidden p-1.5 focus-within:ring-4 focus-within:ring-blue-400/50 transition-all">
           <input 
             type="text" 
@@ -57,7 +53,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. Active Filters Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[-25px] relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-lg border border-gray-100 gap-4">
           <div className="flex w-full md:w-auto gap-4">
@@ -97,14 +92,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. Products Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center gap-3 mb-10">
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Trending Now</h2>
           <div className="h-1 w-20 bg-blue-600 rounded-full mt-2"></div>
         </div>
         
-        {/* اگر کوئی پروڈکٹ نہ ملے تو یہ میسج دکھائیں */}
         {filteredProducts.length === 0 ? (
           <div className="text-center py-20">
             <h3 className="text-2xl text-gray-500 font-bold">No products found... 😢</h3>
@@ -123,17 +116,24 @@ export default function Home() {
                   {product.store}
                 </div>
 
-                <div className="h-60 bg-white p-8 flex justify-center items-center relative overflow-hidden group-hover:bg-gray-50 transition-colors">
+                {/* تصویر کو نیا لنک بنا دیا گیا ہے */}
+                <Link href={`/product/${product.id}`} className="h-60 bg-white p-8 flex justify-center items-center relative overflow-hidden group-hover:bg-gray-50 transition-colors cursor-pointer">
                   <img 
                     src={product.image_url} 
                     alt={product.title} 
                     className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
                   />
-                </div>
+                </Link>
 
                 <div className="p-5 flex flex-col flex-grow border-t border-gray-50">
                   <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-2">{product.category}</span>
-                  <h3 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">{product.title}</h3>
+                  
+                  {/* پروڈکٹ کے نام کو نیا لنک بنا دیا گیا ہے */}
+                  <Link href={`/product/${product.id}`}>
+                    <h3 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors cursor-pointer">
+                      {product.title}
+                    </h3>
+                  </Link>
                   
                   <div className="mt-auto pt-3 flex items-end justify-between">
                     <div>
