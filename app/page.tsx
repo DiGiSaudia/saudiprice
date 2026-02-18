@@ -137,19 +137,19 @@ export default function Home() {
                   HOT
                 </div>
 
-                {/* 2. Heart Icon & Store Badge (Right) - ADDED CAREFULLY HERE */}
-                <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
+                {/* 2. Heart Icon & Store Badge (Right) - زیادہ واضح (High Contrast & Larger) */}
+                <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
                   <button 
                     onClick={(e) => { e.preventDefault(); toggleFavorite(product.id); }}
-                    className="p-1.5 rounded-full bg-white shadow-sm border border-gray-100 hover:scale-110 transition-all text-gray-400 hover:text-red-500 flex items-center justify-center"
+                    className="p-1.5 rounded-full bg-white shadow-md border border-gray-300 hover:scale-110 transition-all text-gray-400 hover:text-red-500 flex items-center justify-center"
                   >
                     {favorites.includes(Number(product.id)) ? (
-                      <svg width="16" height="16" fill="#ef4444" viewBox="0 0 16 16"><path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>
+                      <svg width="18" height="18" fill="#ef4444" viewBox="0 0 16 16"><path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>
                     ) : (
-                      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/></svg>
+                      <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/></svg>
                     )}
                   </button>
-                  <div className="bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                  <div className="bg-[#0f172a] text-white text-xs font-black px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-md border border-gray-600">
                     {product.store}
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export default function Home() {
                   />
                 </Link>
 
-                {/* Card Details (UNTOUCHED) */}
+                {/* Card Details */}
                 <div className="p-5 flex flex-col flex-grow border-t border-gray-50">
                   <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-2">{product.category}</span>
                   <Link href={`/product/${product.id}`}>
