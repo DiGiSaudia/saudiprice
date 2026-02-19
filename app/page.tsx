@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
 
-// Navigation Categories
 const categories = [
   { name: 'Electronics', active: true, sub: ['Mobiles', 'TV & Audio', 'Laptops & Computers', 'Home Appliances'] },
   { name: 'Hyper Markets', active: false, sub: [] },
@@ -14,7 +13,6 @@ const categories = [
   { name: 'Malls', active: false, sub: [] },
 ];
 
-// Partner Stores Data
 const supermarkets = [
   { id: 1, name: 'Carrefour', logo: 'https://placehold.co/150x150/ffffff/005b9f?text=Carrefour' },
   { id: 2, name: 'Nesto', logo: 'https://placehold.co/150x150/ffffff/e31837?text=Nesto' },
@@ -25,7 +23,6 @@ const supermarkets = [
   { id: 7, name: 'Jarir', logo: 'https://placehold.co/150x150/ffffff/e3000f?text=Jarir' },
 ];
 
-// Promotional Flyers Data
 const flyers = [
   { id: 1, store: 'Carrefour', title: "Ramadan Pre-Sale", pages: '+72 Pages', daysLeft: '+6 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Carrefour+Flyer', logo: 'https://placehold.co/80x80/ffffff/005b9f?text=C' },
   { id: 2, store: 'Panda', title: 'Weekly Super Deals', pages: '+24 Pages', daysLeft: '+3 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Panda+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=P' },
@@ -46,71 +43,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-[#f4f5f7] min-h-screen font-sans flex flex-col">
+    <div className="font-sans flex flex-col">
       
-      {/* Top Navigation Tabs */}
-      <div className="bg-white border-b border-gray-200 text-sm font-bold text-gray-500">
-        <div className="max-w-[1400px] mx-auto flex justify-center gap-10">
-          <button className="py-2.5 px-2 text-green-600 border-b-4 border-green-600">Offers</button>
-          <button className="py-2.5 px-2 hover:text-green-600 transition-colors">Products</button>
-          <button className="py-2.5 px-2 hover:text-green-600 transition-colors">Coupons</button>
-        </div>
-      </div>
-
-      {/* Main Header and Search */}
-      <div className="bg-white py-5 shadow-sm">
-        <div className="max-w-[1400px] mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-          <Link href="/" className="text-3xl font-black text-green-600 tracking-tighter">SaudiPrice</Link>
-
-          <div className="flex-1 max-w-3xl w-full flex border-2 border-green-600 rounded-lg overflow-hidden shadow-sm bg-white">
-            <div className="bg-gray-50 border-r border-gray-300 px-3 py-2.5 flex items-center min-w-[120px]">
-              <select 
-                value={selectedCity} 
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="bg-transparent text-gray-800 text-sm font-bold outline-none w-full cursor-pointer"
-              >
-                <option value="Riyadh">Riyadh</option>
-                <option value="Jeddah">Jeddah</option>
-                <option value="Dammam">Dammam</option>
-              </select>
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search for offers, flyers, or stores..." 
-              className="flex-1 px-4 py-2.5 text-sm text-gray-800 outline-none"
-            />
-            <button className="bg-green-600 text-white px-8 py-2.5 font-bold text-sm hover:bg-green-700 transition-colors">
-              SEARCH
-            </button>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-2">
-            <span className="text-sm font-bold text-gray-600">Language:</span>
-            <button className="text-sm font-bold text-green-600">العربية</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Secondary Navigation Menu */}
-      <div className="bg-green-600 text-white hidden md:block shadow-md sticky top-0 z-40">
-        <div className="max-w-[1400px] mx-auto px-4 flex justify-between items-center">
-          <nav className="flex space-x-6 text-[14px] font-semibold">
-            <Link href="/" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Home</Link>
-            <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">All Offers</Link>
-            <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Ramadan offers</Link>
-            <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Supermarket</Link>
-            <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Electronics</Link>
-          </nav>
-          <div className="flex items-center space-x-6">
-            <Link href="/about" className="text-sm font-medium hover:text-green-200 transition-colors">About Us</Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-green-200 transition-colors">Contact</Link>
-            <button className="bg-[#ff8c00] hover:bg-[#e67e00] text-white px-5 py-1.5 rounded text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-              <span>+</span> Add your company
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Breadcrumbs */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 w-full text-[13px] text-gray-500 font-medium">
         <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
@@ -192,47 +126,6 @@ export default function Home() {
 
         </main>
       </div>
-
-      {/* Main Footer */}
-      <footer className="bg-[#0b5e36] text-white pt-16 pb-8 mt-auto border-t-4 border-green-500">
-        <div className="max-w-[1400px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2 flex flex-col sm:flex-row items-center gap-6">
-            <div>
-              <h3 className="text-3xl font-black mb-2 tracking-tighter">SaudiPrice</h3>
-              <p className="text-green-100 text-sm mb-4 max-w-sm">Get all the latest offers, flyers, and coupons directly on your mobile device. Never miss a deal in KSA!</p>
-              <div className="flex gap-3">
-                <button className="bg-black border border-gray-700 rounded px-4 py-2 flex items-center gap-2 hover:bg-gray-900 transition">
-                  <span className="text-xs font-bold">Google Play</span>
-                </button>
-                <button className="bg-black border border-gray-700 rounded px-4 py-2 flex items-center gap-2 hover:bg-gray-900 transition">
-                  <span className="text-xs font-bold">App Store</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h4 className="text-lg font-bold mb-4 border-b border-green-700 pb-2">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-green-100">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-lg font-bold mb-4 border-b border-green-700 pb-2">Top Cities</h4>
-            <ul className="space-y-2 text-sm text-green-100">
-              <li><Link href="#" className="hover:text-white transition-colors">Riyadh Offers</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Jeddah Offers</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Dammam Offers</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Mecca Offers</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-[1400px] mx-auto px-4 mt-12 pt-6 border-t border-green-700 text-center text-sm text-green-200">
-          <p>© 2026 SaudiPrice.com. All rights reserved.</p>
-        </div>
-      </footer>
-
     </div>
   );
 }
