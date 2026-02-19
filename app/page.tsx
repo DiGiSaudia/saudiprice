@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
 
+// Flat Categories (No Parent Grouping)
 const categories = [
-  { name: 'Electronics', active: true, sub: ['Mobiles', 'TV & Audio', 'Laptops & Computers', 'Home Appliances'] },
-  { name: 'Hyper Markets', active: false, sub: [] },
-  { name: 'Super Markets', active: false, sub: [] },
-  { name: 'Health & Beauty', active: false, sub: [] },
-  { name: 'Home & Garden', active: false, sub: [] },
-  { name: 'Malls', active: false, sub: [] },
+  { name: 'Mobiles & Tablets', active: true },
+  { name: 'TV & Audio', active: false },
+  { name: 'Laptops & Computers', active: false },
+  { name: 'Home Appliances', active: false },
+  { name: 'Smartwatches', active: false },
+  { name: 'Gaming Consoles', active: false },
 ];
 
-// Expanded to 15 Stores (Safe Generic Names)
 const supermarkets = [
   { id: 1, name: 'Store One', logo: 'https://placehold.co/150x150/ffffff/005b9f?text=Store+1' },
   { id: 2, name: 'Store Two', logo: 'https://placehold.co/150x150/ffffff/e31837?text=Store+2' },
@@ -27,9 +27,6 @@ const supermarkets = [
   { id: 10, name: 'Store Ten', logo: 'https://placehold.co/150x150/ffffff/008000?text=Store+10' },
   { id: 11, name: 'Store Eleven', logo: 'https://placehold.co/150x150/ffffff/0055a4?text=Store+11' },
   { id: 12, name: 'Store Twelve', logo: 'https://placehold.co/150x150/ffffff/e2231a?text=Store+12' },
-  { id: 13, name: 'Store Thirteen', logo: 'https://placehold.co/150x150/ffffff/d4af37?text=Store+13' },
-  { id: 14, name: 'Store Fourteen', logo: 'https://placehold.co/150x150/ffffff/006400?text=Store+14' },
-  { id: 15, name: 'Store Fifteen', logo: 'https://placehold.co/150x150/ffffff/004b87?text=Store+15' },
 ];
 
 const flyers = [
@@ -53,6 +50,8 @@ export default function Home() {
 
   return (
     <div className="font-sans flex flex-col">
+      
+      {/* Breadcrumbs */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 w-full text-[13px] text-gray-500 font-medium">
         <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
         <span className="text-gray-800">KSA</span> <span className="mx-2">›</span>
@@ -61,6 +60,8 @@ export default function Home() {
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-6 flex-grow pb-10">
+        
+        {/* Left Sidebar Menu */}
         <aside className="hidden md:block w-[260px] flex-shrink-0 bg-white border border-gray-200 rounded shadow-sm h-fit">
           <h2 className="text-[16px] font-black text-gray-800 bg-gray-50 border-b border-gray-200 px-4 py-3 rounded-t">Categories</h2>
           <nav className="py-2">
@@ -68,31 +69,23 @@ export default function Home() {
               <div key={idx} className="border-b border-gray-100 last:border-0">
                 <div className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-green-50 transition-colors ${cat.active ? 'text-green-600 font-bold bg-green-50/50' : 'text-gray-700 font-medium'}`}>
                   <span className="text-[14px]">{cat.name}</span>
-                  {cat.sub.length > 0 && (
-                    <span className="text-lg font-light">{cat.active ? '-' : '+'}</span>
-                  )}
                 </div>
-                {cat.active && cat.sub.length > 0 && (
-                  <div className="bg-white px-4 py-2 space-y-2">
-                    {cat.sub.map((subItem, sIdx) => (
-                      <div key={sIdx} className="text-[13px] text-gray-500 hover:text-green-600 cursor-pointer py-1 pl-4 border-l-2 border-transparent hover:border-green-600 transition-all">
-                        {subItem}
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             ))}
           </nav>
         </aside>
 
+        {/* Main Content Area */}
         <main className="flex-1 overflow-hidden">
+          
+          {/* Partner Stores Horizontal Scroll */}
           <div className="bg-white p-5 rounded shadow-sm border border-gray-200 mb-6 flex space-x-6 overflow-x-auto scrollbar-hide items-center">
             {supermarkets.map((store) => (
               <div key={store.id} className="flex flex-col items-center min-w-[70px] cursor-pointer group">
                 <div className="w-[70px] h-[70px] rounded-full border border-gray-200 overflow-hidden group-hover:border-green-500 transition-all shadow-sm p-1">
                   <img src={store.logo} alt={store.name} className="w-full h-full object-cover rounded-full" />
                 </div>
+                <span className="text-[11px] font-semibold text-gray-500 mt-2 truncate max-w-[70px]">{store.name}</span>
               </div>
             ))}
           </div>
@@ -104,26 +97,28 @@ export default function Home() {
             <button className="bg-white text-gray-700 px-6 py-2 rounded text-[14px] font-bold border border-gray-300 hover:bg-gray-50 transition-colors">Latest</button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+          {/* Flyers Horizontal Scroll on Mobile, Grid on Desktop */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 md:grid md:grid-cols-3 lg:grid-cols-4 scrollbar-hide">
             {flyers.map((flyer) => (
-              <div key={flyer.id} className="bg-white rounded border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col relative">
+              <div key={flyer.id} className="min-w-full md:min-w-0 snap-center bg-white rounded border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col relative">
                 <div className="relative aspect-[3/4] bg-gray-50 border-b border-gray-100 overflow-hidden">
                   <img src={flyer.image} alt={flyer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute -bottom-6 right-3 w-12 h-12 bg-white rounded shadow border border-gray-200 p-1 z-10 flex items-center justify-center">
                     <img src={flyer.logo} alt="Store Logo" className="max-w-full max-h-full object-cover rounded-sm" />
                   </div>
                 </div>
-                <div className="p-3 pt-8 flex-grow flex flex-col">
-                  <h3 className="font-bold text-gray-900 text-[14px] mb-0.5">{flyer.store}</h3>
-                  <p className="text-gray-500 text-[12px] mb-3 line-clamp-1">{flyer.title}</p>
-                  <div className="mt-auto flex items-center justify-between text-[11px] font-bold pt-2 border-t border-gray-100">
-                    <span className="text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">{flyer.pages}</span>
-                    <span className="text-red-600 bg-red-50 px-1.5 py-0.5 rounded">{flyer.daysLeft}</span>
+                <div className="p-4 pt-8 flex-grow flex flex-col">
+                  <h3 className="font-bold text-gray-900 text-[15px] mb-1">{flyer.store}</h3>
+                  <p className="text-gray-500 text-[13px] mb-4 line-clamp-1">{flyer.title}</p>
+                  <div className="mt-auto flex items-center justify-between text-[11px] font-bold pt-3 border-t border-gray-100">
+                    <span className="text-gray-500 bg-gray-100 px-2 py-1 rounded">{flyer.pages}</span>
+                    <span className="text-red-600 bg-red-50 px-2 py-1 rounded">{flyer.daysLeft}</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
         </main>
       </div>
     </div>
