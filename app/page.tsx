@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
 
-// Categories (Simple Text D4D Style - No Icons)
+// Navigation Categories
 const categories = [
   { name: 'Electronics', active: true, sub: ['Mobiles', 'TV & Audio', 'Laptops & Computers', 'Home Appliances'] },
   { name: 'Hyper Markets', active: false, sub: [] },
@@ -14,26 +14,28 @@ const categories = [
   { name: 'Malls', active: false, sub: [] },
 ];
 
+// Partner Stores Data
 const supermarkets = [
-  { id: 1, name: 'Carrefour', logo: 'https://placehold.co/150x150/ffffff/000000?text=Carrefour' },
-  { id: 2, name: 'Nesto', logo: 'https://placehold.co/150x150/ffffff/000000?text=Nesto' },
-  { id: 3, name: 'LuLu', logo: 'https://placehold.co/150x150/ffffff/000000?text=LuLu' },
-  { id: 4, name: 'Othaim', logo: 'https://placehold.co/150x150/ffffff/000000?text=Othaim' },
+  { id: 1, name: 'Carrefour', logo: 'https://placehold.co/150x150/ffffff/005b9f?text=Carrefour' },
+  { id: 2, name: 'Nesto', logo: 'https://placehold.co/150x150/ffffff/e31837?text=Nesto' },
+  { id: 3, name: 'LuLu', logo: 'https://placehold.co/150x150/ffffff/008b43?text=LuLu' },
+  { id: 4, name: 'Othaim', logo: 'https://placehold.co/150x150/ffffff/1f4d25?text=Othaim' },
   { id: 5, name: 'Panda', logo: 'https://placehold.co/150x150/ffffff/000000?text=Panda' },
-  { id: 6, name: 'Extra', logo: 'https://placehold.co/150x150/ffffff/000000?text=Extra' },
-  { id: 7, name: 'Jarir', logo: 'https://placehold.co/150x150/ffffff/000000?text=Jarir' },
+  { id: 6, name: 'Extra', logo: 'https://placehold.co/150x150/ffffff/ff6600?text=Extra' },
+  { id: 7, name: 'Jarir', logo: 'https://placehold.co/150x150/ffffff/e3000f?text=Jarir' },
 ];
 
+// Promotional Flyers Data
 const flyers = [
-  { id: 1, store: 'Carrefour', title: "Ramadan Pre-Sale", pages: '+72 Pages', daysLeft: '+6 Days left', image: 'https://placehold.co/400x550/e2e8f0/475569?text=Carrefour+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=C' },
-  { id: 2, store: 'Panda', title: 'Weekly Super Deals', pages: '+24 Pages', daysLeft: '+3 Days left', image: 'https://placehold.co/400x550/e2e8f0/475569?text=Panda+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=P' },
-  { id: 3, store: 'Nesto', title: 'Weekend Bonanza', pages: '+47 Pages', daysLeft: '+2 Days left', image: 'https://placehold.co/400x550/e2e8f0/475569?text=Nesto+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=N' },
-  { id: 4, store: 'LuLu', title: 'Tech Festival', pages: '+18 Pages', daysLeft: '+5 Days left', image: 'https://placehold.co/400x550/e2e8f0/475569?text=LuLu+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=L' },
+  { id: 1, store: 'Carrefour', title: "Ramadan Pre-Sale", pages: '+72 Pages', daysLeft: '+6 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Carrefour+Flyer', logo: 'https://placehold.co/80x80/ffffff/005b9f?text=C' },
+  { id: 2, store: 'Panda', title: 'Weekly Super Deals', pages: '+24 Pages', daysLeft: '+3 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Panda+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=P' },
+  { id: 3, store: 'Nesto', title: 'Weekend Bonanza', pages: '+47 Pages', daysLeft: '+2 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Nesto+Flyer', logo: 'https://placehold.co/80x80/ffffff/e31837?text=N' },
+  { id: 4, store: 'LuLu', title: 'Tech Festival', pages: '+18 Pages', daysLeft: '+5 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=LuLu+Flyer', logo: 'https://placehold.co/80x80/ffffff/008b43?text=L' },
 ];
 
 export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
-  const [selectedCity, setSelectedCity] = useState('Riyadh');
+  const [selectedCity, setSelectedCity] = useState('Dammam');
 
   useEffect(() => {
     async function fetchProducts() {
@@ -46,8 +48,8 @@ export default function Home() {
   return (
     <div className="bg-[#f4f5f7] min-h-screen font-sans flex flex-col">
       
-      {/* 1. TOP TABS (Offers / Products / Coupons) */}
-      <div className="bg-gray-100 border-b border-gray-200 text-sm font-bold text-gray-500">
+      {/* Top Navigation Tabs */}
+      <div className="bg-white border-b border-gray-200 text-sm font-bold text-gray-500">
         <div className="max-w-[1400px] mx-auto flex justify-center gap-10">
           <button className="py-2.5 px-2 text-green-600 border-b-4 border-green-600">Offers</button>
           <button className="py-2.5 px-2 hover:text-green-600 transition-colors">Products</button>
@@ -55,13 +57,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. MAIN HEADER (Logo + Advanced Search Bar) */}
+      {/* Main Header and Search */}
       <div className="bg-white py-5 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           <Link href="/" className="text-3xl font-black text-green-600 tracking-tighter">SaudiPrice</Link>
 
-          {/* D4D Style Search Bar (City + Input + Button) */}
-          <div className="flex-1 max-w-3xl w-full flex border-2 border-green-600 rounded-lg overflow-hidden shadow-sm">
+          <div className="flex-1 max-w-3xl w-full flex border-2 border-green-600 rounded-lg overflow-hidden shadow-sm bg-white">
             <div className="bg-gray-50 border-r border-gray-300 px-3 py-2.5 flex items-center min-w-[120px]">
               <select 
                 value={selectedCity} 
@@ -90,23 +91,27 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. GREEN SUB-MENU NAVIGATION */}
+      {/* Secondary Navigation Menu */}
       <div className="bg-green-600 text-white hidden md:block shadow-md sticky top-0 z-40">
         <div className="max-w-[1400px] mx-auto px-4 flex justify-between items-center">
           <nav className="flex space-x-6 text-[14px] font-semibold">
+            <Link href="/" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Home</Link>
             <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">All Offers</Link>
             <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Ramadan offers</Link>
             <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Supermarket</Link>
             <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Electronics</Link>
-            <Link href="#" className="py-3.5 hover:text-green-200 border-b-2 border-transparent hover:border-white transition-all">Malls</Link>
           </nav>
-          <button className="bg-[#ff8c00] hover:bg-[#e67e00] text-white px-5 py-1.5 rounded text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-            <span>+</span> Add your company
-          </button>
+          <div className="flex items-center space-x-6">
+            <Link href="/about" className="text-sm font-medium hover:text-green-200 transition-colors">About Us</Link>
+            <Link href="/contact" className="text-sm font-medium hover:text-green-200 transition-colors">Contact</Link>
+            <button className="bg-[#ff8c00] hover:bg-[#e67e00] text-white px-5 py-1.5 rounded text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+              <span>+</span> Add your company
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* BREADCRUMBS */}
+      {/* Breadcrumbs */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 w-full text-[13px] text-gray-500 font-medium">
         <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
         <span className="text-gray-800">KSA</span> <span className="mx-2">›</span>
@@ -116,7 +121,7 @@ export default function Home() {
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-6 flex-grow pb-10">
         
-        {/* 4. LEFT SIDEBAR (Simple Text - No Icons) */}
+        {/* Left Sidebar Menu */}
         <aside className="hidden md:block w-[260px] flex-shrink-0 bg-white border border-gray-200 rounded shadow-sm h-fit">
           <h2 className="text-[16px] font-black text-gray-800 bg-gray-50 border-b border-gray-200 px-4 py-3 rounded-t">Categories</h2>
           <nav className="py-2">
@@ -142,15 +147,15 @@ export default function Home() {
           </nav>
         </aside>
 
-        {/* MAIN CONTENT */}
+        {/* Main Content Area */}
         <main className="flex-1 overflow-hidden">
           
-          {/* Supermarket Carousel */}
+          {/* Partner Stores Carousel */}
           <div className="bg-white p-5 rounded shadow-sm border border-gray-200 mb-6 flex space-x-6 overflow-x-auto scrollbar-hide items-center">
             {supermarkets.map((store) => (
               <div key={store.id} className="flex flex-col items-center min-w-[70px] cursor-pointer group">
                 <div className="w-[70px] h-[70px] rounded-full border border-gray-200 overflow-hidden group-hover:border-green-500 transition-all shadow-sm p-1">
-                  <img src={store.logo} alt={store.name} className="w-full h-full object-contain rounded-full" />
+                  <img src={store.logo} alt={store.name} className="w-full h-full object-cover rounded-full" />
                 </div>
               </div>
             ))}
@@ -163,14 +168,14 @@ export default function Home() {
             <button className="bg-white text-gray-700 px-6 py-2 rounded text-[14px] font-bold border border-gray-300 hover:bg-gray-50 transition-colors">Latest</button>
           </div>
 
-          {/* Exact Flyer Grid */}
+          {/* Flyers Grid Layout */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             {flyers.map((flyer) => (
               <div key={flyer.id} className="bg-white rounded border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col relative">
                 <div className="relative aspect-[3/4] bg-gray-50 border-b border-gray-100 overflow-hidden">
                   <img src={flyer.image} alt={flyer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute -bottom-6 right-3 w-12 h-12 bg-white rounded shadow border border-gray-200 p-1 z-10 flex items-center justify-center">
-                    <img src={flyer.logo} alt="Logo" className="max-w-full max-h-full object-contain" />
+                    <img src={flyer.logo} alt="Store Logo" className="max-w-full max-h-full object-cover rounded-sm" />
                   </div>
                 </div>
                 <div className="p-3 pt-8 flex-grow flex flex-col">
@@ -188,15 +193,12 @@ export default function Home() {
         </main>
       </div>
 
-      {/* 5. LARGE GREEN FOOTER (D4D Style) */}
+      {/* Main Footer */}
       <footer className="bg-[#0b5e36] text-white pt-16 pb-8 mt-auto border-t-4 border-green-500">
         <div className="max-w-[1400px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2 flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-32 h-48 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center">
-              <span className="text-xs text-center text-white/70">App Screen<br/>Placeholder</span>
-            </div>
             <div>
-              <h3 className="text-2xl font-black mb-2">Download SaudiPrice App</h3>
+              <h3 className="text-3xl font-black mb-2 tracking-tighter">SaudiPrice</h3>
               <p className="text-green-100 text-sm mb-4 max-w-sm">Get all the latest offers, flyers, and coupons directly on your mobile device. Never miss a deal in KSA!</p>
               <div className="flex gap-3">
                 <button className="bg-black border border-gray-700 rounded px-4 py-2 flex items-center gap-2 hover:bg-gray-900 transition">
@@ -214,7 +216,6 @@ export default function Home() {
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
           <div>
