@@ -10,11 +10,13 @@ function NavbarContent() {
   
   const defaultCity = searchParams.get('city') || 'Riyadh';
   const [selectedCity, setSelectedCity] = useState(defaultCity);
+  const [selectedLang, setSelectedLang] = useState('en');
   
-  // States for Active UI Elements
+  // State to manage the active tab
   const [activeTab, setActiveTab] = useState('Offers');
+  
+  // State to manage the active sub-menu item
   const [activeSubMenu, setActiveSubMenu] = useState('All Offers');
-  const [activeLang, setActiveLang] = useState('en');
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
@@ -23,6 +25,7 @@ function NavbarContent() {
   };
 
   const tabs = ['Offers', 'Products', 'Coupons'];
+  
   const subMenuItems = [
     'All Offers', 'Ramadan offers', 'Supermarket', 'Mobiles', 
     'Laptops', 'TV & Audio', 'Home & Decor', 'Health & Beauty'
@@ -31,13 +34,16 @@ function NavbarContent() {
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
       
+      {/* Main Top Header Row (Compact Padding & Gap) */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
         
+        {/* Brand Logo */}
         <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0">
           <span className="text-green-600">Saudi</span>
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
+        {/* Compact Center Tabs with Active State */}
         <div className="hidden lg:flex items-center bg-gray-100 rounded-full p-1 border border-gray-200">
           {tabs.map((tab) => (
             <button
@@ -54,7 +60,10 @@ function NavbarContent() {
           ))}
         </div>
 
+        {/* Compact Search Bar with Uniform Border and Attached Search Button */}
         <div className="flex-1 max-w-2xl flex border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20">
+          
+          {/* Compact City Selection Dropdown */}
           <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[90px] md:min-w-[110px]">
             <select 
               value={selectedCity} 
@@ -67,35 +76,34 @@ function NavbarContent() {
             </select>
           </div>
           
+          {/* Search Input Field */}
           <input 
             type="text" 
             placeholder="Find all shopping flyers in one place" 
             className="flex-1 px-3 text-[11px] md:text-xs text-gray-800 outline-none"
           />
           
+          {/* Dedicated Attached Search Button */}
           <button className="bg-green-600 text-white px-5 md:px-6 font-bold text-[11px] md:text-xs hover:bg-green-700 transition-colors border-l border-green-600">
             Search
           </button>
         </div>
 
-        {/* Cleanly Structured Language Toggle for Future Routing */}
-        <div className="hidden md:flex items-center bg-gray-50 rounded-full p-1 border border-gray-200 shrink-0">
-          <button 
-            onClick={() => setActiveLang('en')} 
-            className={`px-4 py-1.5 rounded-full text-[11px] font-bold transition-colors ${activeLang === 'en' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'}`}
+        {/* Compact Language Dropdown */}
+        <div className="hidden md:flex items-center shrink-0">
+          <select 
+            value={selectedLang}
+            onChange={(e) => setSelectedLang(e.target.value)}
+            className="bg-transparent text-[11px] md:text-xs font-bold text-gray-700 hover:text-green-600 outline-none cursor-pointer"
           >
-            EN
-          </button>
-          <button 
-            onClick={() => setActiveLang('ar')} 
-            className={`px-4 py-1.5 rounded-full text-[11px] font-bold transition-colors ${activeLang === 'ar' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'}`}
-          >
-            AR
-          </button>
+            <option value="en">English - EN</option>
+            <option value="ar">عربي - AR</option>
+          </select>
         </div>
 
       </div>
 
+      {/* Green Sub-Menu Navigation with Black Active State */}
       <div className="bg-green-600 text-white shadow-md">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
           <nav className="flex space-x-6 text-[12px] font-semibold whitespace-nowrap py-2.5">
@@ -103,10 +111,10 @@ function NavbarContent() {
               <button
                 key={item}
                 onClick={() => setActiveSubMenu(item)}
-                className={`transition-colors border-b-2 ${
+                className={`transition-colors ${
                   activeSubMenu === item 
-                    ? 'text-[#D4AF37] border-[#D4AF37] pb-1 font-bold' 
-                    : 'text-green-100 border-transparent hover:text-white pb-1'
+                    ? 'text-black font-extrabold' 
+                    : 'text-white hover:text-green-200'
                 }`}
               >
                 {item}
