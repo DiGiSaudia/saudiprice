@@ -61,9 +61,6 @@ export default function Navbar() {
           <div className="flex items-center space-x-6">
             <Link href="/about" className="text-sm font-medium hover:text-green-200 transition-colors">About Us</Link>
             <Link href="/contact" className="text-sm font-medium hover:text-green-200 transition-colors">Contact</Link>
-            <button className="bg-[#ff8c00] hover:bg-[#e67e00] text-white px-5 py-1.5 rounded text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-              <span>+</span> Add your company
-            </button>
           </div>
         </div>
       </div>

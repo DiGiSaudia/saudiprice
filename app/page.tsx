@@ -13,21 +13,30 @@ const categories = [
   { name: 'Malls', active: false, sub: [] },
 ];
 
+// Expanded to 15 Stores (Safe Generic Names)
 const supermarkets = [
-  { id: 1, name: 'Carrefour', logo: 'https://placehold.co/150x150/ffffff/005b9f?text=Carrefour' },
-  { id: 2, name: 'Nesto', logo: 'https://placehold.co/150x150/ffffff/e31837?text=Nesto' },
-  { id: 3, name: 'LuLu', logo: 'https://placehold.co/150x150/ffffff/008b43?text=LuLu' },
-  { id: 4, name: 'Othaim', logo: 'https://placehold.co/150x150/ffffff/1f4d25?text=Othaim' },
-  { id: 5, name: 'Panda', logo: 'https://placehold.co/150x150/ffffff/000000?text=Panda' },
-  { id: 6, name: 'Extra', logo: 'https://placehold.co/150x150/ffffff/ff6600?text=Extra' },
-  { id: 7, name: 'Jarir', logo: 'https://placehold.co/150x150/ffffff/e3000f?text=Jarir' },
+  { id: 1, name: 'Store One', logo: 'https://placehold.co/150x150/ffffff/005b9f?text=Store+1' },
+  { id: 2, name: 'Store Two', logo: 'https://placehold.co/150x150/ffffff/e31837?text=Store+2' },
+  { id: 3, name: 'Store Three', logo: 'https://placehold.co/150x150/ffffff/008b43?text=Store+3' },
+  { id: 4, name: 'Store Four', logo: 'https://placehold.co/150x150/ffffff/1f4d25?text=Store+4' },
+  { id: 5, name: 'Store Five', logo: 'https://placehold.co/150x150/ffffff/000000?text=Store+5' },
+  { id: 6, name: 'Store Six', logo: 'https://placehold.co/150x150/ffffff/ff6600?text=Store+6' },
+  { id: 7, name: 'Store Seven', logo: 'https://placehold.co/150x150/ffffff/e3000f?text=Store+7' },
+  { id: 8, name: 'Store Eight', logo: 'https://placehold.co/150x150/ffffff/000000?text=Store+8' },
+  { id: 9, name: 'Store Nine', logo: 'https://placehold.co/150x150/ffffff/b31b1b?text=Store+9' },
+  { id: 10, name: 'Store Ten', logo: 'https://placehold.co/150x150/ffffff/008000?text=Store+10' },
+  { id: 11, name: 'Store Eleven', logo: 'https://placehold.co/150x150/ffffff/0055a4?text=Store+11' },
+  { id: 12, name: 'Store Twelve', logo: 'https://placehold.co/150x150/ffffff/e2231a?text=Store+12' },
+  { id: 13, name: 'Store Thirteen', logo: 'https://placehold.co/150x150/ffffff/d4af37?text=Store+13' },
+  { id: 14, name: 'Store Fourteen', logo: 'https://placehold.co/150x150/ffffff/006400?text=Store+14' },
+  { id: 15, name: 'Store Fifteen', logo: 'https://placehold.co/150x150/ffffff/004b87?text=Store+15' },
 ];
 
 const flyers = [
-  { id: 1, store: 'Carrefour', title: "Ramadan Pre-Sale", pages: '+72 Pages', daysLeft: '+6 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Carrefour+Flyer', logo: 'https://placehold.co/80x80/ffffff/005b9f?text=C' },
-  { id: 2, store: 'Panda', title: 'Weekly Super Deals', pages: '+24 Pages', daysLeft: '+3 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Panda+Flyer', logo: 'https://placehold.co/80x80/ffffff/000000?text=P' },
-  { id: 3, store: 'Nesto', title: 'Weekend Bonanza', pages: '+47 Pages', daysLeft: '+2 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Nesto+Flyer', logo: 'https://placehold.co/80x80/ffffff/e31837?text=N' },
-  { id: 4, store: 'LuLu', title: 'Tech Festival', pages: '+18 Pages', daysLeft: '+5 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=LuLu+Flyer', logo: 'https://placehold.co/80x80/ffffff/008b43?text=L' },
+  { id: 1, store: 'Store One', title: "Ramadan Pre-Sale", pages: '+72 Pages', daysLeft: '+6 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Flyer+1', logo: 'https://placehold.co/80x80/ffffff/005b9f?text=S1' },
+  { id: 2, store: 'Store Two', title: 'Weekly Super Deals', pages: '+24 Pages', daysLeft: '+3 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Flyer+2', logo: 'https://placehold.co/80x80/ffffff/000000?text=S2' },
+  { id: 3, store: 'Store Three', title: 'Weekend Bonanza', pages: '+47 Pages', daysLeft: '+2 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Flyer+3', logo: 'https://placehold.co/80x80/ffffff/e31837?text=S3' },
+  { id: 4, store: 'Store Four', title: 'Tech Festival', pages: '+18 Pages', daysLeft: '+5 Days left', image: 'https://placehold.co/400x550/f1f5f9/475569?text=Flyer+4', logo: 'https://placehold.co/80x80/ffffff/008b43?text=S4' },
 ];
 
 export default function Home() {
@@ -44,8 +53,6 @@ export default function Home() {
 
   return (
     <div className="font-sans flex flex-col">
-      
-      {/* Breadcrumbs */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 w-full text-[13px] text-gray-500 font-medium">
         <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
         <span className="text-gray-800">KSA</span> <span className="mx-2">›</span>
@@ -54,8 +61,6 @@ export default function Home() {
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-6 flex-grow pb-10">
-        
-        {/* Left Sidebar Menu */}
         <aside className="hidden md:block w-[260px] flex-shrink-0 bg-white border border-gray-200 rounded shadow-sm h-fit">
           <h2 className="text-[16px] font-black text-gray-800 bg-gray-50 border-b border-gray-200 px-4 py-3 rounded-t">Categories</h2>
           <nav className="py-2">
@@ -81,10 +86,7 @@ export default function Home() {
           </nav>
         </aside>
 
-        {/* Main Content Area */}
         <main className="flex-1 overflow-hidden">
-          
-          {/* Partner Stores Carousel */}
           <div className="bg-white p-5 rounded shadow-sm border border-gray-200 mb-6 flex space-x-6 overflow-x-auto scrollbar-hide items-center">
             {supermarkets.map((store) => (
               <div key={store.id} className="flex flex-col items-center min-w-[70px] cursor-pointer group">
@@ -95,14 +97,13 @@ export default function Home() {
             ))}
           </div>
 
-          <h1 className="text-xl font-bold text-gray-800 mb-4 tracking-tight">KSA, Saudi Arabia, Saudi - <span className="text-green-600">{selectedCity} offers</span></h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-4 tracking-tight">SaudiPrice - <span className="text-green-600">{selectedCity} offers</span></h1>
           
           <div className="flex gap-2 mb-6 border-b border-gray-200 pb-4">
             <button className="bg-green-600 text-white px-6 py-2 rounded text-[14px] font-bold shadow-sm hover:bg-green-700 transition-colors">Top Pick</button>
             <button className="bg-white text-gray-700 px-6 py-2 rounded text-[14px] font-bold border border-gray-300 hover:bg-gray-50 transition-colors">Latest</button>
           </div>
 
-          {/* Flyers Grid Layout */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             {flyers.map((flyer) => (
               <div key={flyer.id} className="bg-white rounded border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col relative">
@@ -123,7 +124,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-
         </main>
       </div>
     </div>
