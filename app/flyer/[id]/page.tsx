@@ -1,47 +1,56 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
 
-export default function FlyerDetailsPage({ params }: { params: { id: string } }) {
+export default function FlyerDetailsPage() {
+  const params = useParams();
+  const id = params?.id as string;
+
   const [flyer, setFlyer] = useState<any>(null);
   const [flyerPages, setFlyerPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchFlyerDetails() {
+      // اگر ID نہیں ملی تو فنکشن یہیں رک جائے
+      if (!id) return;
+
       try {
-        // Fetch the main flyer and store details
         const { data: flyerData, error: flyerError } = await supabase
           .from('flyers')
           .select('*, stores(name, logo_url)')
-          .eq('id', params.id)
+          .eq('id', id)
           .single();
+
+        if (flyerError) {
+          console.error("Supabase Error:", flyerError);
+          setLoading(false);
+          return;
+        }
 
         if (flyerData) {
           setFlyer(flyerData);
           
-          // Fetch the inside pages of the flyer
           const { data: pagesData } = await supabase
             .from('flyer_pages')
             .select('*')
-            .eq('flyer_id', params.id)
+            .eq('flyer_id', id)
             .order('page_number', { ascending: true });
             
           if (pagesData) setFlyerPages(pagesData);
         }
       } catch (error) {
-        console.error("Error fetching flyer:", error);
+        console.error("Fetch Error:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    if (params.id) {
-      fetchFlyerDetails();
-    }
-  }, [params.id]);
+    fetchFlyerDetails();
+  }, [id]);
 
   if (loading) {
     return (
@@ -80,7 +89,7 @@ export default function FlyerDetailsPage({ params }: { params: { id: string } })
         
         {/* Flyer Header Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6 mb-6 flex flex-col md:flex-row gap-4 items-center md:items-start text-center md:text-left">
-          <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 border border-gray-100 rounded-lg p-1 shadow-sm">
+          <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 border border-gray-100 rounded-lg p-1 shadow-sm mx-auto md:mx-0">
             <img src={flyer.stores?.logo_url} alt={flyer.stores?.name} className="w-full h-full object-contain" />
           </div>
           <div className="flex-1">
@@ -99,12 +108,10 @@ export default function FlyerDetailsPage({ params }: { params: { id: string } })
 
         {/* Flyer Images Gallery */}
         <div className="flex flex-col gap-4 md:gap-6 items-center w-full">
-          {/* Main Cover Image */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 w-full max-w-[600px]">
             <img src={flyer.cover_image_url} alt="Cover" className="w-full h-auto rounded" />
           </div>
 
-          {/* Inside Pages Loop */}
           {flyerPages.length > 0 ? (
             flyerPages.map((page) => (
               <div key={page.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 w-full max-w-[600px]">
