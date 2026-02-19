@@ -4,30 +4,31 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 export default function Navbar() {
-  const [selectedCity, setSelectedCity] = useState('Dammam');
+  const [selectedCity, setSelectedCity] = useState('Riyadh');
   const [selectedLang, setSelectedLang] = useState('en');
 
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
-      {/* Main Header (Logo, Tabs, Search, Lang) */}
-      <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 flex flex-wrap items-center justify-between gap-4">
+      
+      {/* Main Top Header Row */}
+      <div className="max-w-[1400px] mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-6">
         
         {/* Brand Logo - Dual Color */}
-        <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0">
+        <Link href="/" className="text-3xl font-black tracking-tighter shrink-0">
           <span className="text-green-600">Saudi</span>
           <span className="text-gray-800">Price</span>
         </Link>
 
-        {/* Center Tabs (Desktop Only) */}
-        <div className="hidden md:flex bg-gray-100 rounded-full p-1 mx-4">
-          <button className="px-6 py-2 rounded-full bg-green-600 text-white font-bold text-sm shadow-sm">Offers</button>
-          <button className="px-6 py-2 rounded-full text-gray-600 font-bold text-sm hover:text-green-600 transition-colors">Products</button>
-          <button className="px-6 py-2 rounded-full text-gray-600 font-bold text-sm hover:text-green-600 transition-colors">Coupons</button>
+        {/* Center Tabs (Offers, Products, Coupons) */}
+        <div className="hidden lg:flex items-center bg-gray-100 rounded-full p-1 border border-gray-200">
+          <button className="px-8 py-2.5 rounded-full bg-green-600 text-white font-bold text-sm shadow-sm transition-colors">Offers</button>
+          <button className="px-8 py-2.5 rounded-full text-gray-600 font-bold text-sm hover:text-green-600 transition-colors">Products</button>
+          <button className="px-8 py-2.5 rounded-full text-gray-600 font-bold text-sm hover:text-green-600 transition-colors">Coupons</button>
         </div>
 
-        {/* Search Bar (Full width on mobile, auto on desktop) */}
-        <div className="flex-1 w-full md:w-auto md:flex-none md:max-w-md flex border-2 border-green-600 rounded-full overflow-hidden order-last md:order-none mt-2 md:mt-0 bg-white">
-          <div className="bg-gray-50 border-r border-gray-300 px-3 py-2 flex items-center min-w-[100px] md:min-w-[120px]">
+        {/* Advanced Search Bar (Pill Shape) */}
+        <div className="flex-1 max-w-2xl flex border-2 border-green-600 rounded-full overflow-hidden bg-white h-[46px]">
+          <div className="bg-gray-50 border-r border-gray-300 px-3 flex items-center min-w-[130px]">
             <select 
               value={selectedCity} 
               onChange={(e) => setSelectedCity(e.target.value)}
@@ -40,46 +41,44 @@ export default function Navbar() {
           </div>
           <input 
             type="text" 
-            placeholder="Search for offers..." 
-            className="flex-1 px-4 py-2 text-sm text-gray-800 outline-none"
+            placeholder="Find all shopping flyers in one place" 
+            className="flex-1 px-4 text-sm text-gray-800 outline-none"
           />
-          <button className="bg-green-600 text-white px-5 md:px-8 py-2 font-bold text-sm hover:bg-green-700 transition-colors">
-            SEARCH
+          <button className="bg-green-600 text-white px-8 font-bold text-sm hover:bg-green-700 transition-colors">
+            Search
           </button>
         </div>
 
         {/* Language Dropdown */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="hidden md:flex items-center shrink-0">
           <select 
             value={selectedLang}
             onChange={(e) => setSelectedLang(e.target.value)}
             className="bg-transparent text-sm font-bold text-gray-700 hover:text-green-600 outline-none cursor-pointer"
           >
-            <option value="en">EN</option>
-            <option value="ar">عربي</option>
+            <option value="en">English - EN</option>
+            <option value="ar">عربي - AR</option>
           </select>
         </div>
-      </div>
 
-      {/* Mobile Tabs (Offers/Products/Coupons) - Shows only on mobile under search */}
-      <div className="md:hidden flex border-t border-gray-100 bg-gray-50 text-sm font-bold">
-        <button className="flex-1 py-3 text-green-600 border-b-2 border-green-600">Offers</button>
-        <button className="flex-1 py-3 text-gray-500 hover:text-green-600">Products</button>
-        <button className="flex-1 py-3 text-gray-500 hover:text-green-600">Coupons</button>
       </div>
 
       {/* Green Sub-Menu Navigation */}
       <div className="bg-green-600 text-white shadow-md">
-        <div className="max-w-[1400px] mx-auto px-4 flex justify-start items-center overflow-x-auto scrollbar-hide">
-          <nav className="flex space-x-6 text-[14px] font-semibold whitespace-nowrap py-3">
+        <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
+          <nav className="flex space-x-8 text-[14px] font-semibold whitespace-nowrap py-3.5">
             <Link href="/" className="hover:text-green-200 transition-colors">All Offers</Link>
             <Link href="#" className="hover:text-green-200 transition-colors">Ramadan offers</Link>
             <Link href="#" className="hover:text-green-200 transition-colors">Supermarket</Link>
             <Link href="#" className="hover:text-green-200 transition-colors">Mobiles</Link>
             <Link href="#" className="hover:text-green-200 transition-colors">Laptops</Link>
+            <Link href="#" className="hover:text-green-200 transition-colors">TV & Audio</Link>
+            <Link href="#" className="hover:text-green-200 transition-colors">Home & Decor</Link>
+            <Link href="#" className="hover:text-green-200 transition-colors">Health & Beauty</Link>
           </nav>
         </div>
       </div>
+
     </header>
   );
 }
