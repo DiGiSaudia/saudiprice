@@ -67,13 +67,13 @@ function NavbarContent() {
     });
   };
 
-  // 3. Gregorian Date Shortening: Uses 2-digit year (e.g., Feb 20, 26)
+  // 3. Gregorian Date Formatting: Uses full 4-digit year (e.g., Feb 20, 2026)
   const formatGregorianDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { 
       timeZone: 'Asia/Riyadh', 
       month: 'short', 
       day: 'numeric',
-      year: '2-digit' // Ensures '26' instead of '2026'
+      year: 'numeric' // Ensures full 4-digit year
     });
   };
 
@@ -204,6 +204,7 @@ function NavbarContent() {
              <CalendarIcon />
              <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
              
+             {/* Converter Icon */}
              <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5 text-gray-400 shrink-0 mx-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
              </svg>
