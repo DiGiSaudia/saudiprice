@@ -18,10 +18,18 @@ function NavbarContent() {
   // State to manage the active sub-menu item
   const [activeSubMenu, setActiveSubMenu] = useState('All Offers');
 
+  // New state to manage the Mobile Categories Dropdown
+  const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
+
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
     setSelectedCity(city);
     router.push(`/?city=${city}`);
+  };
+
+  // Function to toggle language beautifully
+  const toggleLanguage = () => {
+    setSelectedLang((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
   };
 
   const tabs = ['Offers', 'Products', 'Coupons'];
@@ -31,10 +39,16 @@ function NavbarContent() {
     'Laptops', 'TV & Audio', 'Home & Decor', 'Health & Beauty'
   ];
 
+  // Categories list for the mobile dropdown menu
+  const mobileCategories = [
+    'Mobiles', 'TV', 'Kitchen Appliance', 'Printer', 
+    'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
+  ];
+
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
       
-      {/* 1. Main Top Header Row (Shared Logo, Desktop Search & Tabs) */}
+      {/* 1. Main Top Header Row */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
         
         {/* Brand Logo - Visible on all screens */}
@@ -60,7 +74,7 @@ function NavbarContent() {
           ))}
         </div>
 
-        {/* Compact Search Bar & City Selector - DESKTOP ONLY (Hidden on Mobile) */}
+        {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
         <div className="hidden md:flex flex-1 max-w-2xl border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20">
           
           <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[110px]">
@@ -86,34 +100,52 @@ function NavbarContent() {
           </button>
         </div>
 
-        {/* Compact Language Dropdown - Visible on all screens */}
+        {/* Visually Appealing Language Toggle Button */}
         <div className="flex items-center shrink-0">
-          <select 
-            value={selectedLang}
-            onChange={(e) => setSelectedLang(e.target.value)}
-            className="bg-transparent text-[11px] md:text-xs font-bold text-gray-700 hover:text-green-600 outline-none cursor-pointer"
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-bold text-[10px] md:text-[11px] hover:bg-green-100 transition-colors shadow-sm"
           >
-            <option value="en">English - EN</option>
-            <option value="ar">عربي - AR</option>
-          </select>
+            {selectedLang === 'en' ? 'عربي - AR' : 'English - EN'}
+          </button>
         </div>
 
       </div>
 
-      {/* 2. NEW: Secondary Mobile-Only Section (Hidden on Desktop) */}
+      {/* 2. Secondary Mobile-Only Section (Hidden on Desktop) */}
       <div className="block md:hidden bg-gray-50 border-t border-gray-100 px-4 py-3 shadow-inner">
         <div className="flex flex-col gap-3">
           
           {/* Row A: Categories Button & City Selector */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 relative z-50">
             
-            {/* Categories Mobile Menu Button */}
-            <button className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-2 rounded-md font-bold text-[11px] shadow-sm hover:bg-green-700 transition-colors shrink-0">
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-              </svg>
-              Categories
-            </button>
+            {/* Categories Mobile Menu Button with Dropdown Logic */}
+            <div className="relative shrink-0">
+              <button 
+                onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
+                className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-2 rounded-md font-bold text-[11px] shadow-sm hover:bg-green-700 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+                Categories
+              </button>
+
+              {/* Expandable Dropdown Menu for Mobile Categories */}
+              {isMobileCategoryOpen && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 flex flex-col">
+                  {mobileCategories.map((cat, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setIsMobileCategoryOpen(false)}
+                      className="px-4 py-2.5 text-left text-[11px] font-bold text-gray-700 hover:bg-green-50 hover:text-green-600 border-b border-gray-50 last:border-0"
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             
             {/* Mobile City Selector */}
             <div className="bg-white border border-gray-300 rounded-md px-2 py-1.5 flex items-center shadow-sm flex-1 h-[34px]">
