@@ -46,13 +46,17 @@ function HomeContent() {
     }
   };
 
+  // جب بھی کیٹیگری پر کلک ہوگا تو پیج سموتھلی اوپر چلا جائے گا
+  const handleCategoryClick = (catName: string) => {
+    setActiveCategory(catName);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
-      // 1. Fetch Categories
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
       if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
-      // 2. Fetch Stores
       const { data: storeData } = await supabase.from('stores').select('*').order('created_at');
       if (storeData) setStores(storeData);
     }
@@ -83,7 +87,7 @@ function HomeContent() {
               return (
                 <li key={cat.id || idx}>
                   <button 
-                    onClick={() => setActiveCategory(cat.name)}
+                    onClick={() => handleCategoryClick(cat.name)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold text-sm ${
                       isActive 
                         ? 'bg-green-50 text-green-700 shadow-sm border border-green-100' 
@@ -107,50 +111,75 @@ function HomeContent() {
           </div>
         </aside>
 
-        <main className="flex-1 w-full min-w-0">
+        {/* Main Content Area */}
+        <main className="flex-1 w-full min-w-0 flex flex-col">
           
-          {/* Hero Banner */}
-          <HeroBanner />
-          
-          {/* Responsive Stores Carousel */}
-          {displayStores.length > 0 && (
-            <div className="relative mb-6 md:mb-8">
-              <div className="flex items-center justify-between mb-4 mt-2">
-                <h2 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Popular Stores</h2>
-              </div>
-              <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
-              <div 
-                ref={storesRef}
-                className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
-              >
-                {displayStores.map((store) => (
-                  <button 
-                    key={store.id} 
-                    onClick={() => setActiveStore(store.id === activeStore ? null : store.id)}
-                    className="flex flex-col items-center min-w-[60px] md:min-w-[70px] snap-start cursor-pointer group shrink-0 outline-none"
+          {/* سمارٹ لاجک: اگر All Deals ہے تو بینر دکھاؤ، ورنہ چھپا دو */}
+          {activeCategory === 'All Deals' ? (
+            <>
+              <HeroBanner />
+              
+              {displayStores.length > 0 && (
+                <div className="relative mb-6 md:mb-8">
+                  <div className="flex items-center justify-between mb-4 mt-2">
+                    <h2 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Popular Stores</h2>
+                  </div>
+                  <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
+                  <div 
+                    ref={storesRef}
+                    className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
                   >
-                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden transition-all shadow-sm p-0.5 border-2 ${
-                      activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-100 group-hover:border-green-400'
-                    }`}>
-                      <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover rounded-full" />
-                    </div>
-                    <span className={`text-[10px] md:text-xs mt-2 truncate w-full text-center transition-colors ${
-                      activeStore === store.id ? 'text-green-600 font-extrabold' : 'text-gray-700 font-semibold group-hover:text-green-600'
-                    }`}>
-                      {store.name}
-                    </span>
-                  </button>
-                ))}
+                    {displayStores.map((store) => (
+                      <button 
+                        key={store.id} 
+                        onClick={() => setActiveStore(store.id === activeStore ? null : store.id)}
+                        className="flex flex-col items-center min-w-[60px] md:min-w-[70px] snap-start cursor-pointer group shrink-0 outline-none"
+                      >
+                        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden transition-all shadow-sm p-0.5 border-2 ${
+                          activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-100 group-hover:border-green-400'
+                        }`}>
+                          <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover rounded-full" />
+                        </div>
+                        <span className={`text-[10px] md:text-xs mt-2 truncate w-full text-center transition-colors ${
+                          activeStore === store.id ? 'text-green-600 font-extrabold' : 'text-gray-700 font-semibold group-hover:text-green-600'
+                        }`}>
+                          {store.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <NavArrow direction="right" onClick={() => scrollCarousel(storesRef, 'right')} />
+                </div>
+              )}
+            </>
+          ) : (
+            /* نیا سمارٹ کیٹیگری ہیڈر (جب کوئی کیٹیگری سلیکٹ ہو) */
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-100 mb-6 flex items-center justify-between animate-in fade-in zoom-in duration-300">
+              <div className="flex items-center gap-3 md:gap-4">
+                <span className="text-2xl md:text-3xl bg-green-50 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-xl shadow-inner">
+                  {getCategoryIcon(activeCategory)}
+                </span>
+                <div>
+                  <h2 className="text-lg md:text-2xl font-black text-gray-800 leading-tight tracking-tight">{activeCategory}</h2>
+                  <p className="text-[10px] md:text-xs text-green-600 font-bold uppercase tracking-wider">Top Deals & Discounts</p>
+                </div>
               </div>
-              <NavArrow direction="right" onClick={() => scrollCarousel(storesRef, 'right')} />
+              <button 
+                onClick={() => handleCategoryClick('All Deals')} 
+                className="text-[10px] md:text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 px-3 py-2 md:px-4 md:py-2.5 rounded-full transition-all shadow-sm shrink-0"
+              >
+                ✕ Clear Filter
+              </button>
             </div>
           )}
 
+          {/* Top Products Section اب Main سکرین کے اندر ہے! */}
+          <div className="w-full pb-8">
+            <TopProducts activeCategory={activeCategory} />
+          </div>
+
         </main>
       </div>
-
-      {/* Top Products Section */}
-      <TopProducts activeCategory={activeCategory} />
 
     </div>
   );
