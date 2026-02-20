@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense, useRef } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import TopProducts from './components/TopProducts'; // 1. Imported TopProducts component here
 
 const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick: () => void }) => (
   <button 
@@ -38,7 +39,7 @@ function HomeContent() {
     }
   };
 
-  // Fetch real data from Supabase
+  // Fetch real data from Supabase for SaudiPrice
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
       // 1. Fetch Categories
@@ -68,11 +69,11 @@ function HomeContent() {
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
       
       <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium">
-  <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
-  <span className="text-green-600 font-bold">{selectedCity} Offers</span>
-</div>
+        <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
+        <span className="text-green-600 font-bold">{selectedCity} Offers</span>
+      </div>
 
-      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 flex-grow pb-10 w-full">
+      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
         
         {/* Left Sidebar - Live Categories */}
         <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-200 rounded-lg shadow-sm h-fit sticky top-[120px]">
@@ -191,6 +192,10 @@ function HomeContent() {
 
         </main>
       </div>
+
+      {/* 2. Top Products Section added below the main flyers content */}
+      <TopProducts />
+
     </div>
   );
 }
