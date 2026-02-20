@@ -221,7 +221,8 @@ function HomeContent() {
       </div>
 
       {/* Top Products Section */}
-      <TopProducts />
+      {/* Top Products Section */}
+      <TopProducts activeCategory={activeCategory} />
 
     </div>
   );
