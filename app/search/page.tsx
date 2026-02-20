@@ -34,7 +34,7 @@ function SearchContent() {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .ilike('title', `%${query}%`);
+        .or(`title.ilike.%${query}%,category.ilike.%${query}%,store_name.ilike.%${query}%`);
 
       if (!error && data) {
         setProducts(data);

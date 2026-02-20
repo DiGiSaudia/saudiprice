@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-// Define the expected props
 interface TopProductsProps {
   activeCategory?: string;
 }
@@ -11,30 +10,28 @@ interface TopProductsProps {
 export default function TopProducts({ activeCategory = 'All Deals' }: TopProductsProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [savedIds, setSavedIds] = useState<string[]>([]); // New State for red heart
 
   useEffect(() => {
+    // Load saved products to make hearts red
+    const saved = JSON.parse(localStorage.getItem('saudiPrice_favs') || '[]');
+    setSavedIds(saved.map((item: any) => item.id));
+
     async function fetchProducts() {
       setLoading(true);
-      
       let query = supabase.from('products').select('*');
       
-      // Filter by category if a specific one is selected
       if (activeCategory && activeCategory !== 'All Deals') {
         query = query.eq('category', activeCategory);
       }
 
       const { data, error } = await query;
-      
-      if (!error && data) {
-        setProducts(data);
-      }
+      if (!error && data) setProducts(data);
       setLoading(false);
     }
-
     fetchProducts();
-  }, [activeCategory]); // Re-run whenever category changes
+  }, [activeCategory]);
 
-  // Save to LocalStorage functionality
   const toggleSaveProduct = (product: any) => {
     const saved = JSON.parse(localStorage.getItem('saudiPrice_favs') || '[]');
     const isSaved = saved.find((item: any) => item.id === product.id);
@@ -42,12 +39,14 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
     let newSaved;
     if (isSaved) {
       newSaved = saved.filter((item: any) => item.id !== product.id);
+      setSavedIds(savedIds.filter(id => id !== product.id)); // Remove red color
     } else {
       newSaved = [...saved, product];
+      setSavedIds([...savedIds, product.id]); // Add red color
     }
     
     localStorage.setItem('saudiPrice_favs', JSON.stringify(newSaved));
-    window.dispatchEvent(new Event('storage')); // Update navbar badge
+    window.dispatchEvent(new Event('storage'));
   };
 
   return (
@@ -71,6 +70,8 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
             const discountPercentage = hasDiscount 
               ? Math.round(((product.old_price - product.current_price) / product.old_price) * 100) 
               : 0;
+            
+            const isSaved = savedIds.includes(product.id);
 
             return (
               <div key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col">
@@ -83,9 +84,9 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
 
                 <button 
                   onClick={() => toggleSaveProduct(product)}
-                  className="absolute top-3 right-3 z-10 p-1.5 bg-white/90 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 shadow-sm hover:shadow transition-all"
+                  className={`absolute top-3 right-3 z-10 p-1.5 bg-white/90 backdrop-blur-sm rounded-full transition-all shadow-sm hover:shadow ${isSaved ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </button>
@@ -107,11 +108,6 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
                     {hasDiscount && <span className="text-[11px] text-gray-400 line-through">SAR {product.old_price}</span>}
                     <span className="text-lg font-black text-green-600 italic">SAR {product.current_price}</span>
                   </div>
-                  <button className="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </button>
                 </div>
 
               </div>

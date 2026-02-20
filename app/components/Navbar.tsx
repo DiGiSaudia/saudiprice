@@ -272,8 +272,15 @@ function NavbarContent() {
           <nav className="flex space-x-5 md:space-x-6 text-[11px] md:text-[12px] font-semibold whitespace-nowrap py-2 md:py-2.5">
             {subMenuItems.map((item) => (
               <button
-                key={item}
-                onClick={() => setActiveSubMenu(item)}
+  key={item}
+  onClick={() => {
+    setActiveSubMenu(item);
+    if (item === 'All Offers') {
+      router.push('/');
+    } else {
+      router.push(`/?category=${encodeURIComponent(item)}`);
+    }
+  }}
                 className={`transition-colors ${
                   activeSubMenu === item 
                     ? 'text-black font-extrabold' 
