@@ -91,10 +91,41 @@ function NavbarContent() {
     </svg>
   );
 
+  // Reusable Date & Time Component to ensure exact layout across Desktop, Tablet, and Mobile
+  const renderDateTimeContainer = (customClasses: string) => (
+    <div className={`flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-full px-3 py-1.5 border border-gray-200 text-[10px] sm:text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0 ${customClasses}`}>
+      
+      {/* Unified Dual Date Container (Gregorian -> Hijri) */}
+      <span className="flex items-center gap-1.5 sm:gap-2 min-w-max shrink-0">
+        <CalendarIcon />
+        <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
+        
+        {/* Elegant Converter/Exchange Icon */}
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        </svg>
+
+        <span className="text-green-700">{isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}</span>
+      </span>
+      
+      <div className="w-px h-3.5 bg-gray-300 shrink-0"></div>
+      
+      {/* Live KSA Time with tabular-nums to prevent any layout shifting when seconds change */}
+      <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[85px] sm:min-w-[95px] shrink-0 tabular-nums">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
+          <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
+          <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
+        </svg>
+        {isMounted && ksaTime ? formatKsaTime(ksaTime) : '00:00:00 AM'}
+      </span>
+
+    </div>
+  );
+
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0 w-full">
       
-      {/* 1. Main Top Header Row */}
+      {/* 1. Main Top Header Row (Desktop Layout) */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
         
         {/* Brand Logo - Visible on all screens */}
@@ -103,35 +134,8 @@ function NavbarContent() {
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
-        {/* Live Dates and Time - DESKTOP ONLY */}
-        {/* Using shrink-0 and whitespace-nowrap to fix flexbox layout shifts across browsers */}
-        <div className="hidden xl:flex items-center gap-3 bg-gray-50 rounded-full px-4 py-1.5 border border-gray-200 text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0">
-          
-          {/* Unified Dual Date Container (Gregorian -> Hijri) */}
-          <span className="flex items-center gap-2 min-w-max">
-            <CalendarIcon />
-            <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
-            
-            {/* Elegant Converter/Exchange Icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-
-            <span className="text-green-700">{isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}</span>
-          </span>
-          
-          <div className="w-px h-3.5 bg-gray-300 shrink-0"></div>
-          
-          {/* Live KSA Time with Colorful Clock SVG */}
-          <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[95px] shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
-              <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
-              <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
-            </svg>
-            {isMounted && ksaTime ? formatKsaTime(ksaTime) : '00:00:00 AM'}
-          </span>
-
-        </div>
+        {/* Live Dates and Time - DESKTOP ONLY (Hidden on smaller screens to prevent clutter) */}
+        {renderDateTimeContainer("hidden lg:flex")}
 
         {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
         <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
@@ -171,7 +175,12 @@ function NavbarContent() {
 
       </div>
 
-      {/* 2. Secondary Mobile-Only Section (Hidden on Desktop) */}
+      {/* 2. Tablet & Mobile Date and Time Row (Visible only on smaller screens) */}
+      <div className="flex lg:hidden bg-white border-t border-gray-100 px-4 py-2 overflow-x-auto scrollbar-hide w-full shadow-inner items-center sm:justify-center">
+         {renderDateTimeContainer("w-max mx-auto")}
+      </div>
+
+      {/* 3. Secondary Mobile-Only Section (Search & Categories for Mobile) */}
       <div className="block md:hidden bg-gray-50 border-t border-gray-100 px-4 py-3 shadow-inner w-full">
         <div className="flex flex-col gap-3">
           
@@ -236,7 +245,7 @@ function NavbarContent() {
         </div>
       </div>
 
-      {/* 3. Green Sub-Menu Navigation */}
+      {/* 4. Green Sub-Menu Navigation */}
       <div className="bg-green-600 text-white shadow-md w-full">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
           <nav className="flex space-x-6 text-[12px] font-semibold whitespace-nowrap py-2.5">
