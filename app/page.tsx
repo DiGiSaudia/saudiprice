@@ -5,7 +5,7 @@ import { supabase } from './lib/supabase';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import TopProducts from './components/TopProducts';
-import HeroBanner from './components/HeroBanner'; // Hero Banner کی امپورٹ شامل کر دی گئی ہے
+import HeroBanner from './components/HeroBanner';
 
 const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick: () => void }) => (
   <button 
@@ -16,7 +16,6 @@ const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick
   </button>
 );
 
-// Helper function to dynamically assign icons based on category name
 const getCategoryIcon = (name: string) => {
   const lowerName = name.toLowerCase();
   if (lowerName.includes('mobile') || lowerName.includes('tablet')) return '📱';
@@ -25,19 +24,17 @@ const getCategoryIcon = (name: string) => {
   if (lowerName.includes('grocery') || lowerName.includes('supermarket') || lowerName.includes('food')) return '🛒';
   if (lowerName.includes('fashion') || lowerName.includes('beauty')) return '👕';
   if (lowerName.includes('home') || lowerName.includes('kitchen')) return '🏠';
-  return '🌟'; // Default icon
+  return '🌟';
 };
 
 function HomeContent() {
   const searchParams = useSearchParams();
   const selectedCity = searchParams.get('city') || 'Riyadh';
   
-  // Database States
   const [categories, setCategories] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
   const [flyers, setFlyers] = useState<any[]>([]);
   
-  // UI Active States
   const [activeCategory, setActiveCategory] = useState('All Deals');
   const [activeStore, setActiveStore] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState('Top Pick');
@@ -52,18 +49,14 @@ function HomeContent() {
     }
   };
 
-  // Fetch real data from Supabase for SaudiPrice
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
-      // 1. Fetch Categories
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
       if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
-      // 2. Fetch Stores
       const { data: storeData } = await supabase.from('stores').select('*').order('created_at');
       if (storeData) setStores(storeData);
 
-      // 3. Fetch Flyers with Store Details attached
       const { data: flyerData } = await supabase.from('flyers').select(`
         *,
         stores ( name, logo_url )
@@ -73,7 +66,6 @@ function HomeContent() {
     fetchLiveSaudiPriceData();
   }, [selectedCity]);
 
-  // Fallback dummy arrays
   const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
   const displayStores = stores.length > 0 ? stores : [];
   const displayFlyers = flyers.length > 0 ? flyers : [];
@@ -88,7 +80,6 @@ function HomeContent() {
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
         
-        {/* Beautiful Left Sidebar - Live Categories */}
         <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-100 rounded-2xl shadow-sm h-fit sticky top-[100px] p-4">
           <h3 className="text-lg font-black text-gray-800 mb-4 px-2 uppercase tracking-wider">
             Categories
@@ -114,7 +105,6 @@ function HomeContent() {
             })}
           </ul>
 
-          {/* Promo Banner inside Sidebar */}
           <div className="mt-8 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
             <h4 className="font-black text-blue-800 text-sm mb-1">Download App</h4>
             <p className="text-xs text-blue-600 mb-3">Get exclusive app-only discounts!</p>
@@ -126,10 +116,8 @@ function HomeContent() {
 
         <main className="flex-1 w-full min-w-0">
           
-          {/* New Hero Banner */}
           <HeroBanner />
           
-          {/* Responsive Stores Carousel */}
           {displayStores.length > 0 && (
             <div className="relative mb-6 md:mb-8">
               <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
@@ -186,7 +174,7 @@ function HomeContent() {
             </div>
           </div>
 
-          {/* Responsive Flyer Carousel */}
+          {/* FIX: Properly sized flyers container */}
           {displayFlyers.length > 0 ? (
             <div className="relative mb-8">
               <NavArrow direction="left" onClick={() => scrollCarousel(flyersRef, 'left')} />
@@ -195,19 +183,21 @@ function HomeContent() {
                 className="flex overflow-x-auto snap-x snap-mandatory gap-3 md:gap-4 pb-4 w-full scrollbar-hide"
               >
                 {displayFlyers.map((flyer) => (
-                  <Link href={`/flyer/${flyer.id}`} key={flyer.id} className="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-0.66rem)] snap-center shrink-0 group">
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative h-full">
-                      <div className="relative aspect-[3/4] bg-gray-50 border-b border-gray-50 overflow-hidden rounded-t-2xl">
+                  <Link href={`/flyer/${flyer.id}`} key={flyer.id} className="w-[140px] md:w-[200px] shrink-0 group snap-center flex flex-col h-full">
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full overflow-hidden">
+                      
+                      <div className="relative h-[180px] md:h-[260px] bg-gray-50 border-b border-gray-50 w-full shrink-0">
                         <img src={flyer.cover_image_url} alt={flyer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div className="absolute -bottom-4 right-2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl shadow-sm border border-gray-100 p-1 z-10 flex items-center justify-center">
                           <img src={flyer.stores?.logo_url} alt="Store Logo" className="max-w-full max-h-full object-contain rounded-lg" />
                         </div>
                       </div>
+
                       <div className="p-3 pt-6 md:p-4 md:pt-8 flex-grow flex flex-col">
-                        <h3 className="font-bold text-gray-900 text-xs md:text-sm mb-1">{flyer.stores?.name}</h3>
-                        <p className="text-gray-500 text-[10px] md:text-xs mb-3 md:mb-4 line-clamp-1">{flyer.title}</p>
+                        <h3 className="font-bold text-gray-900 text-xs md:text-sm mb-1 line-clamp-1">{flyer.stores?.name}</h3>
+                        <p className="text-gray-500 text-[10px] md:text-xs mb-3 md:mb-4 line-clamp-2 h-8">{flyer.title}</p>
                         <div className="mt-auto flex items-center justify-between text-[9px] md:text-[10px] font-bold pt-2 md:pt-3 border-t border-gray-50">
-                          <span className="text-gray-600 bg-gray-50 px-2 py-1 rounded-lg">+{flyer.page_count} Pages</span>
+                          <span className="text-gray-600 bg-gray-50 px-2 py-1 rounded-lg">+{flyer.page_count} Pgs</span>
                           <span className="text-red-600 bg-red-50 px-2 py-1 rounded-lg">Valid</span>
                         </div>
                       </div>
@@ -224,7 +214,6 @@ function HomeContent() {
         </main>
       </div>
 
-      {/* Top Products Section */}
       <TopProducts activeCategory={activeCategory} />
 
     </div>
