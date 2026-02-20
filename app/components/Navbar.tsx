@@ -84,15 +84,15 @@ function NavbarContent() {
     }).format(date).concat(' AH');
   };
 
-  // Standard SVG Calendar Icon Component to maintain clean code
+  // Standard SVG Calendar Icon Component
   const CalendarIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-green-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
   );
 
   return (
-    <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
+    <header className="font-sans z-50 bg-white shadow-sm sticky top-0 w-full">
       
       {/* 1. Main Top Header Row */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
@@ -104,33 +104,27 @@ function NavbarContent() {
         </Link>
 
         {/* Live Dates and Time - DESKTOP ONLY */}
-        {/* Applied whitespace-nowrap and min-w properties to prevent layout shifting */}
-        <div className="hidden xl:flex items-center gap-3 bg-gray-50 rounded-full px-4 py-1.5 border border-gray-200 text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap">
+        {/* Using shrink-0 and whitespace-nowrap to fix flexbox layout shifts across browsers */}
+        <div className="hidden xl:flex items-center gap-3 bg-gray-50 rounded-full px-4 py-1.5 border border-gray-200 text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0">
           
-          {/* Gregorian Date */}
-          <span className="flex items-center gap-1.5 min-w-max">
+          {/* Unified Dual Date Container (Gregorian -> Hijri) */}
+          <span className="flex items-center gap-2 min-w-max">
             <CalendarIcon />
-            {isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}
+            <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
+            
+            {/* Elegant Converter/Exchange Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+
+            <span className="text-green-700">{isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}</span>
           </span>
           
-          <div className="w-px h-3.5 bg-gray-300"></div>
-          
-          {/* Hijri Date with Saudi Flag (Using high-quality SVG to fix Chrome emoji issue) */}
-          <span className="flex items-center gap-1.5 min-w-max">
-            <img 
-              src="https://flagcdn.com/sa.svg" 
-              alt="Saudi Arabia Flag" 
-              className="w-4 h-3 object-cover rounded-sm shadow-sm"
-            />
-            <CalendarIcon />
-            {isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}
-          </span>
-          
-          <div className="w-px h-3.5 bg-gray-300"></div>
+          <div className="w-px h-3.5 bg-gray-300 shrink-0"></div>
           
           {/* Live KSA Time with Colorful Clock SVG */}
-          <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[95px]">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+          <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[95px] shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
               <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
               <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
             </svg>
@@ -142,7 +136,7 @@ function NavbarContent() {
         {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
         <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
           
-          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[100px]">
+          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[100px] shrink-0">
             <select 
               value={selectedCity} 
               onChange={handleCityChange}
@@ -157,10 +151,10 @@ function NavbarContent() {
           <input 
             type="text" 
             placeholder="Find all shopping flyers..." 
-            className="flex-1 px-3 text-xs text-gray-800 outline-none"
+            className="flex-1 px-3 text-xs text-gray-800 outline-none w-full"
           />
           
-          <button className="bg-green-600 text-white px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600">
+          <button className="bg-green-600 text-white px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">
             Search
           </button>
         </div>
@@ -178,7 +172,7 @@ function NavbarContent() {
       </div>
 
       {/* 2. Secondary Mobile-Only Section (Hidden on Desktop) */}
-      <div className="block md:hidden bg-gray-50 border-t border-gray-100 px-4 py-3 shadow-inner">
+      <div className="block md:hidden bg-gray-50 border-t border-gray-100 px-4 py-3 shadow-inner w-full">
         <div className="flex flex-col gap-3">
           
           {/* Row A: Categories Button & City Selector */}
@@ -228,13 +222,13 @@ function NavbarContent() {
           </div>
 
           {/* Row B: Mobile Search Bar */}
-          <div className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[38px] shadow-sm">
+          <div className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[38px] shadow-sm w-full">
             <input 
               type="text" 
               placeholder="Find shopping flyers..." 
-              className="flex-1 px-3 text-[11px] text-gray-800 outline-none"
+              className="flex-1 px-3 text-[11px] text-gray-800 outline-none w-full"
             />
-            <button className="bg-green-600 text-white px-5 font-bold text-[11px] hover:bg-green-700 transition-colors border-l border-green-600">
+            <button className="bg-green-600 text-white px-5 font-bold text-[11px] hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">
               Search
             </button>
           </div>
@@ -243,7 +237,7 @@ function NavbarContent() {
       </div>
 
       {/* 3. Green Sub-Menu Navigation */}
-      <div className="bg-green-600 text-white shadow-md">
+      <div className="bg-green-600 text-white shadow-md w-full">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
           <nav className="flex space-x-6 text-[12px] font-semibold whitespace-nowrap py-2.5">
             {subMenuItems.map((item) => (
@@ -269,7 +263,7 @@ function NavbarContent() {
 
 export default function Navbar() {
   return (
-    <Suspense fallback={<header className="font-sans z-50 bg-white shadow-sm sticky top-0 h-[100px]"></header>}>
+    <Suspense fallback={<header className="font-sans z-50 bg-white shadow-sm sticky top-0 h-[100px] w-full"></header>}>
       <NavbarContent />
     </Suspense>
   );
