@@ -1,7 +1,9 @@
 import { supabase } from '../../lib/supabase'
 import Link from 'next/link'
 
+// یہ لائنیں ورسل کو بتائیں گی کہ بلڈ کے وقت کچھ بھی پری-رینڈر نہیں کرنا
 export const dynamic = 'force-dynamic'; 
+export const fetchCache = 'force-no-store';
 export const revalidate = 0; 
 
 export default async function ProductPage({ params }: any) {
@@ -35,7 +37,6 @@ export default async function ProductPage({ params }: any) {
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* یہاں بیک بٹن کے آئیکن کا سائز 20px فکس کر دیا گیا ہے */}
         <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-8 transition-colors">
           <svg width="20" height="20" className="mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           Back to all deals
@@ -80,7 +81,6 @@ export default async function ProductPage({ params }: any) {
               className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-5 px-8 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-blue-500/30 text-xl flex justify-center items-center gap-3"
             >
               Get Deal Now
-              {/* یہاں ڈیل والے آئیکن کا سائز 24px فکس کر دیا گیا ہے */}
               <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
           </div>
