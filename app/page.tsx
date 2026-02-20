@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import TopProducts from './components/TopProducts'; // 1. Imported TopProducts component here
+import TopProducts from './components/TopProducts';
 
 const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick: () => void }) => (
   <button 
@@ -14,6 +14,18 @@ const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick
     {direction === 'left' ? '❮' : '❯'}
   </button>
 );
+
+// Helper function to dynamically assign icons based on category name
+const getCategoryIcon = (name: string) => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes('mobile') || lowerName.includes('tablet')) return '📱';
+  if (lowerName.includes('laptop') || lowerName.includes('pc')) return '💻';
+  if (lowerName.includes('electronic') || lowerName.includes('tv')) return '🎧';
+  if (lowerName.includes('grocery') || lowerName.includes('supermarket') || lowerName.includes('food')) return '🛒';
+  if (lowerName.includes('fashion') || lowerName.includes('beauty')) return '👕';
+  if (lowerName.includes('home') || lowerName.includes('kitchen')) return '🏠';
+  return '🌟'; // Default icon
+};
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -25,7 +37,7 @@ function HomeContent() {
   const [flyers, setFlyers] = useState<any[]>([]);
   
   // UI Active States
-  const [activeCategory, setActiveCategory] = useState('Supermarket');
+  const [activeCategory, setActiveCategory] = useState('All Deals');
   const [activeStore, setActiveStore] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState('Top Pick');
 
@@ -44,7 +56,7 @@ function HomeContent() {
     async function fetchLiveSaudiPriceData() {
       // 1. Fetch Categories
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
-      if (catData) setCategories(catData);
+      if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
       // 2. Fetch Stores
       const { data: storeData } = await supabase.from('stores').select('*').order('created_at');
@@ -60,8 +72,8 @@ function HomeContent() {
     fetchLiveSaudiPriceData();
   }, [selectedCity]);
 
-  // Fallback dummy arrays to keep layout beautiful while loading or if data is missing
-  const displayCategories = categories.length > 0 ? categories : [{name: 'Loading...'}];
+  // Fallback dummy arrays
+  const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
   const displayStores = stores.length > 0 ? stores : [];
   const displayFlyers = flyers.length > 0 ? flyers : [];
 
@@ -75,45 +87,60 @@ function HomeContent() {
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
         
-        {/* Left Sidebar - Live Categories */}
-        <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-200 rounded-lg shadow-sm h-fit sticky top-[120px]">
-          <h2 className="text-sm font-black text-gray-800 bg-gray-50 border-b border-gray-200 px-4 py-3 rounded-t-lg">Categories</h2>
-          <nav className="py-1">
-            {displayCategories.map((cat, idx) => (
-              <div key={cat.id || idx} className="border-b border-gray-100 last:border-0">
-                <button 
-                  onClick={() => setActiveCategory(cat.name)}
-                  className={`w-full flex items-center px-4 py-3 cursor-pointer transition-colors text-left ${
-                    activeCategory === cat.name 
-                      ? 'text-green-600 font-bold bg-green-50 border-l-4 border-green-600' 
-                      : 'text-gray-700 font-medium border-l-4 border-transparent hover:bg-green-50'
-                  }`}
-                >
-                  <span className="text-xs">{cat.name}</span>
-                </button>
-              </div>
-            ))}
-          </nav>
+        {/* Beautiful Left Sidebar - Live Categories */}
+        <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-100 rounded-2xl shadow-sm h-fit sticky top-[100px] p-4">
+          <h3 className="text-lg font-black text-gray-800 mb-4 px-2 uppercase tracking-wider">
+            Categories
+          </h3>
+          <ul className="space-y-1.5">
+            {displayCategories.map((cat, idx) => {
+              const isActive = activeCategory === cat.name;
+              return (
+                <li key={cat.id || idx}>
+                  <button 
+                    onClick={() => setActiveCategory(cat.name)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold text-sm ${
+                      isActive 
+                        ? 'bg-green-50 text-green-700 shadow-sm border border-green-100' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-green-600 border border-transparent'
+                    }`}
+                  >
+                    <span className="text-xl">{getCategoryIcon(cat.name)}</span>
+                    <span className="truncate">{cat.name}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Promo Banner inside Sidebar */}
+          <div className="mt-8 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+            <h4 className="font-black text-blue-800 text-sm mb-1">Download App</h4>
+            <p className="text-xs text-blue-600 mb-3">Get exclusive app-only discounts!</p>
+            <button className="w-full bg-blue-600 text-white text-xs font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Coming Soon
+            </button>
+          </div>
         </aside>
 
         <main className="flex-1 w-full min-w-0">
           
-          {/* Responsive Stores Carousel - Live Stores */}
+          {/* Responsive Stores Carousel */}
           {displayStores.length > 0 && (
             <div className="relative mb-6 md:mb-8">
               <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
               <div 
                 ref={storesRef}
-                className="bg-white p-3 md:p-4 rounded-lg shadow-sm border border-gray-200 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
+                className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
               >
                 {displayStores.map((store) => (
                   <button 
                     key={store.id} 
-                    onClick={() => setActiveStore(store.id)}
+                    onClick={() => setActiveStore(store.id === activeStore ? null : store.id)}
                     className="flex flex-col items-center min-w-[60px] md:min-w-[70px] snap-start cursor-pointer group shrink-0 outline-none"
                   >
                     <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden transition-all shadow-sm p-0.5 border-2 ${
-                      activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-200 group-hover:border-green-400'
+                      activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-100 group-hover:border-green-400'
                     }`}>
                       <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover rounded-full" />
                     </div>
@@ -155,7 +182,7 @@ function HomeContent() {
             </div>
           </div>
 
-          {/* Responsive Flyer Carousel - Live Flyers */}
+          {/* Responsive Flyer Carousel */}
           {displayFlyers.length > 0 ? (
             <div className="relative mb-8">
               <NavArrow direction="left" onClick={() => scrollCarousel(flyersRef, 'left')} />
@@ -165,19 +192,19 @@ function HomeContent() {
               >
                 {displayFlyers.map((flyer) => (
                   <Link href={`/flyer/${flyer.id}`} key={flyer.id} className="w-[calc(50%-0.375rem)] md:w-[calc(33.333%-0.66rem)] snap-center shrink-0 group">
-                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col relative h-full">
-                      <div className="relative aspect-[3/4] bg-gray-50 border-b border-gray-100 overflow-hidden rounded-t-lg">
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative h-full">
+                      <div className="relative aspect-[3/4] bg-gray-50 border-b border-gray-50 overflow-hidden rounded-t-2xl">
                         <img src={flyer.cover_image_url} alt={flyer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute -bottom-4 right-2 w-10 h-10 md:w-12 md:h-12 bg-white rounded shadow-sm border border-gray-200 p-1 z-10 flex items-center justify-center">
-                          <img src={flyer.stores?.logo_url} alt="Store Logo" className="max-w-full max-h-full object-cover rounded-sm" />
+                        <div className="absolute -bottom-4 right-2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl shadow-sm border border-gray-100 p-1 z-10 flex items-center justify-center">
+                          <img src={flyer.stores?.logo_url} alt="Store Logo" className="max-w-full max-h-full object-contain rounded-lg" />
                         </div>
                       </div>
                       <div className="p-3 pt-6 md:p-4 md:pt-8 flex-grow flex flex-col">
                         <h3 className="font-bold text-gray-900 text-xs md:text-sm mb-1">{flyer.stores?.name}</h3>
                         <p className="text-gray-500 text-[10px] md:text-xs mb-3 md:mb-4 line-clamp-1">{flyer.title}</p>
-                        <div className="mt-auto flex items-center justify-between text-[9px] md:text-[10px] font-bold pt-2 md:pt-3 border-t border-gray-100">
-                          <span className="text-gray-600 bg-gray-100 px-1.5 py-1 rounded">+{flyer.page_count} Pages</span>
-                          <span className="text-red-600 bg-red-50 px-1.5 py-1 rounded">Valid</span>
+                        <div className="mt-auto flex items-center justify-between text-[9px] md:text-[10px] font-bold pt-2 md:pt-3 border-t border-gray-50">
+                          <span className="text-gray-600 bg-gray-50 px-2 py-1 rounded-lg">+{flyer.page_count} Pages</span>
+                          <span className="text-red-600 bg-red-50 px-2 py-1 rounded-lg">Valid</span>
                         </div>
                       </div>
                     </div>
@@ -187,13 +214,13 @@ function HomeContent() {
               <NavArrow direction="right" onClick={() => scrollCarousel(flyersRef, 'right')} />
             </div>
           ) : (
-             <div className="py-10 text-center text-gray-500 font-bold">Loading latest offers...</div>
+             <div className="py-10 text-center text-gray-400 font-medium">Loading latest offers...</div>
           )}
 
         </main>
       </div>
 
-      {/* 2. Top Products Section added below the main flyers content */}
+      {/* Top Products Section */}
       <TopProducts />
 
     </div>
