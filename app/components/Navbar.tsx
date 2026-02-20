@@ -195,7 +195,7 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* --- PERFECT MOBILE & TABLET TIME ROW --- */}
+        {/* Mobile & Tablet Time Row */}
         <div className="flex xl:hidden bg-gray-50 border-t border-b border-gray-200 px-2 py-2 shadow-inner items-center justify-center w-full overflow-x-auto scrollbar-hide">
           <div className="flex items-center justify-center gap-2 sm:gap-3 text-[10px] md:text-xs font-bold text-gray-700 w-max mx-auto">
             <span className="flex items-center gap-1.5 shrink-0">
@@ -249,13 +249,17 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* Live News Ticker Bar */}
+        {/* --- SMART HOT SALE TICKER --- */}
         <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper">
-          <div className="bg-red-600 text-white font-black text-[10px] md:text-xs px-3 py-1 md:px-4 md:py-2 z-20 h-full flex items-center shrink-0 uppercase tracking-widest shadow-lg border-r border-red-700">
-            <span className="animate-pulse mr-1.5 md:mr-2">🔴</span> Live News
+          
+          {/* Smart Badge */}
+          <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-20 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
+            <span className="animate-pulse mr-1.5 md:mr-2 text-sm md:text-base">🔥</span> Hot Sale
           </div>
-          <div className="absolute left-[80px] md:left-[100px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-10 pointer-events-none"></div>
+          
+          <div className="absolute left-[90px] md:left-[110px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-green-600 to-transparent z-10 pointer-events-none"></div>
+          
           <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 cursor-pointer">
             <div className="animate-marquee items-center flex">
               {newsItems.map((item, index) => (
