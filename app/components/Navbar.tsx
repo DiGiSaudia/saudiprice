@@ -12,7 +12,7 @@ function NavbarContent() {
   const [selectedCity, setSelectedCity] = useState(defaultCity);
   const [selectedLang, setSelectedLang] = useState('en');
   
-  // State to manage the active tab
+  // State to manage the active tab (Desktop Top Tabs)
   const [activeTab, setActiveTab] = useState('Offers');
   
   // State to manage the active sub-menu item
@@ -34,16 +34,16 @@ function NavbarContent() {
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
       
-      {/* Main Top Header Row (Compact Padding & Gap) */}
+      {/* 1. Main Top Header Row (Shared Logo, Desktop Search & Tabs) */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
         
-        {/* Brand Logo */}
-        <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0">
+        {/* Brand Logo - Visible on all screens */}
+        <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
           <span className="text-green-600">Saudi</span>
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
-        {/* Compact Center Tabs with Active State */}
+        {/* Compact Center Tabs - Desktop Only */}
         <div className="hidden lg:flex items-center bg-gray-100 rounded-full p-1 border border-gray-200">
           {tabs.map((tab) => (
             <button
@@ -60,15 +60,14 @@ function NavbarContent() {
           ))}
         </div>
 
-        {/* Compact Search Bar with Uniform Border and Attached Search Button */}
-        <div className="flex-1 max-w-2xl flex border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20">
+        {/* Compact Search Bar & City Selector - DESKTOP ONLY (Hidden on Mobile) */}
+        <div className="hidden md:flex flex-1 max-w-2xl border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20">
           
-          {/* Compact City Selection Dropdown */}
-          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[90px] md:min-w-[110px]">
+          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[110px]">
             <select 
               value={selectedCity} 
               onChange={handleCityChange}
-              className="bg-transparent text-gray-800 text-[11px] md:text-xs font-bold outline-none w-full cursor-pointer"
+              className="bg-transparent text-gray-800 text-xs font-bold outline-none w-full cursor-pointer"
             >
               <option value="Riyadh">Riyadh</option>
               <option value="Jeddah">Jeddah</option>
@@ -76,21 +75,19 @@ function NavbarContent() {
             </select>
           </div>
           
-          {/* Search Input Field */}
           <input 
             type="text" 
             placeholder="Find all shopping flyers in one place" 
-            className="flex-1 px-3 text-[11px] md:text-xs text-gray-800 outline-none"
+            className="flex-1 px-3 text-xs text-gray-800 outline-none"
           />
           
-          {/* Dedicated Attached Search Button */}
-          <button className="bg-green-600 text-white px-5 md:px-6 font-bold text-[11px] md:text-xs hover:bg-green-700 transition-colors border-l border-green-600">
+          <button className="bg-green-600 text-white px-6 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600">
             Search
           </button>
         </div>
 
-        {/* Compact Language Dropdown */}
-        <div className="hidden md:flex items-center shrink-0">
+        {/* Compact Language Dropdown - Visible on all screens */}
+        <div className="flex items-center shrink-0">
           <select 
             value={selectedLang}
             onChange={(e) => setSelectedLang(e.target.value)}
@@ -103,7 +100,52 @@ function NavbarContent() {
 
       </div>
 
-      {/* Green Sub-Menu Navigation with Black Active State */}
+      {/* 2. NEW: Secondary Mobile-Only Section (Hidden on Desktop) */}
+      <div className="block md:hidden bg-gray-50 border-t border-gray-100 px-4 py-3 shadow-inner">
+        <div className="flex flex-col gap-3">
+          
+          {/* Row A: Categories Button & City Selector */}
+          <div className="flex items-center justify-between gap-3">
+            
+            {/* Categories Mobile Menu Button */}
+            <button className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-2 rounded-md font-bold text-[11px] shadow-sm hover:bg-green-700 transition-colors shrink-0">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+              </svg>
+              Categories
+            </button>
+            
+            {/* Mobile City Selector */}
+            <div className="bg-white border border-gray-300 rounded-md px-2 py-1.5 flex items-center shadow-sm flex-1 h-[34px]">
+              <select 
+                value={selectedCity} 
+                onChange={handleCityChange}
+                className="bg-transparent text-gray-800 text-[11px] font-bold outline-none w-full cursor-pointer"
+              >
+                <option value="Riyadh">Riyadh</option>
+                <option value="Jeddah">Jeddah</option>
+                <option value="Dammam">Dammam</option>
+              </select>
+            </div>
+            
+          </div>
+
+          {/* Row B: Mobile Search Bar */}
+          <div className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[38px] shadow-sm">
+            <input 
+              type="text" 
+              placeholder="Find shopping flyers..." 
+              className="flex-1 px-3 text-[11px] text-gray-800 outline-none"
+            />
+            <button className="bg-green-600 text-white px-5 font-bold text-[11px] hover:bg-green-700 transition-colors border-l border-green-600">
+              Search
+            </button>
+          </div>
+          
+        </div>
+      </div>
+
+      {/* 3. Green Sub-Menu Navigation with Black Active State */}
       <div className="bg-green-600 text-white shadow-md">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
           <nav className="flex space-x-6 text-[12px] font-semibold whitespace-nowrap py-2.5">
