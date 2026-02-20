@@ -18,15 +18,15 @@ function NavbarContent() {
   // State for Mobile Categories Dropdown
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
 
-  // States for Live KSA Time
+  // States for Live KSA Time and Dates
   const [ksaTime, setKsaTime] = useState<Date | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    // Set initial time
     setKsaTime(new Date());
-    // Update time every second
+    
+    // Update time every second to keep the clock live
     const timer = setInterval(() => {
       setKsaTime(new Date());
     }, 1000);
@@ -54,7 +54,7 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
-  // Helper functions to format time and date in Asia/Riyadh timezone
+  // Formatting functions for Asia/Riyadh timezone
   const formatKsaTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
       timeZone: 'Asia/Riyadh', 
@@ -65,14 +65,31 @@ function NavbarContent() {
     });
   };
 
-  const formatKsaDate = (date: Date) => {
+  const formatGregorianDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { 
       timeZone: 'Asia/Riyadh', 
       weekday: 'short', 
       month: 'short', 
-      day: 'numeric' 
+      day: 'numeric',
+      year: 'numeric'
     });
   };
+
+  const formatHijriDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
+      timeZone: 'Asia/Riyadh',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }).format(date).concat(' AH');
+  };
+
+  // Standard SVG Calendar Icon Component to maintain clean code
+  const CalendarIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  );
 
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
@@ -86,31 +103,44 @@ function NavbarContent() {
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
-        {/* Live Greeting, Date, and Time - DESKTOP ONLY */}
-        <div className="hidden lg:flex items-center gap-4 bg-gray-50 rounded-full px-5 py-1.5 border border-gray-200 text-[11px] xl:text-xs font-bold text-gray-700 shadow-sm">
-          <span className="text-green-700">Welcome to SaudiPrice</span>
+        {/* Live Dates and Time - DESKTOP ONLY */}
+        {/* Applied whitespace-nowrap and min-w properties to prevent layout shifting */}
+        <div className="hidden xl:flex items-center gap-3 bg-gray-50 rounded-full px-4 py-1.5 border border-gray-200 text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap">
           
-          <div className="w-px h-4 bg-gray-300"></div>
-          
-          <span className="flex items-center gap-1.5">
-            <span className="text-sm">🇸🇦</span>
-            {isMounted && ksaTime ? formatKsaDate(ksaTime) : 'Loading date...'}
+          {/* Gregorian Date */}
+          <span className="flex items-center gap-1.5 min-w-max">
+            <CalendarIcon />
+            {isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}
           </span>
           
-          <div className="w-px h-4 bg-gray-300"></div>
+          <div className="w-px h-3.5 bg-gray-300"></div>
           
-          <span className="flex items-center gap-1.5 text-gray-800 w-[100px]">
-            {/* Colorful Clock SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          {/* Hijri Date with Saudi Flag (Using high-quality SVG to fix Chrome emoji issue) */}
+          <span className="flex items-center gap-1.5 min-w-max">
+            <img 
+              src="https://flagcdn.com/sa.svg" 
+              alt="Saudi Arabia Flag" 
+              className="w-4 h-3 object-cover rounded-sm shadow-sm"
+            />
+            <CalendarIcon />
+            {isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}
+          </span>
+          
+          <div className="w-px h-3.5 bg-gray-300"></div>
+          
+          {/* Live KSA Time with Colorful Clock SVG */}
+          <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[95px]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
               <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
               <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
             </svg>
             {isMounted && ksaTime ? formatKsaTime(ksaTime) : '00:00:00 AM'}
           </span>
+
         </div>
 
         {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
-        <div className="hidden md:flex flex-1 max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
+        <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
           
           <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[100px]">
             <select 
