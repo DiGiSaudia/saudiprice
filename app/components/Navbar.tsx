@@ -75,13 +75,26 @@ function NavbarContent() {
     });
   };
 
+  // Fixed Hijri Date formatting: Shows Islamic month, removes duplicate AH or BC issues completely
   const formatHijriDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
-      timeZone: 'Asia/Riyadh',
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    }).format(date).concat(' AH');
+    try {
+      const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
+        timeZone: 'Asia/Riyadh',
+        day: 'numeric',
+        month: 'long', // Forces the actual Islamic month name (e.g., Ramadan, Shawwal)
+        year: 'numeric'
+      });
+      
+      let formatted = formatter.format(date);
+      
+      // Clean the string: Remove any browser-injected 'AH', 'BC', 'BCE', 'CE', or 'ERA'
+      formatted = formatted.replace(/\s*(AH|BC|BCE|CE|AD|ERA)\s*/gi, '').trim();
+      
+      // Append exactly one AH at the end
+      return `${formatted} AH`;
+    } catch (error) {
+      return 'Loading...';
+    }
   };
 
   // Standard SVG Calendar Icon Component
@@ -91,12 +104,12 @@ function NavbarContent() {
     </svg>
   );
 
-  // Reusable Date & Time Component to ensure exact layout across Desktop, Tablet, and Mobile
+  // Reusable Date & Time Component for Desktop and Tablet
   const renderDateTimeContainer = (customClasses: string) => (
-    <div className={`flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-full px-3 py-1.5 border border-gray-200 text-[10px] sm:text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0 ${customClasses}`}>
+    <div className={`flex items-center gap-2 lg:gap-3 bg-gray-50 rounded-full px-2 lg:px-3 py-1.5 border border-gray-200 text-[10px] xl:text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0 ${customClasses}`}>
       
       {/* Unified Dual Date Container (Gregorian -> Hijri) */}
-      <span className="flex items-center gap-1.5 sm:gap-2 min-w-max shrink-0">
+      <span className="flex items-center gap-1.5 lg:gap-2 min-w-max shrink-0">
         <CalendarIcon />
         <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
         
@@ -110,7 +123,7 @@ function NavbarContent() {
       
       <div className="w-px h-3.5 bg-gray-300 shrink-0"></div>
       
-      {/* Live KSA Time with tabular-nums to prevent any layout shifting when seconds change */}
+      {/* Live KSA Time with tabular-nums to prevent layout shifting */}
       <span className="flex items-center justify-center gap-1.5 text-gray-800 min-w-[85px] sm:min-w-[95px] shrink-0 tabular-nums">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0">
           <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
@@ -125,8 +138,8 @@ function NavbarContent() {
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0 w-full">
       
-      {/* 1. Main Top Header Row (Desktop Layout) */}
-      <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4 md:gap-5">
+      {/* 1. Main Top Header Row (Desktop & Tablet Layout sharing the same view) */}
+      <div className="max-w-[1400px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3 md:gap-4">
         
         {/* Brand Logo - Visible on all screens */}
         <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
@@ -134,13 +147,13 @@ function NavbarContent() {
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
-        {/* Live Dates and Time - DESKTOP ONLY (Hidden on smaller screens to prevent clutter) */}
-        {renderDateTimeContainer("hidden lg:flex")}
+        {/* Live Dates and Time - DESKTOP & TABLET (Hidden on Mobile only) */}
+        {renderDateTimeContainer("hidden md:flex")}
 
-        {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
+        {/* Compact Search Bar & City Selector - DESKTOP & TABLET ONLY */}
         <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
           
-          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[100px] shrink-0">
+          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[90px] lg:min-w-[100px] shrink-0">
             <select 
               value={selectedCity} 
               onChange={handleCityChange}
@@ -154,11 +167,11 @@ function NavbarContent() {
           
           <input 
             type="text" 
-            placeholder="Find all shopping flyers..." 
+            placeholder="Find shopping flyers..." 
             className="flex-1 px-3 text-xs text-gray-800 outline-none w-full"
           />
           
-          <button className="bg-green-600 text-white px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">
+          <button className="bg-green-600 text-white px-4 lg:px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">
             Search
           </button>
         </div>
@@ -175,9 +188,33 @@ function NavbarContent() {
 
       </div>
 
-      {/* 2. Tablet & Mobile Date and Time Row (Visible only on smaller screens) */}
-      <div className="flex lg:hidden bg-white border-t border-gray-100 px-4 py-2 overflow-x-auto scrollbar-hide w-full shadow-inner items-center sm:justify-center">
-         {renderDateTimeContainer("w-max mx-auto")}
+      {/* 2. Mobile Date and Time Row (Visible only on Mobile, perfectly centered without horizontal scrolling) */}
+      <div className="flex md:hidden bg-white border-t border-gray-100 px-2 py-2 shadow-inner items-center justify-center w-full">
+         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[10px] font-bold text-gray-700 w-full text-center">
+           
+           {/* Mobile Unified Date Container */}
+           <span className="flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap">
+             <CalendarIcon />
+             <span>{isMounted && ksaTime ? formatGregorianDate(ksaTime) : 'Loading...'}</span>
+             <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 text-gray-400 shrink-0 mx-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+             </svg>
+             <span className="text-green-700">{isMounted && ksaTime ? formatHijriDate(ksaTime) : 'Loading...'}</span>
+           </span>
+           
+           {/* Divider (Hidden if elements wrap on very small screens) */}
+           <div className="hidden sm:block w-px h-3.5 bg-gray-300 shrink-0"></div>
+           
+           {/* Mobile Live KSA Time */}
+           <span className="flex items-center justify-center gap-1 text-gray-800 shrink-0 tabular-nums whitespace-nowrap">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3 shrink-0">
+               <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
+               <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
+             </svg>
+             {isMounted && ksaTime ? formatKsaTime(ksaTime) : '00:00:00 AM'}
+           </span>
+
+         </div>
       </div>
 
       {/* 3. Secondary Mobile-Only Section (Search & Categories for Mobile) */}
@@ -187,7 +224,7 @@ function NavbarContent() {
           {/* Row A: Categories Button & City Selector */}
           <div className="flex items-center justify-between gap-3 relative z-50">
             
-            {/* Categories Mobile Menu Button with Dropdown Logic */}
+            {/* Categories Mobile Menu Button */}
             <div className="relative shrink-0">
               <button 
                 onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
@@ -199,7 +236,7 @@ function NavbarContent() {
                 Categories
               </button>
 
-              {/* Expandable Dropdown Menu for Mobile Categories */}
+              {/* Expandable Dropdown Menu */}
               {isMobileCategoryOpen && (
                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 flex flex-col">
                   {mobileCategories.map((cat, idx) => (
