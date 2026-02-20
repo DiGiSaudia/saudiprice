@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -12,14 +12,27 @@ function NavbarContent() {
   const [selectedCity, setSelectedCity] = useState(defaultCity);
   const [selectedLang, setSelectedLang] = useState('en');
   
-  // State to manage the active tab (Desktop Top Tabs)
-  const [activeTab, setActiveTab] = useState('Offers');
-  
   // State to manage the active sub-menu item
   const [activeSubMenu, setActiveSubMenu] = useState('All Offers');
 
-  // New state to manage the Mobile Categories Dropdown
+  // State for Mobile Categories Dropdown
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
+
+  // States for Live KSA Time
+  const [ksaTime, setKsaTime] = useState<Date | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Set initial time
+    setKsaTime(new Date());
+    // Update time every second
+    const timer = setInterval(() => {
+      setKsaTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
@@ -27,23 +40,39 @@ function NavbarContent() {
     router.push(`/?city=${city}`);
   };
 
-  // Function to toggle language beautifully
   const toggleLanguage = () => {
     setSelectedLang((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
   };
 
-  const tabs = ['Offers', 'Products', 'Coupons'];
-  
   const subMenuItems = [
     'All Offers', 'Ramadan offers', 'Supermarket', 'Mobiles', 
     'Laptops', 'TV & Audio', 'Home & Decor', 'Health & Beauty'
   ];
 
-  // Categories list for the mobile dropdown menu
   const mobileCategories = [
     'Mobiles', 'TV', 'Kitchen Appliance', 'Printer', 
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
+
+  // Helper functions to format time and date in Asia/Riyadh timezone
+  const formatKsaTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      timeZone: 'Asia/Riyadh', 
+      hour12: true, 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
+  };
+
+  const formatKsaDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', { 
+      timeZone: 'Asia/Riyadh', 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
 
   return (
     <header className="font-sans z-50 bg-white shadow-sm sticky top-0">
@@ -57,27 +86,33 @@ function NavbarContent() {
           <span className="text-[#D4AF37]">Price</span>
         </Link>
 
-        {/* Compact Center Tabs - Desktop Only */}
-        <div className="hidden lg:flex items-center bg-gray-100 rounded-full p-1 border border-gray-200">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-1.5 rounded-full font-bold text-xs transition-colors ${
-                activeTab === tab 
-                  ? 'bg-green-600 text-white shadow-sm' 
-                  : 'text-gray-600 hover:text-green-600'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        {/* Live Greeting, Date, and Time - DESKTOP ONLY */}
+        <div className="hidden lg:flex items-center gap-4 bg-gray-50 rounded-full px-5 py-1.5 border border-gray-200 text-[11px] xl:text-xs font-bold text-gray-700 shadow-sm">
+          <span className="text-green-700">Welcome to SaudiPrice</span>
+          
+          <div className="w-px h-4 bg-gray-300"></div>
+          
+          <span className="flex items-center gap-1.5">
+            <span className="text-sm">🇸🇦</span>
+            {isMounted && ksaTime ? formatKsaDate(ksaTime) : 'Loading date...'}
+          </span>
+          
+          <div className="w-px h-4 bg-gray-300"></div>
+          
+          <span className="flex items-center gap-1.5 text-gray-800 w-[100px]">
+            {/* Colorful Clock SVG */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+              <circle cx="12" cy="12" r="10" className="stroke-blue-600 fill-blue-50"></circle>
+              <polyline points="12 6 12 12 16 14" className="stroke-red-500"></polyline>
+            </svg>
+            {isMounted && ksaTime ? formatKsaTime(ksaTime) : '00:00:00 AM'}
+          </span>
         </div>
 
         {/* Compact Search Bar & City Selector - DESKTOP ONLY */}
-        <div className="hidden md:flex flex-1 max-w-2xl border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20">
+        <div className="hidden md:flex flex-1 max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
           
-          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[110px]">
+          <div className="bg-gray-50 border-r border-gray-200 px-3 flex items-center min-w-[100px]">
             <select 
               value={selectedCity} 
               onChange={handleCityChange}
@@ -91,11 +126,11 @@ function NavbarContent() {
           
           <input 
             type="text" 
-            placeholder="Find all shopping flyers in one place" 
+            placeholder="Find all shopping flyers..." 
             className="flex-1 px-3 text-xs text-gray-800 outline-none"
           />
           
-          <button className="bg-green-600 text-white px-6 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600">
+          <button className="bg-green-600 text-white px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600">
             Search
           </button>
         </div>
@@ -177,7 +212,7 @@ function NavbarContent() {
         </div>
       </div>
 
-      {/* 3. Green Sub-Menu Navigation with Black Active State */}
+      {/* 3. Green Sub-Menu Navigation */}
       <div className="bg-green-600 text-white shadow-md">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center overflow-x-auto scrollbar-hide">
           <nav className="flex space-x-6 text-[12px] font-semibold whitespace-nowrap py-2.5">
