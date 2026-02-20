@@ -5,6 +5,7 @@ import { supabase } from './lib/supabase';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import TopProducts from './components/TopProducts';
+import HeroBanner from './components/HeroBanner'; // Hero Banner کی امپورٹ شامل کر دی گئی ہے
 
 const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick: () => void }) => (
   <button 
@@ -125,6 +126,9 @@ function HomeContent() {
 
         <main className="flex-1 w-full min-w-0">
           
+          {/* New Hero Banner */}
+          <HeroBanner />
+          
           {/* Responsive Stores Carousel */}
           {displayStores.length > 0 && (
             <div className="relative mb-6 md:mb-8">
@@ -220,7 +224,6 @@ function HomeContent() {
         </main>
       </div>
 
-      {/* Top Products Section */}
       {/* Top Products Section */}
       <TopProducts activeCategory={activeCategory} />
 
