@@ -33,14 +33,11 @@ function HomeContent() {
   
   const [categories, setCategories] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
-  const [flyers, setFlyers] = useState<any[]>([]);
   
   const [activeCategory, setActiveCategory] = useState('All Deals');
   const [activeStore, setActiveStore] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState('Top Pick');
 
   const storesRef = useRef<HTMLDivElement>(null);
-  const flyersRef = useRef<HTMLDivElement>(null);
 
   const scrollCarousel = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
     if (ref.current) {
@@ -51,24 +48,19 @@ function HomeContent() {
 
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
+      // 1. Fetch Categories
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
       if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
+      // 2. Fetch Stores
       const { data: storeData } = await supabase.from('stores').select('*').order('created_at');
       if (storeData) setStores(storeData);
-
-      const { data: flyerData } = await supabase.from('flyers').select(`
-        *,
-        stores ( name, logo_url )
-      `).order('created_at');
-      if (flyerData) setFlyers(flyerData);
     }
     fetchLiveSaudiPriceData();
   }, [selectedCity]);
 
   const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
   const displayStores = stores.length > 0 ? stores : [];
-  const displayFlyers = flyers.length > 0 ? flyers : [];
 
   return (
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
@@ -80,6 +72,7 @@ function HomeContent() {
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
         
+        {/* Left Sidebar - Live Categories */}
         <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-100 rounded-2xl shadow-sm h-fit sticky top-[100px] p-4">
           <h3 className="text-lg font-black text-gray-800 mb-4 px-2 uppercase tracking-wider">
             Categories
@@ -116,10 +109,15 @@ function HomeContent() {
 
         <main className="flex-1 w-full min-w-0">
           
+          {/* Hero Banner */}
           <HeroBanner />
           
+          {/* Responsive Stores Carousel */}
           {displayStores.length > 0 && (
             <div className="relative mb-6 md:mb-8">
+              <div className="flex items-center justify-between mb-4 mt-2">
+                <h2 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Popular Stores</h2>
+              </div>
               <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
               <div 
                 ref={storesRef}
@@ -148,72 +146,10 @@ function HomeContent() {
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-4 md:mb-5 border-b border-gray-200 pb-3 gap-3 w-full">
-            <h1 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Latest Flyers & Offers</h1>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setActiveFilter('Top Pick')}
-                className={`px-4 md:px-5 py-1.5 rounded-md text-xs font-bold shadow-sm transition-colors border ${
-                  activeFilter === 'Top Pick' 
-                    ? 'bg-green-600 text-white border-green-600' 
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Top Pick
-              </button>
-              <button 
-                onClick={() => setActiveFilter('Latest')}
-                className={`px-4 md:px-5 py-1.5 rounded-md text-xs font-bold shadow-sm transition-colors border ${
-                  activeFilter === 'Latest' 
-                    ? 'bg-green-600 text-white border-green-600' 
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Latest
-              </button>
-            </div>
-          </div>
-
-          {/* FIX: Properly sized flyers container */}
-          {displayFlyers.length > 0 ? (
-            <div className="relative mb-8">
-              <NavArrow direction="left" onClick={() => scrollCarousel(flyersRef, 'left')} />
-              <div 
-                ref={flyersRef}
-                className="flex overflow-x-auto snap-x snap-mandatory gap-3 md:gap-4 pb-4 w-full scrollbar-hide"
-              >
-                {displayFlyers.map((flyer) => (
-                  <Link href={`/flyer/${flyer.id}`} key={flyer.id} className="w-[140px] md:w-[200px] shrink-0 group snap-center flex flex-col h-full">
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full overflow-hidden">
-                      
-                      <div className="relative h-[180px] md:h-[260px] bg-gray-50 border-b border-gray-50 w-full shrink-0">
-                        <img src={flyer.cover_image_url} alt={flyer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute -bottom-4 right-2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl shadow-sm border border-gray-100 p-1 z-10 flex items-center justify-center">
-                          <img src={flyer.stores?.logo_url} alt="Store Logo" className="max-w-full max-h-full object-contain rounded-lg" />
-                        </div>
-                      </div>
-
-                      <div className="p-3 pt-6 md:p-4 md:pt-8 flex-grow flex flex-col">
-                        <h3 className="font-bold text-gray-900 text-xs md:text-sm mb-1 line-clamp-1">{flyer.stores?.name}</h3>
-                        <p className="text-gray-500 text-[10px] md:text-xs mb-3 md:mb-4 line-clamp-2 h-8">{flyer.title}</p>
-                        <div className="mt-auto flex items-center justify-between text-[9px] md:text-[10px] font-bold pt-2 md:pt-3 border-t border-gray-50">
-                          <span className="text-gray-600 bg-gray-50 px-2 py-1 rounded-lg">+{flyer.page_count} Pgs</span>
-                          <span className="text-red-600 bg-red-50 px-2 py-1 rounded-lg">Valid</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <NavArrow direction="right" onClick={() => scrollCarousel(flyersRef, 'right')} />
-            </div>
-          ) : (
-             <div className="py-10 text-center text-gray-400 font-medium">Loading latest offers...</div>
-          )}
-
         </main>
       </div>
 
+      {/* Top Products Section */}
       <TopProducts activeCategory={activeCategory} />
 
     </div>
