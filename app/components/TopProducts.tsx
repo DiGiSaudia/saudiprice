@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import Link from 'next/link';
 
 interface TopProductsProps {
   activeCategory?: string;
@@ -10,7 +11,7 @@ interface TopProductsProps {
 export default function TopProducts({ activeCategory = 'All Deals' }: TopProductsProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [savedIds, setSavedIds] = useState<string[]>([]); // New State for red heart
+  const [savedIds, setSavedIds] = useState<string[]>([]);
 
   useEffect(() => {
     // Load saved products to make hearts red
@@ -74,7 +75,11 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
             const isSaved = savedIds.includes(product.id);
 
             return (
-              <div key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col">
+              <Link 
+                href={`/product/${product.id}`} 
+                key={product.id} 
+                className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col cursor-pointer"
+              >
                 
                 {hasDiscount && (
                   <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded-md z-10 shadow-sm">
@@ -83,7 +88,10 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
                 )}
 
                 <button 
-                  onClick={() => toggleSaveProduct(product)}
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevents navigating to the product page when clicking the heart
+                    toggleSaveProduct(product);
+                  }}
                   className={`absolute top-3 right-3 z-10 p-1.5 bg-white/90 backdrop-blur-sm rounded-full transition-all shadow-sm hover:shadow ${isSaved ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -110,7 +118,7 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
                   </div>
                 </div>
 
-              </div>
+              </Link>
             );
           })}
         </div>

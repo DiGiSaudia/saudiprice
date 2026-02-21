@@ -1,130 +1,173 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
 
-type Product = {
-  id: string;
-  title: string;
-  description: string;
-  current_price: number;
-  old_price: number | null;
-  image_url: string;
-  product_url: string;
-  stores?: { name: string } | null;
-};
+export default function ProductDetailsPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
 
-export default function ProductDetail() {
-  const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    async function fetchProduct() {
+    async function fetchProductDetails() {
+      setLoading(true);
       const { data, error } = await supabase
         .from('products')
-        .select('*, stores(name)')
+        .select('*')
         .eq('id', id)
         .single();
 
-      if (!error && data) {
-        setProduct(data as unknown as Product);
+      if (data && !error) {
+        setProduct(data);
+        
+        // Check if saved
+        const saved = JSON.parse(localStorage.getItem('saudiPrice_favs') || '[]');
+        setIsSaved(saved.some((item: any) => item.id === data.id));
       }
       setLoading(false);
     }
-    fetchProduct();
+
+    if (id) {
+      fetchProductDetails();
+    }
   }, [id]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center font-bold text-gray-400">Loading Product Details...</div>;
-  if (!product) return <div className="min-h-screen flex items-center justify-center">Product not found.</div>;
+  const toggleSaveProduct = () => {
+    if (!product) return;
+    
+    const saved = JSON.parse(localStorage.getItem('saudiPrice_favs') || '[]');
+    let newSaved;
+    
+    if (isSaved) {
+      newSaved = saved.filter((item: any) => item.id !== product.id);
+      setIsSaved(false);
+    } else {
+      newSaved = [...saved, product];
+      setIsSaved(true);
+    }
+    
+    localStorage.setItem('saudiPrice_favs', JSON.stringify(newSaved));
+    window.dispatchEvent(new Event('storage'));
+  };
+
+  const shareProduct = () => {
+    if (!product) return;
+    const url = window.location.href;
+    const text = `Check out this deal: ${product.title} for SAR ${product.current_price} at ${product.store_name} on SaudiPrice!\n\n${url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f4f5f7]">
+        <div className="text-xl font-bold text-green-600 animate-pulse">Loading Product...</div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4f5f7]">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Product not found</h1>
+        <button onClick={() => router.push('/')} className="bg-green-600 text-white px-6 py-2 rounded-full font-bold hover:bg-green-700">
+          Go Back Home
+        </button>
+      </div>
+    );
+  }
 
   const hasDiscount = product.old_price && product.old_price > product.current_price;
+  const discountPercentage = hasDiscount 
+    ? Math.round(((product.old_price - product.current_price) / product.old_price) * 100) 
+    : 0;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 py-10">
-      <nav className="text-sm text-gray-500 mb-8">
-        <Link href="/" className="hover:text-green-600">Home</Link> / 
-        <span className="ml-2 text-gray-800 font-medium">{product.title}</span>
-      </nav>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-        
-        {/* Left Side: Product Image */}
-        <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 relative overflow-hidden">
-          {hasDiscount && (
-            <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-4 py-1.5 rounded-full z-10">
-              SPECIAL OFFER
-            </div>
-          )}
-          <img 
-            src={product.image_url} 
-            alt={product.title} 
-            className="max-h-[450px] object-contain hover:scale-105 transition-transform duration-500"
-          />
+    <div className="min-h-screen bg-[#f4f5f7] pb-20 font-sans">
+      
+      {/* Top Navigation */}
+      <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-40">
+        <button onClick={() => router.back()} className="flex items-center gap-1.5 text-sm font-bold text-gray-600 hover:text-green-600 transition-colors bg-gray-50 px-3 py-1.5 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back
+        </button>
+        <div className="flex gap-2">
+          <button onClick={shareProduct} className="p-2 bg-gray-50 text-gray-600 rounded-full hover:bg-green-50 hover:text-green-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+          <button onClick={toggleSaveProduct} className={`p-2 rounded-full transition-colors ${isSaved ? 'bg-red-50 text-red-500' : 'bg-gray-50 text-gray-400 hover:text-red-500'}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
         </div>
+      </div>
 
-        {/* Right Side: Product Info */}
-        <div className="flex flex-col">
-          <div className="mb-4">
-            <span className="text-xs font-black text-green-700 bg-green-50 px-3 py-1 rounded-full uppercase">
-              {product.stores?.name || "Official Store"}
-            </span>
-          </div>
-
-          <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-4 leading-tight">
-            {product.title}
-          </h1>
-
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex flex-col">
-              <span className="text-3xl font-black text-green-600">
-                SAR {product.current_price}
-              </span>
-              {hasDiscount && (
-                <span className="text-lg text-gray-400 line-through font-medium">
-                  SAR {product.old_price}
-                </span>
-              )}
-            </div>
+      <div className="max-w-[1000px] mx-auto px-4 mt-6">
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row">
+          
+          {/* Product Image Section */}
+          <div className="w-full md:w-1/2 p-8 md:p-12 bg-white relative flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
             {hasDiscount && (
-              <div className="bg-red-50 text-red-600 px-3 py-1 rounded-lg font-bold text-sm">
-                Save SAR {product.old_price! - product.current_price}
-              </div>
+              <span className="absolute top-6 left-6 bg-red-500 text-white font-black text-sm px-3 py-1 rounded-lg shadow-sm">
+                -{discountPercentage}%
+              </span>
             )}
+            <img 
+              src={product.image_url} 
+              alt={product.title} 
+              className="max-h-[350px] w-auto object-contain mix-blend-multiply hover:scale-105 transition-transform duration-500" 
+              onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x600/f4f5f7/a1a1aa?text=Image+Not+Found'; }}
+            />
           </div>
 
-          <p className="text-gray-600 text-sm leading-relaxed mb-8 border-t border-gray-100 pt-6">
-            {product.description || "No description available for this product."}
-          </p>
-
-          <div className="flex flex-col gap-4 mt-auto">
-            <a 
-              href={product.product_url} 
-              target="_blank" 
-              className="w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 rounded-2xl font-black text-lg shadow-lg shadow-green-100 transition-all flex items-center justify-center gap-2"
-            >
-              Go to Store
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
-
-            <div className="flex gap-3">
-              <button className="flex-1 border border-gray-200 hover:bg-gray-50 py-3 rounded-xl font-bold text-gray-700 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                Favorite
-              </button>
-              <button className="flex-1 border border-gray-200 hover:bg-gray-50 py-3 rounded-xl font-bold text-gray-700 flex items-center justify-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                Share
-              </button>
+          {/* Product Details Section */}
+          <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center">
+            
+            <div className="mb-6">
+              <Link href={`/store/${encodeURIComponent(product.store_name)}`} className="inline-block bg-blue-50 text-blue-600 font-black text-xs px-3 py-1.5 rounded-lg uppercase tracking-wider mb-4 hover:bg-blue-100 transition-colors">
+                {product.store_name}
+              </Link>
+              <h1 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight mb-4">
+                {product.title}
+              </h1>
+              
+              <div className="flex items-end gap-3">
+                <span className="text-4xl font-black text-green-600 italic tracking-tighter">SAR {product.current_price}</span>
+                {hasDiscount && (
+                  <span className="text-lg text-gray-400 line-through font-bold mb-1">SAR {product.old_price}</span>
+                )}
+              </div>
             </div>
+
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3 text-sm text-gray-600 font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <span className="text-green-500 text-xl">✓</span>
+                Verified Offer from {product.store_name}
+              </div>
+              <div className="flex items-center gap-3 text-sm text-gray-600 font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <span className="text-green-500 text-xl">✓</span>
+                Prices are inclusive of VAT
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3 mt-auto">
+              <button className="w-full bg-green-600 text-white font-black text-lg py-4 rounded-2xl hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Go to Store
+              </button>
+              <p className="text-center text-xs text-gray-400 font-medium">Clicking this will take you to the official retailer</p>
+            </div>
+
           </div>
         </div>
       </div>
