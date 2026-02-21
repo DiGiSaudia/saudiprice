@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabase'; // <-- پاتھ ٹھیک کر دیا گیا ہے
+import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
 
 export default function StoreDetailsPage() {
@@ -25,24 +25,21 @@ export default function StoreDetailsPage() {
     async function fetchStoreData() {
       setLoading(true);
       
-      // 1. Fetch Store Info by NAME (not ID)
       const { data: storeData } = await supabase
         .from('stores')
         .select('*')
-        .ilike('name', storeNameFromUrl) // نام سے تلاش کریں
+        .ilike('name', storeNameFromUrl)
         .single();
         
       if (storeData) {
         setStore(storeData);
         
-        // 2. Fetch Flyers for this specific store
         const { data: flyersData } = await supabase
           .from('flyers')
           .select('*')
           .eq('store_id', storeData.id);
         if (flyersData) setFlyers(flyersData);
 
-        // 3. Fetch Products matching this store's name
         const { data: productsData } = await supabase
           .from('products')
           .select('*')
@@ -97,6 +94,21 @@ export default function StoreDetailsPage() {
   return (
     <div className="min-h-screen bg-[#f4f5f7] pb-12 font-sans">
       
+      {/* نیا بیک بٹن (Top Navigation Bar) */}
+      <div className="bg-white px-4 py-3 flex items-center shadow-sm sticky top-0 z-40 md:static md:shadow-none md:border-b md:border-gray-200">
+        <div className="max-w-[1400px] mx-auto w-full">
+          <button 
+            onClick={() => router.push('/')} 
+            className="flex items-center gap-1.5 text-sm font-bold text-gray-600 hover:text-green-600 transition-colors w-fit bg-gray-50 md:bg-transparent px-3 py-1.5 md:p-0 rounded-full md:rounded-none"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Offers
+          </button>
+        </div>
+      </div>
+
       {/* Store Header Banner */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-4 py-6 md:py-8 flex flex-col md:flex-row items-center gap-4 md:gap-6">
