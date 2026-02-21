@@ -20,6 +20,14 @@ function NavbarContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [savedCount, setSavedCount] = useState(0);
 
+  // Sync Navbar city with URL changes (when clicking from Footer)
+  useEffect(() => {
+    const urlCity = searchParams.get('city');
+    if (urlCity && urlCity !== selectedCity) {
+      setSelectedCity(urlCity);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     setIsMounted(true);
     setKsaTime(new Date());
@@ -171,6 +179,8 @@ function NavbarContent() {
                 <option value="Riyadh">Riyadh</option>
                 <option value="Jeddah">Jeddah</option>
                 <option value="Dammam">Dammam</option>
+                <option value="Mecca">Mecca</option>
+                <option value="Madina">Madina</option>
               </select>
             </div>
             <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products or stores..." className="flex-1 px-3 text-xs text-gray-800 outline-none w-full"/>
@@ -239,6 +249,8 @@ function NavbarContent() {
                   <option value="Riyadh">Riyadh</option>
                   <option value="Jeddah">Jeddah</option>
                   <option value="Dammam">Dammam</option>
+                  <option value="Mecca">Mecca</option>
+                  <option value="Madina">Madina</option>
                 </select>
               </div>
             </div>
