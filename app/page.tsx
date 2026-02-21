@@ -130,9 +130,9 @@ function HomeContent() {
                     className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
                   >
                     {displayStores.map((store) => (
-                      <button 
+                      <Link 
+                        href={`/store/${encodeURIComponent(store.name)}`} 
                         key={store.id} 
-                        onClick={() => setActiveStore(store.id === activeStore ? null : store.id)}
                         className="flex flex-col items-center min-w-[60px] md:min-w-[70px] snap-start cursor-pointer group shrink-0 outline-none"
                       >
                         <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden transition-all shadow-sm p-0.5 border-2 ${
@@ -145,7 +145,7 @@ function HomeContent() {
                         }`}>
                           {store.name}
                         </span>
-                      </button>
+                      </Link>
                     ))}
                   </div>
                   <NavArrow direction="right" onClick={() => scrollCarousel(storesRef, 'right')} />
