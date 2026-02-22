@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import TopProducts from './components/TopProducts';
 import HeroBanner from './components/HeroBanner';
 
@@ -28,11 +28,7 @@ const getCategoryIcon = (name: string) => {
 };
 
 function HomeContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  
-  // 🔥 FIX: شہر کا نام خالی (empty) ہوگا اگر روٹ (/) پر ہوں گے
-  const currentCity = searchParams.get('city') || '';
   
   const [categories, setCategories] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
@@ -53,13 +49,12 @@ function HomeContent() {
     if (catName === 'All Deals') {
       setActiveCategory('All Deals');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      router.push(currentCity ? `/?city=${currentCity}` : `/`, { scroll: false });
+      router.push(`/`, { scroll: false });
     } else {
-      router.push(`/category/${encodeURIComponent(catName)}${currentCity ? `?city=${currentCity}` : ''}`);
+      router.push(`/category/${encodeURIComponent(catName)}`);
     }
   };
 
-  // 🔥 FIX 4: All Offers پر کلک کرنے سے یہ سیدھا روٹ (/) پر جائے گا
   const resetToHome = () => {
     setActiveCategory('All Deals');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -75,7 +70,7 @@ function HomeContent() {
       if (storeData) setStores(storeData);
     }
     fetchLiveSaudiPriceData();
-  }, [currentCity]);
+  }, []);
 
   const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
   const displayStores = stores.length > 0 ? stores : [];
@@ -83,27 +78,21 @@ function HomeContent() {
   return (
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
       
-      {/* Smart Clickable Breadcrumb */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium flex items-center">
         
         <button onClick={resetToHome} className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 font-bold bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
           All Offers
         </button> 
         
-        {/* 🔥 FIX 5: اگر شہر سلیکٹڈ ہو، صرف تب شہر کا نام دکھاؤ */}
-        {currentCity && (
-          <>
-            <span className="mx-2 text-gray-400">›</span>
-            <span className="text-green-700 font-black bg-green-50 px-3 py-1 rounded-full border border-green-100 shadow-sm">
-              {currentCity} Offers
-            </span>
-          </>
-        )}
+        <span className="mx-2 text-gray-400">›</span>
+        <span className="text-green-700 font-black bg-green-50 px-3 py-1 rounded-full border border-green-100 shadow-sm">
+          Saudi Arabia
+        </span>
+
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
         
-        {/* Left Sidebar - Live Categories */}
         <aside className="hidden md:block w-[240px] flex-shrink-0 bg-white border border-gray-100 rounded-2xl shadow-sm h-fit sticky top-[100px] p-4">
           <h3 className="text-lg font-black text-gray-800 mb-4 px-2 uppercase tracking-wider">
             Categories
@@ -138,7 +127,6 @@ function HomeContent() {
           </div>
         </aside>
 
-        {/* Main Content Area */}
         <main className="flex-1 w-full min-w-0 flex flex-col">
           
           {activeCategory === 'All Deals' ? (
@@ -147,8 +135,7 @@ function HomeContent() {
                 <div className="relative mb-6">
                   <div className="flex items-center justify-between mb-4 mt-2">
                     <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">
-                      {/* 🔥 FIX 6: اسٹورز کی ہیڈنگ میں شہر کا نام کنٹرول کر لیا */}
-                      Popular Stores {currentCity ? `in ${currentCity}` : ''}
+                      Popular Stores in Saudi Arabia
                     </h2>
                     <Link href="/stores" className="text-xs md:text-sm font-bold text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm">
                       View All <span className="hidden sm:inline">Stores</span> ❯

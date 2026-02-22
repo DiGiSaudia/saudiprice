@@ -2,15 +2,15 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 function NavbarContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const pathname = usePathname();
   
-  // 🔥 FIX 1: اگر URL میں شہر نہیں ہے، تو یہ خالی رہے گا (یعنی Select your region)
-  const currentCity = searchParams.get('city') || '';
-  const cityQuery = currentCity ? `&city=${currentCity}` : '';
+  const validCities = ['Riyadh', 'Jeddah', 'Dammam', 'Mecca', 'Madina'];
+  const firstSegment = pathname.split('/')[1];
+  const currentCity = validCities.includes(firstSegment) ? firstSegment : '';
   
   const [selectedLang, setSelectedLang] = useState('en');
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
@@ -43,7 +43,7 @@ function NavbarContent() {
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
     if (city) {
-      router.push(`/?city=${city}`);
+      router.push(`/${city}`);
     } else {
       router.push(`/`);
     }
@@ -56,6 +56,7 @@ function NavbarContent() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      const cityQuery = currentCity ? `&city=${currentCity}` : '';
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}${cityQuery}`);
     }
   };
@@ -65,12 +66,13 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
+  const cityParam = currentCity ? `?city=${currentCity}` : '';
   const newsItems = [
-    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon${cityQuery}` },
-    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone${cityQuery}` },
-    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: `/search?q=Panda${cityQuery}` },
-    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: `/search?q=Jarir${cityQuery}` },
-    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: `/search?q=sale${cityQuery}` }
+    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon${cityParam}` },
+    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone${cityParam}` },
+    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: `/search?q=Panda${cityParam}` },
+    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: `/search?q=Jarir${cityParam}` },
+    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: `/search?q=sale${cityParam}` }
   ];
 
   const formatKsaTime = (date: Date) => {
@@ -105,23 +107,14 @@ function NavbarContent() {
   return (
     <>
       <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-          animation: marquee 35s linear infinite;
-          display: inline-flex;
-        }
-        .ticker-wrapper:hover .animate-marquee {
-          animation-play-state: paused;
-        }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
+        .animate-marquee { animation: marquee 35s linear infinite; display: inline-flex; }
+        .ticker-wrapper:hover .animate-marquee { animation-play-state: paused; }
       `}</style>
 
       <header className="font-sans z-50 bg-white shadow-sm sticky top-0 w-full">
         <div className="max-w-[1400px] mx-auto px-3 md:px-4 py-2.5 md:py-3 flex flex-wrap items-center justify-between gap-3 md:gap-4">
           
-          {/* 🔥 FIX 2: مین لوگو اب بالکل روٹ ہوم پیج (/) پر جائے گا */}
           <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
             <span className="text-green-600">Saudi</span>
             <span className="text-[#D4AF37]">Price</span>
@@ -148,8 +141,6 @@ function NavbarContent() {
 
           <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto shadow-sm">
             <div className="bg-green-50 hover:bg-green-100 transition-colors border-r border-green-200 px-2 lg:px-3 flex items-center min-w-[90px] lg:min-w-[110px] shrink-0">
-              
-              {/* 🔥 FIX 3: Select your region آپشن شامل کر دیا گیا */}
               <select value={currentCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-xs font-black outline-none w-full cursor-pointer">
                 <option value="" disabled hidden>Select your region</option>
                 <option value="Riyadh">Riyadh</option>
@@ -218,8 +209,6 @@ function NavbarContent() {
                 )}
               </div>
               <div className="bg-green-50 border border-green-200 rounded-md px-2 flex items-center shadow-sm flex-1 h-[32px]">
-                
-                {/* 🔥 FIX 3 Mobile: Select your region آپشن موبائل کے لیے */}
                 <select value={currentCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-[11px] font-black outline-none w-full cursor-pointer h-full">
                   <option value="" disabled hidden>Select your region</option>
                   <option value="Riyadh">Riyadh</option>
