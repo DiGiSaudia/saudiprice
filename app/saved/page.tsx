@@ -19,37 +19,46 @@ export default function SavedItemsPage() {
     return () => window.removeEventListener('storage', loadSavedItems);
   }, []);
 
-  const removeProduct = (id: string) => {
+  const removeProduct = (e: React.MouseEvent, id: string) => {
+    e.preventDefault(); // Prevents the Link from triggering when clicking the remove button
     const updatedItems = savedProducts.filter(item => item.id !== id);
     setSavedProducts(updatedItems);
     localStorage.setItem('saudiPrice_favs', JSON.stringify(updatedItems));
     window.dispatchEvent(new Event('storage')); // Update navbar counter
   };
 
-  if (!isMounted) return <div className="min-h-screen bg-gray-50"></div>;
+  if (!isMounted) return <div className="min-h-screen bg-[#f4f5f7]"></div>;
 
   return (
-    <main className="min-h-screen bg-gray-50 py-10 font-sans">
+    <main className="min-h-screen bg-[#f4f5f7] py-8 font-sans">
       <div className="max-w-[1400px] mx-auto px-4">
         
-        <div className="mb-8 flex items-center gap-3">
-          <Link href="/" className="p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+        {/* Breadcrumb / Back Navigation */}
+        <div className="flex items-center gap-2 text-sm mb-6 text-gray-500 font-medium">
+          <Link href="/" className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
+            Back to Home
           </Link>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900 font-bold">Saved Items</span>
+        </div>
+
+        {/* Page Header */}
+        <div className="mb-8 flex items-center gap-3">
           <h1 className="text-2xl font-black text-gray-800">My Saved Items</h1>
-          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
-            {savedProducts.length} items
+          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black tracking-wider">
+            {savedProducts.length} ITEMS
           </span>
         </div>
 
         {savedProducts.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-            <div className="text-5xl mb-4">💔</div>
-            <h2 className="text-xl font-bold text-gray-800">No saved items yet</h2>
-            <p className="text-gray-500 mt-2">Click the heart icon on any product to save it here.</p>
-            <Link href="/" className="mt-6 inline-block bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-all">
+          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100 max-w-2xl mx-auto">
+            <div className="text-6xl mb-4 drop-shadow-md">💔</div>
+            <h2 className="text-2xl font-black text-gray-800">No saved items yet</h2>
+            <p className="text-gray-500 mt-2 font-medium">Click the heart icon on any product to save it here for later.</p>
+            <Link href="/" className="mt-8 inline-block bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
               Explore Deals
             </Link>
           </div>
@@ -59,11 +68,13 @@ export default function SavedItemsPage() {
               const hasDiscount = product.old_price && product.old_price > product.current_price;
               
               return (
-                <div key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col">
+                /* Main Card Wrapper as a Link */
+                <Link href={`/product/${product.id}`} key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col cursor-pointer block">
                   
+                  {/* Remove Button (Z-index ensures it stays on top of the link) */}
                   <button 
-                    onClick={() => removeProduct(product.id)}
-                    className="absolute top-3 right-3 z-10 p-1.5 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                    onClick={(e) => removeProduct(e, product.id)}
+                    className="absolute top-3 right-3 z-20 p-2 bg-red-50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-sm"
                     title="Remove from saved"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -72,10 +83,10 @@ export default function SavedItemsPage() {
                   </button>
 
                   <div className="relative aspect-square w-full mb-4 bg-gray-50 rounded-xl flex items-center justify-center p-4">
-                    <img src={product.image_url} alt={product.title} className="max-h-full max-w-full object-contain mix-blend-multiply" />
+                    <img src={product.image_url} alt={product.title} className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
                   </div>
 
-                  <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-1 rounded w-fit uppercase mb-2 block">
+                  <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2.5 py-1 rounded w-fit uppercase mb-2 block tracking-wider">
                     {product.store_name || 'Retailer'}
                   </span>
 
@@ -83,11 +94,13 @@ export default function SavedItemsPage() {
                     {product.title}
                   </h3>
 
-                  <div className="mt-auto flex flex-col border-t border-gray-50 pt-3">
-                    {hasDiscount && <span className="text-[11px] text-gray-400 line-through">SAR {product.old_price}</span>}
-                    <span className="text-lg font-black text-green-600 italic">SAR {product.current_price}</span>
+                  <div className="mt-auto flex items-end justify-between border-t border-gray-50 pt-3">
+                    <div className="flex flex-col">
+                      {hasDiscount && <span className="text-[11px] text-gray-400 line-through font-medium">SAR {product.old_price}</span>}
+                      <span className="text-lg font-black text-green-600 italic">SAR {product.current_price}</span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

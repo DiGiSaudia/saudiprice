@@ -15,9 +15,11 @@ export default function HeroBanner() {
         <p className="text-green-100 mb-5 md:mb-6 max-w-md text-xs md:text-sm leading-relaxed">
           Get the best deals on smartphones, laptops, and home appliances. Limited time offer across all major KSA stores.
         </p>
-        <button className="bg-white text-green-700 px-6 py-2.5 rounded-full font-bold text-xs md:text-sm shadow-md hover:bg-gray-50 transition-transform hover:scale-105 inline-block">
+        
+        {/* Updated Button to be Clickable */}
+        <Link href="/search?q=electronics" className="bg-white text-green-700 px-6 py-2.5 rounded-full font-bold text-xs md:text-sm shadow-md hover:bg-gray-50 transition-transform hover:scale-105 inline-block">
           Shop Now
-        </button>
+        </Link>
       </div>
 
       {/* Right Side Design (Visible on larger screens) */}

@@ -10,7 +10,7 @@ import HeroBanner from './components/HeroBanner';
 const NavArrow = ({ direction, onClick }: { direction: 'left' | 'right', onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`absolute top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg border border-gray-200 text-green-600 rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center hover:bg-green-50 transition-colors ${direction === 'left' ? '-left-3 md:-left-5' : '-right-3 md:-right-5'}`}
+    className={`absolute top-1/2 -translate-y-1/2 z-20 bg-white shadow-md border border-gray-200 text-gray-600 hover:text-green-600 rounded-full w-9 h-9 md:w-10 md:h-10 flex items-center justify-center hover:bg-green-50 transition-colors ${direction === 'left' ? 'left-0 md:-left-2' : 'right-0 md:-right-2'}`}
   >
     {direction === 'left' ? '❮' : '❯'}
   </button>
@@ -69,9 +69,10 @@ function HomeContent() {
   return (
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
       
-      <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium">
-        <Link href="/" className="hover:text-green-600">Home</Link> <span className="mx-2">›</span>
-        <span className="text-green-600 font-bold">{selectedCity} Offers</span>
+      {/* Clickable Breadcrumb */}
+      <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium flex items-center">
+        <Link href="/" className="hover:text-green-600 transition-colors cursor-pointer text-gray-600">Home</Link> <span className="mx-2">›</span>
+        <span className="text-gray-900 font-bold">{selectedCity} Offers</span>
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
@@ -114,43 +115,52 @@ function HomeContent() {
         {/* Main Content Area */}
         <main className="flex-1 w-full min-w-0 flex flex-col">
           
-          {/* سمارٹ لاجک: اگر All Deals ہے تو بینر دکھاؤ، ورنہ چھپا دو */}
+          {/* سمارٹ لاجک: اگر All Deals ہے تو پہلے سٹورز دکھاؤ، پھر بینر دکھاؤ */}
           {activeCategory === 'All Deals' ? (
             <>
-              <HeroBanner />
-              
               {displayStores.length > 0 && (
-                <div className="relative mb-6 md:mb-8">
+                <div className="relative mb-6">
                   <div className="flex items-center justify-between mb-4 mt-2">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Popular Stores</h2>
+                    <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">Popular Stores</h2>
                   </div>
-                  <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
-                  <div 
-                    ref={storesRef}
-                    className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide items-start w-full"
-                  >
-                    {displayStores.map((store) => (
-                      <Link 
-                        href={`/store/${encodeURIComponent(store.name)}`} 
-                        key={store.id} 
-                        className="flex flex-col items-center min-w-[60px] md:min-w-[70px] snap-start cursor-pointer group shrink-0 outline-none"
-                      >
-                        <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden transition-all shadow-sm p-0.5 border-2 ${
-                          activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-100 group-hover:border-green-400'
-                        }`}>
-                          <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover rounded-full" />
-                        </div>
-                        <span className={`text-[10px] md:text-xs mt-2 truncate w-full text-center transition-colors ${
-                          activeStore === store.id ? 'text-green-600 font-extrabold' : 'text-gray-700 font-semibold group-hover:text-green-600'
-                        }`}>
-                          {store.name}
-                        </span>
-                      </Link>
-                    ))}
+                  
+                  {/* Stores Container with space for outside arrows */}
+                  <div className="relative w-full px-8 md:px-10">
+                    <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
+                    
+                    <div 
+                      ref={storesRef}
+                      className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-2 scrollbar-hide items-start w-full"
+                    >
+                      {displayStores.map((store) => (
+                        <Link 
+                          href={`/store/${encodeURIComponent(store.name)}`} 
+                          key={store.id} 
+                          className="flex flex-col items-center min-w-[70px] md:min-w-[90px] snap-start cursor-pointer group shrink-0 outline-none"
+                        >
+                          <div className={`w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden transition-all shadow-sm p-1 border-2 bg-white ${
+                            activeStore === store.id ? 'border-green-600 scale-105' : 'border-gray-100 group-hover:border-green-400 group-hover:shadow-md'
+                          }`}>
+                            <img src={store.logo_url} alt={store.name} className="w-full h-full object-contain rounded-full" />
+                          </div>
+                          <span className={`text-[11px] md:text-sm mt-2.5 truncate w-full text-center transition-colors ${
+                            activeStore === store.id ? 'text-green-600 font-extrabold' : 'text-gray-700 font-bold group-hover:text-green-600'
+                          }`}>
+                            {store.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    <NavArrow direction="right" onClick={() => scrollCarousel(storesRef, 'right')} />
                   </div>
-                  <NavArrow direction="right" onClick={() => scrollCarousel(storesRef, 'right')} />
                 </div>
               )}
+
+              {/* اب HeroBanner (Mega Sale) سٹورز کے نیچے آئے گا */}
+              <div className="mb-8">
+                <HeroBanner />
+              </div>
             </>
           ) : (
             /* نیا سمارٹ کیٹیگری ہیڈر (جب کوئی کیٹیگری سلیکٹ ہو) */
@@ -173,7 +183,7 @@ function HomeContent() {
             </div>
           )}
 
-          {/* Top Products Section اب Main سکرین کے اندر ہے! */}
+          {/* Top Products Section */}
           <div className="w-full pb-8">
             <TopProducts activeCategory={activeCategory} />
           </div>

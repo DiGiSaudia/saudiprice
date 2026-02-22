@@ -134,7 +134,7 @@ export default function ProductDetailsPage() {
           <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center">
             
             <div className="mb-6">
-              <Link href={`/store/${encodeURIComponent(product.store_name)}`} className="inline-block bg-blue-50 text-blue-600 font-black text-xs px-3 py-1.5 rounded-lg uppercase tracking-wider mb-4 hover:bg-blue-100 transition-colors">
+              <Link href={`/search?q=${encodeURIComponent(product.store_name)}`} className="inline-block bg-blue-50 text-blue-600 font-black text-xs px-3 py-1.5 rounded-lg uppercase tracking-wider mb-4 hover:bg-blue-100 transition-colors">
                 {product.store_name}
               </Link>
               <h1 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight mb-4">
@@ -149,6 +149,14 @@ export default function ProductDetailsPage() {
               </div>
             </div>
 
+            {/* Added Description Section */}
+            {product.description && (
+              <div className="mb-6">
+                <h3 className="text-sm font-black text-gray-900 mb-2 uppercase tracking-wider">Product Overview</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+              </div>
+            )}
+
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-3 text-sm text-gray-600 font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
                 <span className="text-green-500 text-xl">✓</span>
@@ -162,9 +170,18 @@ export default function ProductDetailsPage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-3 mt-auto">
-              <button className="w-full bg-green-600 text-white font-black text-lg py-4 rounded-2xl hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-                Go to Store
-              </button>
+              {/* Made this a clickable link instead of a dummy button */}
+              <a 
+                href={product.product_url || '#'} 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-green-600 text-white font-black text-lg py-4 rounded-2xl hover:bg-green-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2"
+              >
+                Go to {product.store_name}
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
               <p className="text-center text-xs text-gray-400 font-medium">Clicking this will take you to the official retailer</p>
             </div>
 

@@ -33,7 +33,11 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
     fetchProducts();
   }, [activeCategory]);
 
-  const toggleSaveProduct = (product: any) => {
+  // Updated function with proper event handling (e.preventDefault & e.stopPropagation)
+  const toggleSaveProduct = (e: React.MouseEvent, product: any) => {
+    e.preventDefault(); 
+    e.stopPropagation(); // This strictly stops the Link from opening when heart is clicked
+    
     const saved = JSON.parse(localStorage.getItem('saudiPrice_favs') || '[]');
     const isSaved = saved.find((item: any) => item.id === product.id);
     
@@ -59,7 +63,7 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
       </div>
 
       {loading ? (
-        <div className="text-center py-10 font-bold text-green-600">Loading deals...</div>
+        <div className="text-center py-10 font-bold text-green-600 animate-pulse">Loading deals...</div>
       ) : products.length === 0 ? (
         <div className="text-center py-10 text-gray-500 font-bold bg-white rounded-2xl border border-gray-100 shadow-sm">
           No products found in {activeCategory}.
@@ -78,7 +82,7 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
               <Link 
                 href={`/product/${product.id}`} 
                 key={product.id} 
-                className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col cursor-pointer"
+                className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col cursor-pointer block"
               >
                 
                 {hasDiscount && (
@@ -87,12 +91,11 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
                   </span>
                 )}
 
+                {/* Clean and protected Heart Button */}
                 <button 
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevents navigating to the product page when clicking the heart
-                    toggleSaveProduct(product);
-                  }}
-                  className={`absolute top-3 right-3 z-10 p-1.5 bg-white/90 backdrop-blur-sm rounded-full transition-all shadow-sm hover:shadow ${isSaved ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
+                  onClick={(e) => toggleSaveProduct(e, product)}
+                  className={`absolute top-3 right-3 z-20 p-2 bg-white/90 backdrop-blur-sm rounded-full transition-all shadow-sm hover:shadow-md ${isSaved ? 'text-red-500' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}`}
+                  title={isSaved ? "Remove from saved" : "Save for later"}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -103,7 +106,7 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
                   <img src={product.image_url} alt={product.title} className="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
                 </div>
 
-                <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-1 rounded-md w-fit uppercase mb-2 block">
+                <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md w-fit uppercase mb-2 block tracking-wider">
                   {product.store_name || 'Retailer'}
                 </span>
 
@@ -113,7 +116,7 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
 
                 <div className="mt-auto flex items-end justify-between border-t border-gray-50 pt-3">
                   <div className="flex flex-col">
-                    {hasDiscount && <span className="text-[11px] text-gray-400 line-through">SAR {product.old_price}</span>}
+                    {hasDiscount && <span className="text-[11px] text-gray-400 line-through font-medium">SAR {product.old_price}</span>}
                     <span className="text-lg font-black text-green-600 italic">SAR {product.current_price}</span>
                   </div>
                 </div>

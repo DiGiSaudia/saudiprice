@@ -71,12 +71,13 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
+  // Upgraded news items with individual links
   const newsItems = [
-    "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!",
-    "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!",
-    "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!",
-    "💻 Back to School Offers on Laptops at Jarir Bookstore!",
-    "💳 Extra 10% Discount using Al Rajhi Bank cards!"
+    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: "/search?q=Noon" },
+    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: "/search?q=iPhone" },
+    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: "/search?q=Panda" },
+    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: "/search?q=Jarir" },
+    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: "/search?q=sale" }
   ];
 
   const formatKsaTime = (date: Date) => {
@@ -152,7 +153,7 @@ function NavbarContent() {
             <span className="text-[#D4AF37]">Price</span>
           </Link>
 
-          {/* Desktop Time (Visible ONLY on Extra Large Screens) */}
+          {/* Desktop Time */}
           <div className="hidden xl:flex items-center gap-2 lg:gap-3 bg-gray-50 rounded-full px-2 lg:px-3 py-1.5 border border-gray-200 text-[10px] xl:text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0">
             <span className="flex items-center gap-1.5 lg:gap-2 min-w-max shrink-0">
               <CalendarIcon />
@@ -261,10 +262,10 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* --- SMART HOT SALE TICKER --- */}
+        {/* --- SMART HOT SALE TICKER (Now With Individual Links) --- */}
         <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper">
           
-          {/* Smart Badge */}
+          {/* Smart Badge (Static - Not Clickable) */}
           <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-20 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
             <span className="animate-pulse mr-1.5 md:mr-2 text-sm md:text-base">🔥</span> Hot Sale
           </div>
@@ -272,11 +273,14 @@ function NavbarContent() {
           <div className="absolute left-[90px] md:left-[110px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-green-600 to-transparent z-10 pointer-events-none"></div>
           
-          <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 cursor-pointer">
+          {/* Scrolling Items (Each item is now its own clickable link) */}
+          <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 h-full">
             <div className="animate-marquee items-center flex">
               {newsItems.map((item, index) => (
                 <div key={`news1-${index}`} className="flex items-center">
-                  <span className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors">{item}</span>
+                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer">
+                    {item.text}
+                  </Link>
                   <span className="text-yellow-400 font-bold text-[10px]">•</span>
                 </div>
               ))}
@@ -284,7 +288,9 @@ function NavbarContent() {
             <div className="animate-marquee items-center flex" aria-hidden="true">
               {newsItems.map((item, index) => (
                 <div key={`news2-${index}`} className="flex items-center">
-                  <span className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors">{item}</span>
+                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer">
+                    {item.text}
+                  </Link>
                   <span className="text-yellow-400 font-bold text-[10px]">•</span>
                 </div>
               ))}
