@@ -61,24 +61,24 @@ function StoreContent() {
   if (!store) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f4f5f7]">
       <h1 className="text-2xl font-black mb-4 text-gray-800">Store Not Found</h1>
-      <button onClick={() => router.push('/')} className="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-md">Back to Home</button>
+      <button onClick={() => router.back()} className="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-md">Go Back</button>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-[#f4f5f7] pb-12 font-sans">
       
-      {/* Premium Back Navigation (Back Button) */}
+      {/* Premium Smart Back Navigation */}
       <div className="bg-white px-4 py-3 border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-[1400px] mx-auto w-full">
           <button 
-            onClick={() => router.push('/')} 
-            className="flex items-center gap-2 text-sm font-black text-gray-600 hover:text-green-600 transition-all bg-gray-50 hover:bg-green-50 px-4 py-2 rounded-full border border-gray-200"
+            onClick={() => router.back()} 
+            className="flex items-center gap-2 text-sm font-black text-gray-600 hover:text-green-600 transition-all bg-gray-50 hover:bg-green-50 px-4 py-2 rounded-full border border-gray-200 w-fit"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to All Offers
+            Go Back
           </button>
         </div>
       </div>

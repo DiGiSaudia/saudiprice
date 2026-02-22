@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from 'react';
 import { supabase } from './lib/supabase';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import TopProducts from './components/TopProducts';
 import HeroBanner from './components/HeroBanner';
 
@@ -29,6 +29,7 @@ const getCategoryIcon = (name: string) => {
 
 function HomeContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const selectedCity = searchParams.get('city') || 'Riyadh';
   
   const [categories, setCategories] = useState<any[]>([]);
@@ -46,10 +47,21 @@ function HomeContent() {
     }
   };
 
-  // جب بھی کیٹیگری پر کلک ہوگا تو پیج سموتھلی اوپر چلا جائے گا
+  // ✨ Smart Category Routing (URL Update)
   const handleCategoryClick = (catName: string) => {
-    setActiveCategory(catName);
+    if (catName === 'All Deals') {
+      setActiveCategory('All Deals');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      router.push(`/?city=${selectedCity}`, { scroll: false });
+    } else {
+      router.push(`/category/${encodeURIComponent(catName)}?city=${selectedCity}`);
+    }
+  };
+
+  const resetToHome = () => {
+    setActiveCategory('All Deals');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    router.push(`/?city=${selectedCity}`, { scroll: false });
   };
 
   useEffect(() => {
@@ -69,10 +81,15 @@ function HomeContent() {
   return (
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
       
-      {/* Clickable Breadcrumb */}
+      {/* Smart Clickable Breadcrumb */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium flex items-center">
-        <Link href="/" className="hover:text-green-600 transition-colors cursor-pointer text-gray-600">Home</Link> <span className="mx-2">›</span>
-        <span className="text-gray-900 font-bold">{selectedCity} Offers</span>
+        <button onClick={resetToHome} className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 font-bold bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
+          Home
+        </button> 
+        <span className="mx-2 text-gray-400">›</span>
+        <span className="text-green-700 font-black bg-green-50 px-3 py-1 rounded-full border border-green-100 shadow-sm">
+          {selectedCity} Offers
+        </span>
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
@@ -115,16 +132,17 @@ function HomeContent() {
         {/* Main Content Area */}
         <main className="flex-1 w-full min-w-0 flex flex-col">
           
-          {/* سمارٹ لاجک: اگر All Deals ہے تو پہلے سٹورز دکھاؤ، پھر بینر دکھاؤ */}
           {activeCategory === 'All Deals' ? (
             <>
               {displayStores.length > 0 && (
                 <div className="relative mb-6">
                   <div className="flex items-center justify-between mb-4 mt-2">
-                    <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">Popular Stores</h2>
+                    <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">Popular Stores in {selectedCity}</h2>
+                    <Link href="/stores" className="text-xs md:text-sm font-bold text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm">
+                      View All <span className="hidden sm:inline">Stores</span> ❯
+                    </Link>
                   </div>
                   
-                  {/* Stores Container with space for outside arrows */}
                   <div className="relative w-full px-8 md:px-10">
                     <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
                     
@@ -157,13 +175,11 @@ function HomeContent() {
                 </div>
               )}
 
-              {/* اب HeroBanner (Mega Sale) سٹورز کے نیچے آئے گا */}
               <div className="mb-8">
                 <HeroBanner />
               </div>
             </>
           ) : (
-            /* نیا سمارٹ کیٹیگری ہیڈر (جب کوئی کیٹیگری سلیکٹ ہو) */
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-100 mb-6 flex items-center justify-between animate-in fade-in zoom-in duration-300">
               <div className="flex items-center gap-3 md:gap-4">
                 <span className="text-2xl md:text-3xl bg-green-50 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-xl shadow-inner">
@@ -175,7 +191,7 @@ function HomeContent() {
                 </div>
               </div>
               <button 
-                onClick={() => handleCategoryClick('All Deals')} 
+                onClick={resetToHome} 
                 className="text-[10px] md:text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 px-3 py-2 md:px-4 md:py-2.5 rounded-full transition-all shadow-sm shrink-0"
               >
                 ✕ Clear Filter
@@ -183,7 +199,6 @@ function HomeContent() {
             </div>
           )}
 
-          {/* Top Products Section */}
           <div className="w-full pb-8">
             <TopProducts activeCategory={activeCategory} />
           </div>
@@ -195,9 +210,10 @@ function HomeContent() {
   );
 }
 
+// یہ وہ آخری حصہ ہے جو لازمی ہونا چاہیے
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f4f5f7] w-full"></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#f4f5f7] w-full flex justify-center pt-20 font-black text-green-600">Loading SaudiPrice...</div>}>
       <HomeContent />
     </Suspense>
   );

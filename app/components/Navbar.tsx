@@ -20,7 +20,7 @@ function NavbarContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [savedCount, setSavedCount] = useState(0);
 
-  // Sync Navbar city with URL changes (when clicking from Footer)
+  // Sync Navbar city with URL seamlessly
   useEffect(() => {
     const urlCity = searchParams.get('city');
     if (urlCity && urlCity !== selectedCity) {
@@ -49,9 +49,11 @@ function NavbarContent() {
     };
   }, []);
 
+  // Smart City Change handler
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
     setSelectedCity(city);
+    // Push new city to URL cleanly
     router.push(`/?city=${city}`);
   };
 
@@ -71,7 +73,6 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
-  // Upgraded news items with individual links
   const newsItems = [
     { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: "/search?q=Noon" },
     { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: "/search?q=iPhone" },
@@ -81,41 +82,22 @@ function NavbarContent() {
   ];
 
   const formatKsaTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      timeZone: 'Asia/Riyadh', 
-      hour12: true, 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit' 
-    });
+    return date.toLocaleTimeString('en-US', { timeZone: 'Asia/Riyadh', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
 
   const formatGregorianDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      timeZone: 'Asia/Riyadh', 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
+    return date.toLocaleDateString('en-US', { timeZone: 'Asia/Riyadh', month: 'short', day: 'numeric', year: 'numeric' });
   };
 
   const formatHijriDate = (date: Date) => {
     try {
-      const parts = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
-        timeZone: 'Asia/Riyadh',
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric'
-      }).formatToParts(date);
-
+      const parts = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', { timeZone: 'Asia/Riyadh', day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(date);
       const day = parts.find(p => p.type === 'day')?.value || '1';
       const monthNum = parseInt(parts.find(p => p.type === 'month')?.value || '1', 10);
       let year = parts.find(p => p.type === 'year')?.value || '1447';
       year = year.replace(/[^0-9]/g, '');
-
       const islamicMonths = ['Muh', 'Saf', 'Rab', 'Rb2', 'Jum', 'Jm2', 'Raj', 'Sha', 'Ram', 'Shw', 'DhQ', 'DhH'];
       const monthName = islamicMonths[monthNum - 1] || 'Ram';
-
       return `${monthName} ${day}, ${year} AH`;
     } catch (error) {
       return 'Loading...';
@@ -173,10 +155,10 @@ function NavbarContent() {
             </span>
           </div>
 
-          {/* Desktop Search */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto">
-            <div className="bg-gray-50 border-r border-gray-200 px-2 lg:px-3 flex items-center min-w-[80px] lg:min-w-[100px] shrink-0">
-              <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-gray-800 text-xs font-bold outline-none w-full cursor-pointer">
+          {/* Desktop Search & City */}
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto shadow-sm">
+            <div className="bg-green-50 hover:bg-green-100 transition-colors border-r border-green-200 px-2 lg:px-3 flex items-center min-w-[90px] lg:min-w-[110px] shrink-0">
+              <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-xs font-black outline-none w-full cursor-pointer">
                 <option value="Riyadh">Riyadh</option>
                 <option value="Jeddah">Jeddah</option>
                 <option value="Dammam">Dammam</option>
@@ -184,23 +166,23 @@ function NavbarContent() {
                 <option value="Madina">Madina</option>
               </select>
             </div>
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products or stores..." className="flex-1 px-3 text-xs text-gray-800 outline-none w-full"/>
-            <button type="submit" className="bg-green-600 text-white px-4 lg:px-5 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">Search</button>
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products or stores..." className="flex-1 px-3 text-xs text-gray-800 outline-none w-full font-medium"/>
+            <button type="submit" className="bg-green-600 text-white px-4 lg:px-6 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">Search</button>
           </form>
 
           {/* Top Right Icons */}
           <div className="flex items-center gap-3 shrink-0">
-            <Link href="/saved" className="relative p-1.5 text-gray-600 hover:text-red-500 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+            <Link href="/saved" className="relative p-1.5 text-gray-600 hover:text-red-500 transition-colors bg-gray-50 rounded-full border border-gray-100 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               {savedCount > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] md:text-[10px] font-bold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full border-2 border-white">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
                   {savedCount}
                 </span>
               )}
             </Link>
-            <button onClick={toggleLanguage} className="hidden sm:flex items-center bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full font-bold text-[10px] md:text-[11px] hover:bg-green-100 transition-colors shadow-sm">
+            <button onClick={toggleLanguage} className="hidden sm:flex items-center bg-white text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-bold text-[11px] hover:bg-green-50 transition-colors shadow-sm">
               {selectedLang === 'en' ? 'عربي - AR' : 'English - EN'}
             </button>
           </div>
@@ -229,24 +211,24 @@ function NavbarContent() {
         </div>
 
         {/* Mobile Search & Categories */}
-        <div className="block md:hidden bg-white px-3 py-2.5 w-full">
+        <div className="block md:hidden bg-white px-3 py-2.5 w-full border-b border-gray-100">
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-between gap-2.5 relative z-40">
               <div className="relative shrink-0">
-                <button onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)} className="flex items-center gap-1.5 bg-green-600 text-white px-2.5 py-1.5 rounded-md font-bold text-[11px] shadow-sm hover:bg-green-700 transition-colors">
+                <button onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)} className="flex items-center gap-1.5 bg-green-600 text-white px-3 py-1.5 rounded-md font-bold text-[11px] shadow-sm hover:bg-green-700 transition-colors">
                   <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" /></svg>
                   Categories
                 </button>
                 {isMobileCategoryOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-gray-200 rounded-md shadow-lg py-1 flex flex-col z-50">
+                  <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-xl py-1 flex flex-col z-50 overflow-hidden">
                     {mobileCategories.map((cat, idx) => (
-                      <button key={idx} onClick={() => setIsMobileCategoryOpen(false)} className="px-3 py-2 text-left text-[11px] font-bold text-gray-700 hover:bg-green-50 hover:text-green-600 border-b border-gray-50 last:border-0">{cat}</button>
+                      <button key={idx} onClick={() => setIsMobileCategoryOpen(false)} className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-700 hover:bg-green-50 hover:text-green-700 border-b border-gray-50 last:border-0">{cat}</button>
                     ))}
                   </div>
                 )}
               </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-md px-2 py-1 flex items-center shadow-sm flex-1 h-[30px]">
-                <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-gray-800 text-[11px] font-bold outline-none w-full cursor-pointer">
+              <div className="bg-green-50 border border-green-200 rounded-md px-2 flex items-center shadow-sm flex-1 h-[32px]">
+                <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-[11px] font-black outline-none w-full cursor-pointer h-full">
                   <option value="Riyadh">Riyadh</option>
                   <option value="Jeddah">Jeddah</option>
                   <option value="Dammam">Dammam</option>
@@ -255,25 +237,20 @@ function NavbarContent() {
                 </select>
               </div>
             </div>
-            <form onSubmit={handleSearch} className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[34px] shadow-sm w-full">
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products..." className="flex-1 px-2.5 text-[11px] text-gray-800 outline-none w-full"/>
-              <button type="submit" className="bg-green-600 text-white px-4 font-bold text-[11px] hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">Search</button>
+            <form onSubmit={handleSearch} className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[36px] shadow-sm w-full">
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search deals..." className="flex-1 px-3 text-[12px] font-medium text-gray-800 outline-none w-full"/>
+              <button type="submit" className="bg-green-600 text-white px-4 font-bold text-[11px] hover:bg-green-700 transition-colors shrink-0">Search</button>
             </form>
           </div>
         </div>
 
-        {/* --- SMART HOT SALE TICKER (Now With Individual Links) --- */}
+        {/* Ticker Row */}
         <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper">
-          
-          {/* Smart Badge (Static - Not Clickable) */}
           <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-20 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
             <span className="animate-pulse mr-1.5 md:mr-2 text-sm md:text-base">🔥</span> Hot Sale
           </div>
-          
           <div className="absolute left-[90px] md:left-[110px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-green-600 to-transparent z-10 pointer-events-none"></div>
-          
-          {/* Scrolling Items (Each item is now its own clickable link) */}
           <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 h-full">
             <div className="animate-marquee items-center flex">
               {newsItems.map((item, index) => (
