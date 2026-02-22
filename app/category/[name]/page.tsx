@@ -2,13 +2,16 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { supabase } from '../../lib/supabase';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 function CategoryContent() {
   const params = useParams();
-  const router = useRouter();
+  const searchParams = useSearchParams(); // 1️⃣ UPDATE: شہر کو پکڑنے کے لیے searchParams شامل کیا
+  
   const categoryName = decodeURIComponent(params.name as string);
+  const currentCity = searchParams.get('city') || 'Riyadh'; // موجودہ شہر پکڑا
+
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,12 +34,13 @@ function CategoryContent() {
         
         {/* Breadcrumb / Back Button */}
         <div className="flex items-center gap-2 text-sm mb-6 text-gray-500 font-medium">
-          <button onClick={() => router.back()} className="hover:text-green-600 transition-colors flex items-center gap-1">
+          {/* 2️⃣ UPDATE: Back بٹن کو Link میں تبدیل کر کے شہر کا نام لگا دیا */}
+          <Link href={`/?city=${currentCity}`} className="hover:text-green-600 transition-colors flex items-center gap-1 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back
-          </button>
+            Back to Home
+          </Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900 font-bold capitalize">{categoryName} Deals</span>
         </div>
@@ -55,7 +59,8 @@ function CategoryContent() {
         ) : products.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
             <h3 className="text-xl text-gray-500 font-bold">No products found in {categoryName}... 😢</h3>
-            <Link href="/" className="mt-4 inline-block text-green-600 font-bold underline">Go back home</Link>
+            {/* 3️⃣ UPDATE: خالی کیٹیگری والے ہوم لنک میں بھی شہر شامل کر دیا */}
+            <Link href={`/?city=${currentCity}`} className="mt-4 inline-block text-green-600 font-bold underline">Go back home</Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">

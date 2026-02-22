@@ -61,10 +61,11 @@ function NavbarContent() {
     setSelectedLang((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
   };
 
+  // 1️⃣ UPDATE: Search with City Sync
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}&city=${selectedCity}`);
     }
   };
 
@@ -73,12 +74,13 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
+  // 2️⃣ UPDATE: Hot Sale links with City Sync
   const newsItems = [
-    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: "/search?q=Noon" },
-    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: "/search?q=iPhone" },
-    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: "/search?q=Panda" },
-    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: "/search?q=Jarir" },
-    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: "/search?q=sale" }
+    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon&city=${selectedCity}` },
+    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone&city=${selectedCity}` },
+    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: `/search?q=Panda&city=${selectedCity}` },
+    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: `/search?q=Jarir&city=${selectedCity}` },
+    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: `/search?q=sale&city=${selectedCity}` }
   ];
 
   const formatKsaTime = (date: Date) => {
@@ -130,7 +132,9 @@ function NavbarContent() {
         
         {/* Main Header Row */}
         <div className="max-w-[1400px] mx-auto px-3 md:px-4 py-2.5 md:py-3 flex flex-wrap items-center justify-between gap-3 md:gap-4">
-          <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
+          
+          {/* 3️⃣ UPDATE: Main Logo with City Sync */}
+          <Link href={`/?city=${selectedCity}`} className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
             <span className="text-green-600">Saudi</span>
             <span className="text-[#D4AF37]">Price</span>
           </Link>
