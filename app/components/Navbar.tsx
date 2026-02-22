@@ -244,31 +244,32 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* Ticker Row */}
-        <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper">
-          <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-20 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
+        {/* Ticker Row - FIXED CLICK ISSUE */}
+        <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper z-40">
+          <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-50 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
             <span className="animate-pulse mr-1.5 md:mr-2 text-sm md:text-base">🔥</span> Hot Sale
           </div>
-          <div className="absolute left-[90px] md:left-[110px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-green-600 to-transparent z-10 pointer-events-none"></div>
-          <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 h-full">
+          <div className="absolute left-[90px] md:left-[110px] top-0 bottom-0 w-8 bg-gradient-to-r from-green-600 to-transparent z-20 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-green-600 to-transparent z-20 pointer-events-none"></div>
+          
+          <div className="flex whitespace-nowrap overflow-hidden items-center flex-1 h-full relative z-40">
             <div className="animate-marquee items-center flex">
               {newsItems.map((item, index) => (
                 <div key={`news1-${index}`} className="flex items-center">
-                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer">
+                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer block py-2">
                     {item.text}
                   </Link>
-                  <span className="text-yellow-400 font-bold text-[10px]">•</span>
+                  <span className="text-yellow-400 font-bold text-[10px] pointer-events-none">•</span>
                 </div>
               ))}
             </div>
             <div className="animate-marquee items-center flex" aria-hidden="true">
               {newsItems.map((item, index) => (
                 <div key={`news2-${index}`} className="flex items-center">
-                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer">
+                  <Link href={item.link} className="mx-4 text-[11px] md:text-xs font-semibold hover:text-yellow-300 transition-colors cursor-pointer block py-2">
                     {item.text}
                   </Link>
-                  <span className="text-yellow-400 font-bold text-[10px]">•</span>
+                  <span className="text-yellow-400 font-bold text-[10px] pointer-events-none">•</span>
                 </div>
               ))}
             </div>
