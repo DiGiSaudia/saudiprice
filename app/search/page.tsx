@@ -18,6 +18,9 @@ function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   
+  // 1️⃣ UPDATE: یہاں ہم نے URL سے موجودہ شہر (City) کو پکڑا ہے
+  const currentCity = searchParams.get('city') || 'Riyadh';
+  
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,7 +54,8 @@ function SearchContent() {
         
         {/* Added Back Button / Breadcrumb Navigation */}
         <div className="flex items-center gap-2 text-sm mb-6 text-gray-500 font-medium">
-          <Link href="/" className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 flex items-center gap-1.5">
+          {/* 2️⃣ UPDATE: Back بٹن میں شہر کا لنک لگا دیا ہے */}
+          <Link href={`/?city=${currentCity}`} className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 flex items-center gap-1.5">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -75,7 +79,8 @@ function SearchContent() {
             <div className="text-6xl mb-4 drop-shadow-md">🔍</div>
             <h2 className="text-2xl font-black text-gray-800">No products found</h2>
             <p className="text-gray-500 mt-2">Try searching for something else like "iPhone" or "Samsung".</p>
-            <Link href="/" className="mt-8 inline-block bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
+            {/* 3️⃣ UPDATE: خالی پیج والے Back بٹن میں بھی شہر کا لنک لگا دیا ہے */}
+            <Link href={`/?city=${currentCity}`} className="mt-8 inline-block bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
               Back to Home
             </Link>
           </div>
@@ -85,7 +90,6 @@ function SearchContent() {
               const hasDiscount = product.old_price && product.old_price > product.current_price;
               
               return (
-                /* Changed div to Link to make the entire product card clickable */
                 <Link href={`/product/${product.id}`} key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all relative group flex flex-col cursor-pointer block">
                   
                   <div className="relative aspect-square w-full mb-4 bg-gray-50 rounded-xl flex items-center justify-center p-4">
