@@ -71,11 +71,11 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-bold mb-4 border-b border-[#0d6e40] pb-2">Top Cities</h4>
             <ul className="space-y-2 text-sm text-green-100">
-              <li><Link href="/?city=Riyadh" className="hover:text-white transition-colors">Riyadh Offers</Link></li>
-              <li><Link href="/?city=Jeddah" className="hover:text-white transition-colors">Jeddah Offers</Link></li>
-              <li><Link href="/?city=Dammam" className="hover:text-white transition-colors">Dammam Offers</Link></li>
-              <li><Link href="/?city=Mecca" className="hover:text-white transition-colors">Mecca Offers</Link></li>
-              <li><Link href="/?city=Madina" className="hover:text-white transition-colors">Madina Offers</Link></li>
+              <li><Link href="/Riyadh" className="hover:text-white transition-colors">Riyadh Offers</Link></li>
+              <li><Link href="/Jeddah" className="hover:text-white transition-colors">Jeddah Offers</Link></li>
+              <li><Link href="/Dammam" className="hover:text-white transition-colors">Dammam Offers</Link></li>
+              <li><Link href="/Mecca" className="hover:text-white transition-colors">Mecca Offers</Link></li>
+              <li><Link href="/Madina" className="hover:text-white transition-colors">Madina Offers</Link></li>
             </ul>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function Footer() {
         </div>
         
         <div className="mt-8 pt-6 border-t border-[#0d6e40] text-center text-sm text-green-200">
-          <p>&copy; 2026 SaudiPrice. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SaudiPrice. All rights reserved.</p>
         </div>
       </div>
     </footer>
