@@ -8,25 +8,16 @@ function NavbarContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const defaultCity = searchParams.get('city') || 'Riyadh';
-  const [selectedCity, setSelectedCity] = useState(defaultCity);
-  const [selectedLang, setSelectedLang] = useState('en');
+  // 🔥 FIX 1: اگر URL میں شہر نہیں ہے، تو یہ خالی رہے گا (یعنی Select your region)
+  const currentCity = searchParams.get('city') || '';
+  const cityQuery = currentCity ? `&city=${currentCity}` : '';
   
+  const [selectedLang, setSelectedLang] = useState('en');
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
-
   const [ksaTime, setKsaTime] = useState<Date | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [savedCount, setSavedCount] = useState(0);
-
-  // Sync Navbar city with URL seamlessly
-  useEffect(() => {
-    const urlCity = searchParams.get('city');
-    if (urlCity && urlCity !== selectedCity) {
-      setSelectedCity(urlCity);
-    }
-  }, [searchParams]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -49,23 +40,23 @@ function NavbarContent() {
     };
   }, []);
 
-  // Smart City Change handler
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
-    setSelectedCity(city);
-    // Push new city to URL cleanly
-    router.push(`/?city=${city}`);
+    if (city) {
+      router.push(`/?city=${city}`);
+    } else {
+      router.push(`/`);
+    }
   };
 
   const toggleLanguage = () => {
     setSelectedLang((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
   };
 
-  // 1️⃣ UPDATE: Search with City Sync
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}&city=${selectedCity}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}${cityQuery}`);
     }
   };
 
@@ -74,13 +65,12 @@ function NavbarContent() {
     'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'
   ];
 
-  // 2️⃣ UPDATE: Hot Sale links with City Sync
   const newsItems = [
-    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon&city=${selectedCity}` },
-    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone&city=${selectedCity}` },
-    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: `/search?q=Panda&city=${selectedCity}` },
-    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: `/search?q=Jarir&city=${selectedCity}` },
-    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: `/search?q=sale&city=${selectedCity}` }
+    { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon${cityQuery}` },
+    { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone${cityQuery}` },
+    { text: "🛒 Ramadan Supermarket deals starting tomorrow at Panda & Othaim!", link: `/search?q=Panda${cityQuery}` },
+    { text: "💻 Back to School Offers on Laptops at Jarir Bookstore!", link: `/search?q=Jarir${cityQuery}` },
+    { text: "💳 Extra 10% Discount using Al Rajhi Bank cards!", link: `/search?q=sale${cityQuery}` }
   ];
 
   const formatKsaTime = (date: Date) => {
@@ -129,17 +119,14 @@ function NavbarContent() {
       `}</style>
 
       <header className="font-sans z-50 bg-white shadow-sm sticky top-0 w-full">
-        
-        {/* Main Header Row */}
         <div className="max-w-[1400px] mx-auto px-3 md:px-4 py-2.5 md:py-3 flex flex-wrap items-center justify-between gap-3 md:gap-4">
           
-          {/* 3️⃣ UPDATE: Main Logo with City Sync */}
-          <Link href={`/?city=${selectedCity}`} className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
+          {/* 🔥 FIX 2: مین لوگو اب بالکل روٹ ہوم پیج (/) پر جائے گا */}
+          <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter shrink-0 flex items-center">
             <span className="text-green-600">Saudi</span>
             <span className="text-[#D4AF37]">Price</span>
           </Link>
 
-          {/* Desktop Time */}
           <div className="hidden xl:flex items-center gap-2 lg:gap-3 bg-gray-50 rounded-full px-2 lg:px-3 py-1.5 border border-gray-200 text-[10px] xl:text-[11px] font-bold text-gray-700 shadow-sm whitespace-nowrap shrink-0">
             <span className="flex items-center gap-1.5 lg:gap-2 min-w-max shrink-0">
               <CalendarIcon />
@@ -159,10 +146,12 @@ function NavbarContent() {
             </span>
           </div>
 
-          {/* Desktop Search & City */}
           <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 ml-auto shadow-sm">
             <div className="bg-green-50 hover:bg-green-100 transition-colors border-r border-green-200 px-2 lg:px-3 flex items-center min-w-[90px] lg:min-w-[110px] shrink-0">
-              <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-xs font-black outline-none w-full cursor-pointer">
+              
+              {/* 🔥 FIX 3: Select your region آپشن شامل کر دیا گیا */}
+              <select value={currentCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-xs font-black outline-none w-full cursor-pointer">
+                <option value="" disabled hidden>Select your region</option>
                 <option value="Riyadh">Riyadh</option>
                 <option value="Jeddah">Jeddah</option>
                 <option value="Dammam">Dammam</option>
@@ -174,7 +163,6 @@ function NavbarContent() {
             <button type="submit" className="bg-green-600 text-white px-4 lg:px-6 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">Search</button>
           </form>
 
-          {/* Top Right Icons */}
           <div className="flex items-center gap-3 shrink-0">
             <Link href="/saved" className="relative p-1.5 text-gray-600 hover:text-red-500 transition-colors bg-gray-50 rounded-full border border-gray-100 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -192,7 +180,6 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* Mobile & Tablet Time Row */}
         <div className="flex xl:hidden bg-gray-50 border-t border-b border-gray-200 px-2 py-2 shadow-inner items-center justify-center w-full overflow-x-auto scrollbar-hide">
           <div className="flex items-center justify-center gap-2 sm:gap-3 text-[10px] md:text-xs font-bold text-gray-700 w-max mx-auto">
             <span className="flex items-center gap-1.5 shrink-0">
@@ -214,7 +201,6 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* Mobile Search & Categories */}
         <div className="block md:hidden bg-white px-3 py-2.5 w-full border-b border-gray-100">
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-between gap-2.5 relative z-40">
@@ -232,7 +218,10 @@ function NavbarContent() {
                 )}
               </div>
               <div className="bg-green-50 border border-green-200 rounded-md px-2 flex items-center shadow-sm flex-1 h-[32px]">
-                <select value={selectedCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-[11px] font-black outline-none w-full cursor-pointer h-full">
+                
+                {/* 🔥 FIX 3 Mobile: Select your region آپشن موبائل کے لیے */}
+                <select value={currentCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-[11px] font-black outline-none w-full cursor-pointer h-full">
+                  <option value="" disabled hidden>Select your region</option>
                   <option value="Riyadh">Riyadh</option>
                   <option value="Jeddah">Jeddah</option>
                   <option value="Dammam">Dammam</option>
@@ -248,7 +237,6 @@ function NavbarContent() {
           </div>
         </div>
 
-        {/* Ticker Row - FIXED CLICK ISSUE */}
         <div className="bg-green-600 text-white shadow-md w-full overflow-hidden relative flex items-center h-8 md:h-10 ticker-wrapper z-40">
           <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white font-black text-[10px] md:text-xs px-4 md:px-5 py-1 z-50 h-full flex items-center shrink-0 uppercase tracking-wider shadow-[4px_0_12px_rgba(239,68,68,0.5)] border-r border-orange-400">
             <span className="animate-pulse mr-1.5 md:mr-2 text-sm md:text-base">🔥</span> Hot Sale

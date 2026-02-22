@@ -30,7 +30,9 @@ const getCategoryIcon = (name: string) => {
 function HomeContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedCity = searchParams.get('city') || 'Riyadh';
+  
+  // 🔥 FIX: شہر کا نام خالی (empty) ہوگا اگر روٹ (/) پر ہوں گے
+  const currentCity = searchParams.get('city') || '';
   
   const [categories, setCategories] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
@@ -47,21 +49,21 @@ function HomeContent() {
     }
   };
 
-  // ✨ Smart Category Routing (URL Update)
   const handleCategoryClick = (catName: string) => {
     if (catName === 'All Deals') {
       setActiveCategory('All Deals');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      router.push(`/?city=${selectedCity}`, { scroll: false });
+      router.push(currentCity ? `/?city=${currentCity}` : `/`, { scroll: false });
     } else {
-      router.push(`/category/${encodeURIComponent(catName)}?city=${selectedCity}`);
+      router.push(`/category/${encodeURIComponent(catName)}${currentCity ? `?city=${currentCity}` : ''}`);
     }
   };
 
+  // 🔥 FIX 4: All Offers پر کلک کرنے سے یہ سیدھا روٹ (/) پر جائے گا
   const resetToHome = () => {
     setActiveCategory('All Deals');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    router.push(`/?city=${selectedCity}`, { scroll: false });
+    router.push(`/`);
   };
 
   useEffect(() => {
@@ -73,7 +75,7 @@ function HomeContent() {
       if (storeData) setStores(storeData);
     }
     fetchLiveSaudiPriceData();
-  }, [selectedCity]);
+  }, [currentCity]);
 
   const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
   const displayStores = stores.length > 0 ? stores : [];
@@ -83,13 +85,20 @@ function HomeContent() {
       
       {/* Smart Clickable Breadcrumb */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4 w-full text-xs md:text-sm text-gray-500 font-medium flex items-center">
+        
         <button onClick={resetToHome} className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 font-bold bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
-          Home
+          All Offers
         </button> 
-        <span className="mx-2 text-gray-400">›</span>
-        <span className="text-green-700 font-black bg-green-50 px-3 py-1 rounded-full border border-green-100 shadow-sm">
-          {selectedCity} Offers
-        </span>
+        
+        {/* 🔥 FIX 5: اگر شہر سلیکٹڈ ہو، صرف تب شہر کا نام دکھاؤ */}
+        {currentCity && (
+          <>
+            <span className="mx-2 text-gray-400">›</span>
+            <span className="text-green-700 font-black bg-green-50 px-3 py-1 rounded-full border border-green-100 shadow-sm">
+              {currentCity} Offers
+            </span>
+          </>
+        )}
       </div>
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 md:gap-6 pb-10 w-full">
@@ -137,7 +146,10 @@ function HomeContent() {
               {displayStores.length > 0 && (
                 <div className="relative mb-6">
                   <div className="flex items-center justify-between mb-4 mt-2">
-                    <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">Popular Stores in {selectedCity}</h2>
+                    <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">
+                      {/* 🔥 FIX 6: اسٹورز کی ہیڈنگ میں شہر کا نام کنٹرول کر لیا */}
+                      Popular Stores {currentCity ? `in ${currentCity}` : ''}
+                    </h2>
                     <Link href="/stores" className="text-xs md:text-sm font-bold text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm">
                       View All <span className="hidden sm:inline">Stores</span> ❯
                     </Link>
@@ -210,7 +222,6 @@ function HomeContent() {
   );
 }
 
-// یہ وہ آخری حصہ ہے جو لازمی ہونا چاہیے
 export default function Home() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#f4f5f7] w-full flex justify-center pt-20 font-black text-green-600">Loading SaudiPrice...</div>}>
