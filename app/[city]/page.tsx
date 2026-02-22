@@ -22,6 +22,8 @@ const getCategoryIcon = (name: string) => {
   if (lowerName.includes('laptop') || lowerName.includes('pc')) return '💻';
   if (lowerName.includes('electronic') || lowerName.includes('tv')) return '🎧';
   if (lowerName.includes('grocery') || lowerName.includes('supermarket') || lowerName.includes('food')) return '🛒';
+  if (lowerName.includes('fashion') || lowerName.includes('beauty')) return '👕';
+  if (lowerName.includes('home') || lowerName.includes('kitchen')) return '🏠';
   return '🌟';
 };
 
