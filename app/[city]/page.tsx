@@ -55,14 +55,21 @@ function CityContent() {
 
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
+      // Categories stay the same
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
       if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
-      const { data: storeData } = await supabase.from('stores').select('*').order('created_at');
+      // 🔥 Store Filter Logic added here
+      let storeQuery = supabase.from('stores').select('*');
+      if (currentCity) {
+        storeQuery = storeQuery.eq('city', currentCity);
+      }
+      
+      const { data: storeData } = await storeQuery.order('created_at');
       if (storeData) setStores(storeData);
     }
     fetchLiveSaudiPriceData();
-  }, []);
+  }, [currentCity]);
 
   const displayCategories = categories.length > 0 ? categories : [{id: 'loading', name: 'Loading...'}];
 
