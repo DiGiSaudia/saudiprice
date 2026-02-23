@@ -28,14 +28,12 @@ function NavbarContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
 
-  // Live Search States
   const [searchQuery, setSearchQuery] = useState('');
   const [liveProducts, setLiveProducts] = useState<any[]>([]);
   const [liveStores, setLiveStores] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Auto Clear Search Input when navigating away
   useEffect(() => {
     if (!pathname.includes('/search')) {
       setSearchQuery('');
@@ -45,7 +43,6 @@ function NavbarContent() {
     }
   }, [pathname, searchParams]);
 
-  // Handle typing: Immediately show dropdown and searching state
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearchQuery(val);
@@ -59,20 +56,17 @@ function NavbarContent() {
     }
   };
 
-  // Live Search Fetch Logic (Fixed DB Error by using select('*'))
   useEffect(() => {
     const fetchLiveSearch = async () => {
       const query = searchQuery.trim();
       if (query.length < 2) return;
 
-      // Fetch Stores Suggestions
       const { data: storesData } = await supabase
         .from('stores')
         .select('*')
         .ilike('name', `%${query}%`)
         .limit(3);
 
-      // Fetch Products Suggestions
       let pQuery = supabase
         .from('products')
         .select('*')
@@ -94,7 +88,6 @@ function NavbarContent() {
     return () => clearTimeout(debounceTimer);
   }, [searchQuery, currentCity]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -149,10 +142,24 @@ function NavbarContent() {
     }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      alert(`Image selected: ${file.name}`);
+    }
+  };
+
   const toggleLanguage = () => setSelectedLang((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
 
-  const mobileCategories = ['Mobiles', 'TV', 'Kitchen Appliance', 'Printer', 'Smart Watch', 'Computer & Laptop', 'Tabs', 'Gaming'];
-  const cityParam = currentCity ? `?city=${currentCity}` : '';
+  const mobileCategories = [
+    'Mobiles & Tablets', 
+    'Laptops & PCs', 
+    'Electronics & TV', 
+    'Grocery & Daily Needs', 
+    'Fashion & Beauty', 
+    'Home & Kitchen'
+  ];
+  const cityParam = currentCity ? `&city=${currentCity}` : '';
   const newsItems = [
     { text: "🔥 Mega Sale: Up to 70% OFF on Electronics at Noon!", link: `/search?q=Noon${cityParam}` },
     { text: "📱 iPhone 15 Pro Max 256GB - Lowest price ever in Amazon SA!", link: `/search?q=iPhone${cityParam}` },
@@ -211,7 +218,7 @@ function NavbarContent() {
           </div>
 
           <div ref={searchRef} className="hidden md:flex flex-1 max-w-sm lg:max-w-md xl:max-w-lg relative">
-            <form onSubmit={handleSearchSubmit} className="flex flex-1 border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 shadow-sm">
+            <form onSubmit={handleSearchSubmit} className="flex flex-1 border-2 border-green-600 rounded-full overflow-hidden bg-white h-[36px] md:h-[38px] transition-all focus-within:ring-2 focus-within:ring-green-600/20 shadow-sm relative">
               <div className="bg-green-50 hover:bg-green-100 transition-colors border-r border-green-200 px-2 lg:px-3 flex items-center min-w-[90px] lg:min-w-[110px] shrink-0">
                 <select value={currentCity} onChange={handleCityChange} className="bg-transparent text-green-800 text-xs font-black outline-none w-full cursor-pointer">
                   <option value="" disabled hidden>Select your region</option>
@@ -230,6 +237,15 @@ function NavbarContent() {
                 placeholder="Search products or stores..." 
                 className="flex-1 px-3 text-xs text-gray-800 outline-none w-full font-medium"
               />
+              
+              <label title="Search by Image" className="flex items-center justify-center px-3 cursor-pointer text-gray-400 hover:text-green-600 transition-colors bg-white border-l border-gray-100">
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+              </label>
+
               <button type="submit" className="bg-green-600 text-white px-4 lg:px-6 font-bold text-xs hover:bg-green-700 transition-colors border-l border-green-600 shrink-0">Search</button>
             </form>
 
@@ -312,7 +328,21 @@ function NavbarContent() {
               </div>
             </div>
             
-            {/* Mobile Search Form (Updated with Live Search Logic) */}
+            {isMobileCategoryOpen && (
+              <div className="bg-gray-50 border border-gray-100 rounded-lg p-2 grid grid-cols-2 gap-2 shadow-inner">
+                {mobileCategories.map(cat => (
+                  <Link 
+                    key={cat} 
+                    href={`/search?q=${cat}${cityParam}`} 
+                    onClick={() => setIsMobileCategoryOpen(false)} 
+                    className="text-[11px] font-bold text-gray-700 bg-white p-2 rounded border border-gray-100 text-center hover:bg-green-50 hover:text-green-600 transition-colors shadow-sm"
+                  >
+                    {cat}
+                  </Link>
+                ))}
+              </div>
+            )}
+
             <div className="relative w-full">
               <form onSubmit={handleSearchSubmit} className="flex border-2 border-green-600 rounded-md overflow-hidden bg-white h-[36px] shadow-sm w-full">
                 <input 
@@ -323,6 +353,15 @@ function NavbarContent() {
                   placeholder="Search deals..." 
                   className="flex-1 px-3 text-[12px] font-medium text-gray-800 outline-none w-full"
                 />
+                
+                <label title="Search by Image" className="flex items-center justify-center px-3 cursor-pointer text-gray-400 hover:text-green-600 transition-colors bg-white border-l border-gray-100">
+                  <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageUpload} />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                  </svg>
+                </label>
+
                 <button type="submit" className="bg-green-600 text-white px-4 font-bold text-[11px] hover:bg-green-700 transition-colors shrink-0">Search</button>
               </form>
             </div>
