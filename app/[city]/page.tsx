@@ -55,11 +55,9 @@ function CityContent() {
 
   useEffect(() => {
     async function fetchLiveSaudiPriceData() {
-      // Categories stay the same
       const { data: catData } = await supabase.from('categories').select('*').order('created_at');
       if (catData) setCategories([{ id: 'all', name: 'All Deals' }, ...catData]);
 
-      // 🔥 Store Filter Logic added here
       let storeQuery = supabase.from('stores').select('*');
       if (currentCity) {
         storeQuery = storeQuery.eq('city', currentCity);
@@ -104,6 +102,16 @@ function CityContent() {
               );
             })}
           </ul>
+
+          <div className="mt-8 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+            <h4 className="font-black text-blue-800 text-sm mb-1">Download App</h4>
+            <button onClick={() => alert('🚀 Our official app is launching very soon! Stay tuned for a smarter shopping experience and exclusive discounts.')} className="w-full text-left group">
+               <p className="text-[10px] text-blue-600 mb-2 group-hover:underline cursor-pointer">Get exclusive app-only discounts!</p>
+               <div className="w-full bg-blue-600 text-white text-[10px] font-bold py-1.5 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                 Coming Soon
+               </div>
+            </button>
+          </div>
         </aside>
 
         <main className="flex-1 w-full min-w-0 flex flex-col">

@@ -1,0 +1,142 @@
+[33md0e087b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to @{4 hours ago}
+[33md0e087b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{1}: commit: Updated Home Page layout and fixed component imports
+[33md310a6a[m HEAD@{2}: commit: Updated Footer and WhatsApp button
+[33m524e03e[m[33m ([m[1;31morigin/dev[m[33m)[m HEAD@{3}: commit: Updated Navbar: added camera icon and fixed mobile categories
+[33m7041933[m HEAD@{4}: commit: Added green price filter and 2-column mobile view
+[33m47cf32d[m HEAD@{5}: reset: moving to HEAD
+[33m47cf32d[m HEAD@{6}: checkout: moving from main to dev
+[33ma9e6ceb[m[33m ([m[1;32mmain[m[33m)[m HEAD@{7}: merge dev: Merge made by the 'ort' strategy.
+[33ma72d37c[m HEAD@{8}: checkout: moving from dev to main
+[33m47cf32d[m HEAD@{9}: commit: Perfected live search auto-suggest, fixed category navigation, and stabilized city state
+[33m125dcad[m HEAD@{10}: checkout: moving from main to dev
+[33ma72d37c[m HEAD@{11}: commit (merge): Resolved merge conflict in city page
+[33mb69910e[m HEAD@{12}: checkout: moving from dev to main
+[33m125dcad[m HEAD@{13}: commit: Fixed footer links and category routing
+[33m1f3b327[m HEAD@{14}: checkout: moving from main to dev
+[33mb69910e[m HEAD@{15}: checkout: moving from main to main
+[33mb69910e[m HEAD@{16}: commit: Updated URL structure to dynamic routes, cleaned Navbar and Home code
+[33m9df3880[m HEAD@{17}: merge dev: Merge made by the 'ort' strategy.
+[33m0af597e[m HEAD@{18}: checkout: moving from dev to main
+[33m1f3b327[m HEAD@{19}: commit: Updated URL structure, fixed Navbar routing, and added dynamic city page
+[33m2848afd[m HEAD@{20}: checkout: moving from main to dev
+[33m0af597e[m HEAD@{21}: merge dev: Merge made by the 'ort' strategy.
+[33mcff6940[m HEAD@{22}: checkout: moving from dev to main
+[33m2848afd[m HEAD@{23}: commit: Fixed global city state sync, header logo routing, and All Offers navigation
+[33mf85b897[m HEAD@{24}: checkout: moving from main to dev
+[33mcff6940[m HEAD@{25}: merge dev: Merge made by the 'ort' strategy.
+[33m3c60293[m HEAD@{26}: checkout: moving from dev to main
+[33mf85b897[m HEAD@{27}: commit: Fixed city sync issue in Navbar, Search, and Category pages
+[33m87ddad1[m HEAD@{28}: checkout: moving from main to dev
+[33m3c60293[m HEAD@{29}: merge dev: Merge made by the 'ort' strategy.
+[33meca9344[m HEAD@{30}: checkout: moving from dev to main
+[33m87ddad1[m HEAD@{31}: checkout: moving from main to dev
+[33meca9344[m HEAD@{32}: checkout: moving from dev to main
+[33m87ddad1[m HEAD@{33}: checkout: moving from main to dev
+[33meca9344[m HEAD@{34}: checkout: moving from dev to main
+[33m87ddad1[m HEAD@{35}: commit: Fixed Hot Sale ticker links issue in Navbar
+[33mb4eef2a[m HEAD@{36}: commit: Added All Stores page, fixed category routing and updated UI
+[33m0bbe445[m HEAD@{37}: checkout: moving from dev to dev
+[33m0bbe445[m HEAD@{38}: checkout: moving from dev to dev
+[33m0bbe445[m HEAD@{39}: commit: Updated product details, search and store pages with back buttons
+[33m520eda5[m HEAD@{40}: checkout: moving from main to dev
+[33meca9344[m HEAD@{41}: checkout: moving from main to main
+[33meca9344[m HEAD@{42}: commit: Added new custom favicon for SaudiPrice
+[33m520eda5[m HEAD@{43}: merge dev: Fast-forward
+[33mb08765f[m HEAD@{44}: checkout: moving from dev to main
+[33m520eda5[m HEAD@{45}: commit: Standardized legal pages, updated footer, synced navbar cities, and added premium contact page
+[33mb08765f[m HEAD@{46}: checkout: moving from main to dev
+[33mb08765f[m HEAD@{47}: merge dev: Fast-forward
+[33m9c283db[m HEAD@{48}: checkout: moving from dev to main
+[33mb08765f[m HEAD@{49}: commit: Added complete Product Details Page and fixed TopProducts Links
+[33m9c283db[m HEAD@{50}: checkout: moving from dev to dev
+[33m9c283db[m HEAD@{51}: checkout: moving from main to dev
+[33m9c283db[m HEAD@{52}: commit: Added a Back to Offers button on the Store Details page
+[33m02043ee[m HEAD@{53}: commit: Updated dynamic route to use [name] for SEO friendly URLs and fetched store details accordingly
+[33m1ec226e[m HEAD@{54}: commit: Moved TopProducts inside main container and added dynamic layout switching for category selection
+[33m80ff584[m HEAD@{55}: commit: Removed flyers from homepage for a cleaner product-focused layout
+[33m9cfdb08[m HEAD@{56}: commit: Changed Live News badge to a smart gradient Hot Sale badge with fire icon
+[33mab1378a[m HEAD@{57}: commit: Fixed explicitly the mobile and tablet time/date row visibility
+[33me318a6b[m HEAD@{58}: commit: Restored original clean RootLayout with proper flex-grow
+[33me9ce949[m HEAD@{59}: commit: Fixed heart icon state, improved search, added stores and linked green menu
+[33m1bdba19[m HEAD@{60}: commit: Added live category filtering for products
+[33m122f192[m HEAD@{61}: commit: Restored original complex Navbar and integrated functional search
+[33m38615d6[m HEAD@{62}: commit: Added functional search bar and search results page
+[33mb1584a6[m HEAD@{63}: commit: Integrated modern sidebar UI with live Supabase category data
+[33m354b0f7[m HEAD@{64}: commit: Added dedicated Saved Items page with Supabase integration
+[33mcaba60c[m HEAD@{65}: commit: Fixed image alignment, added dynamic store names and wishlist functionality
+[33m348570e[m HEAD@{66}: commit: Fixed supabase import path in product detail page
+[33m79208ea[m HEAD@{67}: commit: Fixed product image sizing, discount tags, and updated UI for TopProducts in SaudiPrice
+[33mf3dc1cb[m HEAD@{68}: commit: Integrated TopProducts with store names, favorites, and shopping cart for SaudiPrice
+[33medd2614[m HEAD@{69}: commit: Added TopProducts component and integrated it into the Home page for SaudiPrice
+[33m7054ba5[m HEAD@{70}: commit: Updated Navbar: Restored full 4-digit Gregorian year while maintaining strictly formatted 3-letter Hijri months, kept real-time clock perfectly centered, and optimized ultra-compact mobile layout
+[33mf50fab0[m HEAD@{71}: commit: Updated Navbar: Implemented strict 3-letter Islamic months, 2-digit Gregorian year, and an ultra-compact real-time DateTime row optimized specifically for mobile screens
+[33m3d67ea4[m HEAD@{72}: commit: Updated Navbar: Implemented strict 3-letter Islamic months, 2-digit Gregorian year, and an ultra-compact real-time DateTime row optimized specifically for mobile screens
+[33ma19ea1d[m HEAD@{73}: commit: Updated Navbar: Fixed Hijri month formatting to show Islamic months strictly, enforced exactly one AH suffix, merged tablet UI into desktop view, and perfectly centered mobile datetime without horizontal overflow
+[33m84d4c78[m HEAD@{74}: commit: Updated Navbar: Made exact DateTime functionality fully responsive across tablet and mobile, added tabular-nums to fix clock jitter, and resolved all browser layout shifts
+[33maf3d43d[m HEAD@{75}: commit: Updated Navbar: Unified Gregorian and Hijri dates with an elegant converter icon, removed flag, and enforced strict whitespace-nowrap to prevent layout shifts
+[33mb6fd6b7[m HEAD@{76}: commit: Updated Navbar: Replaced text with dual Gregorian and Hijri dates, fixed Saudi flag rendering with SVG, and resolved layout shifting
+[33m4e708c9[m HEAD@{77}: commit: Updated Navbar: Replaced center tabs with live KSA time, date, and colorful clock icon
+[33m5af5e1a[m HEAD@{78}: commit: Updated Mobile UI: Converted language select to a toggle button, added functioning mobile categories dropdown, and removed KSA from breadcrumbs
+[33m805deb4[m HEAD@{79}: commit: Updated Navbar: Implemented highly touch-friendly mobile layout with dedicated Categories, City, and Search section while keeping desktop UI unchanged
+[33m5c17471[m HEAD@{80}: commit: Cleaned up syntax and safely loading data
+[33m658eac2[m HEAD@{81}: commit: Created dynamic flyer details page to fix 404 error and display flyer contents
+[33me23024a[m HEAD@{82}: commit: Connected Supabase database to frontend: Now fetching live Categories, Stores, and Flyers
+[33md022edb[m HEAD@{83}: commit: Updated Navbar: Added black active state for sub-menu items keeping compact sizes intact
+[33m6e1f49a[m HEAD@{84}: commit: Added active states for Navbar links, Categories, Store Strip, Top Buttons, Language toggle, and wrapped Flyers in routing Links
+[33m59a3f39[m HEAD@{85}: commit: Updated Navbar: Implemented active tab states, compact sizing for elements, and improved search bar UI
+[33m51bcee1[m HEAD@{86}: commit: Added left/right navigation arrows, customized Google Play colors, updated responsive sizing (2 flyers on mobile, 3 on desktop), and fixed overflow
+[33m5e23cb3[m HEAD@{87}: commit: Fixed mobile layout, adjusted carousel rules (1 mobile, 3 desktop), added SVGs to footer, and fixed overflow issues
+[33m1f1de1f[m HEAD@{88}: commit: Fixed Vercel build error by wrapping useSearchParams with Suspense boundary
+[33m6ce88a2[m HEAD@{89}: commit: Updated logo to gold, implemented dynamic city routing, updated main heading, and fixed horizontal scroll & flyer grid responsiveness
+[33m185e957[m HEAD@{90}: commit: Matched desktop layout exactly with reference: Inline header elements, rounded search bar, flat categories, and clean grid
+[33mbb37344[m HEAD@{91}: commit: Fixed mobile layout: Swipeable flyers, dual-color logo, store names added, flattened electronics categories
+[33mbc52dcb[m HEAD@{92}: commit: Updated UI based on videos: Dual color logo, language dropdown, mobile flyer swipe carousel, and refined categories
+[33mbc7ec95[m HEAD@{93}: commit: Fixed duplicated code, removed add company button, and ensured strictly 15 safe store placeholders
+[33m4d817d8[m HEAD@{94}: commit: Removed Add Company button from Navbar and increased stores to 15 on homepage
+[33mc028bda[m HEAD@{95}: commit: Added Terms of Service link to the Footer Quick Links
+[33mdc1cc68[m HEAD@{96}: commit: Added dedicated Terms and Conditions page with legal content for SaudiPrice
+[33m627bed4[m HEAD@{97}: commit: Removed header and footer from page.tsx to use global layout
+[33m61c7621[m HEAD@{98}: commit: Cleaned up layout and homepage code, removed all references
+[33m0647443[m HEAD@{99}: commit: Final Structural D4D Update: Added Top Tabs, Advanced Search Bar, Green Sub-menu, and Big Footer
+[33m15b3a06[m HEAD@{100}: commit: Final 100% D4D Clone with Green Theme, Search Bar, and Sidebar Icons
+[33m815d568[m HEAD@{101}: commit: 100% D4D Homepage Clone with City Selector and Exact Styling
+[33mdc0b683[m HEAD@{102}: commit: Added Left Sidebar, Tabs, and Advanced D4D Flyer Cards
+[33m5adce76[m HEAD@{103}: commit: Fixed supabase import path on homepage
+[33m166d630[m HEAD@{104}: commit: Added About, Contact, and Privacy pages
+[33mf68b0c4[m HEAD@{105}: commit: Added dynamic pages for categories and stores
+[33mac2795b[m HEAD@{106}: commit: Updated Footer with dynamic category and store links
+[33m7e74f29[m HEAD@{107}: commit: Upgraded Footer and added Terms of Service page
+[33m3815bcf[m HEAD@{108}: commit: Fixed Navbar and Footer import paths
+[33mc707563[m HEAD@{109}: commit: Fixed mobile horizontal scroll
+[33m9b9d8de[m HEAD@{110}: commit: Final push: Added force-dynamic and fetchCache for product pages
+[33m6518b2f[m HEAD@{111}: commit: Fixed build error with force-dynamic in product page
+[33m00760d9[m HEAD@{112}: commit: Forcing dynamic rendering to fix Vercel build
+[33m1ebb56d[m HEAD@{113}: commit: Premium design: Robust Supabase initialization
+[33m19e447c[m HEAD@{114}: commit: Final forced deployment of premium design
+[33m428afe7[m HEAD@{115}: commit: Updated heart icon and store badge with high contrast colors for better visibility
+[33m708d26e[m HEAD@{116}: commit: Added heart icon and store badge to the top right of product cards without changing the bottom layout
+[33m39c99f6[m HEAD@{117}: commit: Fixed JSX parsing error caused by inline comment
+[33mc31a569[m HEAD@{118}: commit: Finalized card layout: Moved wishlist heart next to store badge, restored original price and icon button footer design
+[33mf3cea86[m HEAD@{119}: commit: Reverted to perfect layout: restored HOT and Store badges, fixed filters, and securely added wishlist icon
+[33m1b0d137[m HEAD@{120}: commit: Reverted to premium UI: fixed double menu, restored hero gradient, and applied sleek dark view deal buttons
+[33me459169[m HEAD@{121}: commit: Mega homepage overhaul: restored flag, badges, premium buttons, and fixed images
+[33mc0dc7a9[m HEAD@{122}: commit: Implemented local storage wishlist feature for users to save deals
+[33m4ba0e40[m HEAD@{123}: commit: Fixed giant SVG icons issue on product details page
+[33m0f619e4[m HEAD@{124}: commit: Updated dynamic route to fully support Next.js 15 async params
+[33mf3e0af9[m HEAD@{125}: commit: Fixed dynamic routing cache and added detailed error logging
+[33m49b2510[m HEAD@{126}: commit: Linked homepage product cards to dynamic product details page
+[33m13ab53c[m HEAD@{127}: commit: Added dynamic product details page with premium design
+[33md3cde0e[m HEAD@{128}: commit: Added live search and functional category/store filters
+[33mf150696[m HEAD@{129}: commit: Added premium hero section, filters UI, and advanced product cards
+[33ma68b0c2[m HEAD@{130}: commit: Applied advanced e-commerce design to homepage
+[33md1a69d5[m HEAD@{131}: commit: Updated homepage to English and improved design
+[33m031fb2d[m HEAD@{132}: commit: Added Supabase connection setup
+[33m44f06f4[m HEAD@{133}: commit: Added Electronics page
+[33m8f19335[m HEAD@{134}: commit: Updated footer to match exact screenshot design
+[33mc5fa28c[m HEAD@{135}: commit: Moved Navbar and Footer to layout
+[33m1799e31[m HEAD@{136}: commit: Added PS5 deal manually
+[33m2bb90ac[m HEAD@{137}: commit: Linked frontend with data.ts
+[33mc054608[m HEAD@{138}: commit: Added data.ts file for products
+[33m7a35faf[m HEAD@{139}: commit: Updated website design
+[33m1be8cdf[m HEAD@{140}: Branch: renamed refs/heads/master to refs/heads/main
+[33m1be8cdf[m HEAD@{142}: commit (initial): Initial commit from Create Next App
