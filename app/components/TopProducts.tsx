@@ -65,8 +65,9 @@ export default function TopProducts({ activeCategory = 'All Deals' }: TopProduct
     <section className="py-6 w-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">
+          {/* Changed 'Trending Products' to 'Trending Deals' */}
           {activeCategory === 'All Deals' 
-            ? (currentCity ? `Trending Deals in ${currentCity}` : 'Trending Products in Saudi Arabia') 
+            ? (currentCity ? `Trending Deals in ${currentCity}` : 'Trending Deals in Saudi Arabia') 
             : `${activeCategory} Deals`}
         </h2>
       </div>
