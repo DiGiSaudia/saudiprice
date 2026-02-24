@@ -81,7 +81,6 @@ function HomeContent() {
   return (
     <div className="font-sans flex flex-col bg-[#f4f5f7] min-h-screen w-full overflow-x-hidden">
       
-      {/* Breadcrumb Navigation */}
       <div className="max-w-[1400px] mx-auto px-4 py-3 w-full text-xs text-gray-500 font-medium flex items-center flex-wrap gap-2">
         <button onClick={resetToHome} className="hover:text-green-600 transition-colors cursor-pointer text-gray-600 font-bold bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
           Home
@@ -107,7 +106,6 @@ function HomeContent() {
 
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row px-4 gap-4 pb-6 w-full">
         
-        {/* Sidebar Navigation */}
         <aside className="hidden md:block w-[240px] flex-shrink-0 h-fit sticky top-[80px]">
           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-3 mb-4">
             <h3 className="text-sm font-black text-gray-800 mb-3 px-2 uppercase tracking-wider">
@@ -136,13 +134,15 @@ function HomeContent() {
 
             <div className="mt-4 bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-xl border border-blue-200">
               <h4 className="font-black text-blue-800 text-xs mb-1">Download App</h4>
-              <button className="w-full bg-blue-600 text-white text-[10px] font-bold py-1.5 rounded-lg hover:bg-blue-700 transition-colors">
-                Coming Soon
+              <button onClick={() => alert('🚀 Our official app is launching very soon! Stay tuned for a smarter shopping experience and exclusive discounts.')} className="w-full text-left group">
+                 <p className="text-[10px] text-blue-600 mb-2 group-hover:underline cursor-pointer">Get exclusive app-only discounts!</p>
+                 <div className="w-full bg-blue-600 text-white text-[10px] font-bold py-1.5 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                   Coming Soon
+                 </div>
               </button>
             </div>
           </div>
 
-          {/* Sidebar Ads */}
           <div className="flex flex-col gap-3">
             <div className="bg-gray-200 rounded-xl w-full h-[250px] flex items-center justify-center border border-gray-300 shadow-inner">
               <span className="text-gray-400 text-xs font-bold">Ad Space 1 (300x250)</span>
@@ -153,12 +153,10 @@ function HomeContent() {
           </div>
         </aside>
 
-        {/* Main Content Area */}
         <main className="flex-1 w-full min-w-0 flex flex-col">
           
           {activeCategory === 'All Deals' ? (
             <>
-              {/* Stores Strip section */}
               {displayStores.length > 0 && (
                 <div className="mb-4 w-full bg-white rounded-xl shadow-sm border border-gray-200 p-1.5 md:p-2 flex items-center justify-between">
                   <NavArrow direction="left" onClick={() => scrollCarousel(storesRef, 'left')} />
@@ -173,7 +171,6 @@ function HomeContent() {
                         key={store.id} 
                         className="flex flex-col items-center snap-start cursor-pointer group shrink-0 outline-none"
                       >
-                        {/* Removed padding (p-1) to allow image to fill the box cleanly */}
                         <div className={`w-[55px] h-[55px] md:w-[65px] md:h-[65px] rounded-xl overflow-hidden transition-all border flex items-center justify-center bg-white ${
                           activeStore === store.id ? 'border-green-600 shadow-sm' : 'border-gray-200 group-hover:border-green-500 group-hover:shadow-sm'
                         }`}>
@@ -187,7 +184,6 @@ function HomeContent() {
                 </div>
               )}
 
-              {/* Promotional Banner */}
               <div className="w-full mb-5">
                 <Link href="/search?q=offers" className="block w-full overflow-hidden rounded-xl shadow-sm border border-gray-200 hover:opacity-95 transition-opacity">
                    <img 
@@ -198,13 +194,11 @@ function HomeContent() {
                 </Link>
               </div>
 
-              {/* Hero Banner Component */}
               <div className="mb-4">
                 <HeroBanner />
               </div>
             </>
           ) : (
-            // Category filtered view header
             <div className="bg-white rounded-2xl p-3 shadow-sm border border-green-100 mb-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-xl md:text-2xl bg-green-50 w-10 h-10 flex items-center justify-center rounded-xl shadow-inner">

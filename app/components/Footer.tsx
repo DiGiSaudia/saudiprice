@@ -85,31 +85,33 @@ function FooterContent() {
             </div>
           </div>
           
-          <div className="md:w-1/4">
-            <h4 className="text-[17px] font-black mb-4 text-gray-800 uppercase tracking-wider">Quick Links</h4>
-            <ul className="space-y-3 text-[15px] text-gray-500 font-medium">
-              <li><Link href="/about" className="hover:text-green-600 transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-green-600 transition-colors">Contact Us</Link></li>
-              <li><Link href="/privacy" className="hover:text-green-600 transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-green-600 transition-colors">Terms of Service</Link></li>
-              <li><Link href="/disclaimer" className="hover:text-green-600 transition-colors">Disclaimer</Link></li>
-            </ul>
-          </div>
-          
-          <div className="md:w-1/4">
-            <h4 className="text-[17px] font-black mb-4 text-gray-800 uppercase tracking-wider">Top Cities</h4>
-            <ul className="space-y-3 text-[15px] text-gray-500 font-medium">
-              {cities.map((city) => (
-                <li key={city}>
-                  <Link href={getCityHref(city)} className="hover:text-green-600 transition-colors">
-                    {city} Offers
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="md:w-1/2 flex gap-8 md:gap-4 flex-row justify-between w-full">
+            <div className="flex-1">
+              <h4 className="text-[17px] font-black mb-4 text-gray-800 uppercase tracking-wider">Quick Links</h4>
+              <ul className="space-y-3 text-[15px] text-gray-500 font-medium">
+                <li><Link href="/about" className="hover:text-green-600 transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-green-600 transition-colors">Contact Us</Link></li>
+                <li><Link href="/privacy" className="hover:text-green-600 transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-green-600 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/disclaimer" className="hover:text-green-600 transition-colors">Disclaimer</Link></li>
+              </ul>
+            </div>
+            
+            <div className="flex-1">
+              <h4 className="text-[17px] font-black mb-4 text-gray-800 uppercase tracking-wider">Top Cities</h4>
+              <ul className="space-y-3 text-[15px] text-gray-500 font-medium">
+                {cities.map((city) => (
+                  <li key={city}>
+                    <Link href={getCityHref(city)} className="hover:text-green-600 transition-colors">
+                      {city} Offers
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div className="md:w-1/4">
+          <div className="md:w-1/4 mt-8 md:mt-0">
             <h4 className="text-[17px] font-black mb-4 text-gray-800 uppercase tracking-wider">Newsletter</h4>
             <form onSubmit={handleSubscribe} className="flex mb-6">
               <input 
